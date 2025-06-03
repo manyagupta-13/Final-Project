@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room: The Abandoned Laboratory</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #111;
+            color: #e0e0e0;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: background-color 0.5s;
+        }
+        
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        #game-container {
+            background-color: #222;
+            border: 2px solid #444;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            transition: background-color 0.5s;
+        }
+        
+        body.light-mode #game-container {
+            background-color: #e0e0e0;
+            border-color: #aaa;
+        }
+        
+        #room-description {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            min-height: 100px;
+            transition: background-color 0.5s;
+        }
+        
+        body.light-mode #room-description {
+            background-color: #ddd;
+        }
+        
+        #inventory {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: background-color 0.5s;
+        }
+        
+        body.light-mode #inventory {
+            background-color: #ddd;
+        }
+        
+        #inventory-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .inventory-item {
+            background-color: #444;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        body.light-mode .inventory-item {
+            background-color: #ccc;
+        }
+        
+        .inventory-item.dragging {
+            opacity: 0.5;
+        }
+        
+        #room-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .room-item {
+            background-color: #444;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 120px;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .room-item {
+            background-color: #ccc;
+        }
+        
+        .room-item:hover, .inventory-item:hover {
+            background-color: #555;
+        }
+        
+        body.light-mode .room-item:hover, body.light-mode .inventory-item:hover {
+            background-color: #bbb;
+        }
+        
+        #puzzle-container {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+            transition: background-color 0.5s;
+        }
+        
+        body.light-mode #puzzle-container {
+            background-color: #ddd;
+        }
+        
+        button {
+            background-color: #4a4a4a;
+            color: #e0e0e0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode button {
+            background-color: #aaa;
+            color: #333;
+        }
+        
+        button:hover {
+            background-color: #5a5a5a;
+        }
+        
+        body.light-mode button:hover {
+            background-color: #999;
+        }
+        
+        input {
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            padding: 5px;
+            margin: 5px;
+            transition: all 0.5s;
+        }
+        
+        body.light-mode input {
+            background-color: #fff;
+            color: #333;
+            border-color: #999;
+        }
+        
+        .crossword {
+            display: grid;
+            grid-template-columns: repeat(5, 30px);
+            grid-gap: 2px;
+            margin: 15px 0;
+        }
+        
+        .crossword-cell {
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body.light-mode .crossword-cell {
+            background-color: #ccc;
+        }
+        
+        .crossword-cell input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        
+        .hint {
+            color: #aaa;
+            font-style: italic;
+            margin: 10px 0;
+        }
+        
+        body.light-mode .hint {
+            color: #666;
+        }
+        
+        .success {
+            color: #8bc34a;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #f44336;
+        }
+        
+        #timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f44336;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        #health-bar {
+            height: 10px;
+            background-color: #f44336;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+        
+        #map {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 100;
+            border: 2px solid #444;
+            max-width: 80%;
+        }
+        
+        body.light-mode #map {
+            background-color: #e0e0e0;
+            border-color: #aaa;
+        }
+        
+        #map-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        
+        #notebook {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 100;
+            border: 2px solid #444;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        body.light-mode #notebook {
+            background-color: #e0e0e0;
+            border-color: #aaa;
+        }
+        
+        #notebook-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        
+        .notebook-clue {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #555;
+        }
+        
+        body.light-mode .notebook-clue {
+            border-bottom-color: #aaa;
+        }
+        
+        #light-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #444;
+            border: none;
+            font-size: 20px;
+        }
+        
+        #hint-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #4a4a4a;
+            border: none;
+            font-size: 16px;
+        }
+        
+        #map-button {
+            position: fixed;
+            bottom: 140px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #4a4a4a;
+            border: none;
+            font-size: 16px;
+        }
+        
+        #notebook-button {
+            position: fixed;
+            bottom: 200px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #4a4a4a;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .jigsaw-puzzle {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .jigsaw-piece {
+            width: 100px;
+            height: 100px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        
+        .jigsaw-piece.correct {
+            background-color: #8bc34a;
+        }
+        
+        #chemistry-lab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #beaker {
+            width: 100px;
+            height: 150px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid #aaa;
+            border-radius: 5px 5px 30px 30px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #liquid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0;
+            transition: height 0.5s, background-color 0.5s;
+        }
+        
+        .chemical {
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .chemical-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .achievement {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #4a4a4a;
+            padding: 10px;
+            border-radius: 5px;
+            animation: slideIn 0.5s forwards;
+            display: none;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            margin: 10px 0;
+            line-height: 1;
+        }
+        
+        .room-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* New styles for additional puzzles */
+        .wiring-puzzle {
+            display: grid;
+            grid-template-columns: repeat(5, 40px);
+            grid-gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .wire {
+            width: 40px;
+            height: 10px;
+            background-color: #777;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .wire:hover {
+            transform: scaleY(1.5);
+        }
+        
+        .wire.connected {
+            background-color: #ff0;
+        }
+        
+        .sliding-puzzle {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-gap: 2px;
+            margin: 15px 0;
+        }
+        
+        .tile {
+            width: 80px;
+            height: 80px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+        
+        .tile.empty {
+            background-color: transparent;
+            cursor: default;
+        }
+        
+        .sequence-game {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .sequence-button {
+            width: 60px;
+            height: 60px;
+            background-color: #444;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background-color 0.3s;
+        }
+        
+        .sequence-button.active {
+            background-color: #8bc34a;
+        }
+        
+        .sequence-button.wrong {
+            background-color: #f44336;
+        }
+        
+        /* Audio log styles */
+        .audio-log {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+        
+        .audio-log button {
+            margin-left: 10px;
+        }
+        
+        /* Environmental effects */
+        .flicker {
+            animation: flicker 0.5s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            from { opacity: 1; }
+            to { opacity: 0.7; }
+        }
+        
+        /* Ending screen */
+        .ending-screen {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .ending-image {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="room-background" class="room-background"></div>
+    <h1>Escape Room: The Abandoned Laboratory</h1>
+    <div id="game-container">
+        <div id="health-bar" style="width: 100%;"></div>
+        <div id="timer">Time: 30:00</div>
+        <div id="room-description">
+            You wake up in a dimly lit laboratory. The air smells of chemicals and dust. You don't remember how you got here. The door is locked with a digital keypad. You need to find a way out before it's too late...
+        </div>
+        
+        <div id="inventory">
+            <h3>Inventory</h3>
+            <div id="inventory-items"></div>
+        </div>
+        
+        <div id="room-items"></div>
+        
+        <div id="puzzle-container"></div>
+    </div>
+
+    <div id="map">
+        <button id="map-close">X</button>
+        <h3>Laboratory Map</h3>
+        <div class="ascii-art">
+        +-----------------------+
+        |       ENTRANCE        |
+        +-----------+-----------+
+        |  CABINET  |   DESK    |
+        +-----------+-----------+
+        | COMPUTER  | BOOKSHELF |
+        +-----------+-----------+
+        |   DOOR    | WHITEBD.  |
+        +-----------+-----------+
+        | STORAGE   | BREAK RM  |
+        +-----------+-----------+
+        | SERVER RM | VENT ENTR |
+        +-----------------------+
+        </div>
+        <p>Areas with * are unexplored</p>
+    </div>
+
+    <div id="notebook">
+        <button id="notebook-close">X</button>
+        <h3>Your Notebook</h3>
+        <div id="notebook-entries"></div>
+    </div>
+
+    <button id="light-toggle" title="Toggle lights">💡</button>
+    <button id="hint-button" title="Get hint">?</button>
+    <button id="map-button" title="Show map">🗺️</button>
+    <button id="notebook-button" title="Open notebook">📓</button>
+
+    <div class="achievement" id="achievement-popup">
+        <strong>Achievement Unlocked!</strong>
+        <p id="achievement-text"></p>
+    </div>
+
+    <!-- Sound effects -->
+    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
+    <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" preload="auto"></audio>
+    <audio id="door-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-creaky-door-opening-2280.mp3" preload="auto"></audio>
+    <audio id="computer-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-computer-science-alert-2511.mp3" preload="auto"></audio>
+    <audio id="item-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3" preload="auto"></audio>
+    <audio id="alarm-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" preload="auto"></audio>
+    <audio id="vent-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-metal-hit-woosh-1481.mp3" preload="auto"></audio>
+    <audio id="power-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
+    
+    <!-- Background music tracks -->
+    <audio id="bgm-normal" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-dark-ambient-1131.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgm-tense" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-sci-fi-ambience-285.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgm-danger" loop preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-sci-fi-alarm-278.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgm-success" preload="auto">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-game-level-completed-2059.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Game state
+        const gameState = {
+            inventory: [],
+            discoveredClues: [],
+            puzzlesSolved: 0,
+            doorCode: Math.floor(1000 + Math.random() * 9000).toString(), // Random 4-digit code
+            storyProgress: 0,
+            usedItems: [],
+            health: 100,
+            timeLeft: 1800, // 30 minutes in seconds
+            achievements: [],
+            hintsUsed: 0,
+            lightMode: false,
+            currentRoom: 'main',
+            exploredRooms: ['main'],
+            endings: [],
+            audioLogsFound: 0,
+            journalEntriesFound: 0,
+            hasAntidote: false,
+            powerRestored: false,
+            ventUnlocked: false,
+            secretEndingUnlocked: false,
+            currentBGM: null
+        };
+
+        // Journal entries that reveal the backstory
+        const journalEntries = [
+            {
+                id: 'entry-1',
+                title: 'Lab Journal - Dr. Alchem',
+                content: 'Day 42: The breakthrough is near. Our experiments with the new compound show promise, but the side effects are... disturbing. Subjects report vivid hallucinations and memory loss. Management is pushing for faster results.'
+            },
+            {
+                id: 'entry-2',
+                title: 'Personal Note - Dr. Chen',
+                content: 'I can\'t sleep. The screams from the test chamber haunt me. What are we becoming? The board doesn\'t care about ethics, only profits. I\'ve started hiding my research notes.'
+            },
+            {
+                id: 'entry-3',
+                title: 'Emergency Log - Security',
+                content: 'Containment breach in Sector 4. All personnel evacuate immediately. Do NOT attempt to rescue affected subjects. They are no longer human. Activating lockdown protocol.'
+            }
+        ];
+
+        // Audio logs with voice recordings
+        const audioLogs = [
+            {
+                id: 'audio-1',
+                title: 'Audio Log #17 - Dr. Alchem',
+                content: 'The compound is more dangerous than we anticipated. It doesn\'t just affect the mind - it rewrites DNA. The test subjects... they\'re changing. If anyone finds this, the antidote formula is hidden in the chemical chart.',
+                audio: 'https://assets.mixkit.co/voice/preview/mixkit-man-talking-about-a-virus-433.mp3'
+            },
+            {
+                id: 'audio-2',
+                title: 'Audio Log #23 - Technician',
+                content: 'The vents... they\'re moving. I saw something in there. It looked human but... wrong. I\'ve barricaded the server room. If you need to escape, the maintenance vent in the break room leads outside, but you\'ll need the crowbar to open it.',
+                audio: 'https://assets.mixkit.co/voice/preview/mixkit-scared-man-reporting-a-monster-433.mp3'
+            },
+            {
+                id: 'audio-3',
+                title: 'Final Message - Dr. Chen',
+                content: 'It\'s over. The compound has breached containment. I\'ve set the self-destruct sequence. The code is... (static)... hidden in the computer files. May God have mercy on our souls.',
+                audio: 'https://assets.mixkit.co/voice/preview/mixkit-woman-reporting-a-catastrophe-433.mp3'
+            }
+        ];
+
+        // Room items with descriptions and interactions
+        const roomItems = [
+            {
+                id: 'desk',
+                name: 'Lab Desk',
+                description: 'A cluttered lab desk with various papers and equipment.',
+                imageDesc: 'A metal desk with a microscope, scattered papers, and a small locked drawer.',
+                emoji: '🧪',
+                interactions: [
+                    {
+                        action: 'Search the desk',
+                        result: 'You find a note with strange symbols and a small key. There\'s also a journal entry.',
+                        callback: () => {
+                            addToInventory('small-key');
+                            addToInventory('symbol-note');
+                            addJournalEntry('entry-1');
+                            updateRoomItem('desk', 'The desk looks mostly searched now, but the microscope might still be useful.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Use microscope',
+                        result: 'You look through the microscope and see a tiny engraving: "The truth is hidden in plain sight"',
+                        callback: () => {
+                            addClue('truth-hidden');
+                            updateRoomItem('desk', 'The microscope reveals a hidden message.');
+                            addNotebookEntry('Microscope engraving', '"The truth is hidden in plain sight"');
+                            playSound('click-sound');
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'cabinet',
+                name: 'Supply Cabinet',
+                description: 'A tall metal cabinet with several drawers.',
+                imageDesc: 'A gray metal cabinet with three drawers of different sizes.',
+                emoji: '🗄️',
+                interactions: [
+                    {
+                        action: 'Open top drawer',
+                        result: 'The drawer is locked with a small padlock.',
+                        requiredItem: 'small-key',
+                        successResult: 'You unlock the drawer with the small key and find a crossword puzzle and an audio recorder.',
+                        callback: () => {
+                            addToInventory('crossword');
+                            addAudioLog('audio-1');
+                            gameState.usedItems.push('small-key');
+                            updateRoomItem('cabinet', 'The top drawer is now open.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Open middle drawer',
+                        result: 'It contains various lab supplies: beakers, test tubes, and a bottle labeled "Danger: Do Not Mix".',
+                        callback: () => {
+                            addToInventory('danger-bottle');
+                            updateRoomItem('cabinet', 'The middle drawer contains lab supplies.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Open bottom drawer',
+                        result: 'It\'s stuck. Maybe you need to find a way to force it open.',
+                        requiredItem: 'crowbar',
+                        successResult: 'You force the drawer open with the crowbar and find a fuse and some wires.',
+                        callback: () => {
+                            addToInventory('fuse');
+                            addToInventory('wires');
+                            updateRoomItem('cabinet', 'The bottom drawer is now open, revealing electrical components.');
+                            playSound('item-sound');
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'bookshelf',
+                name: 'Bookshelf',
+                description: 'A bookshelf filled with old scientific journals and textbooks.',
+                imageDesc: 'A wooden bookshelf with dusty books. One book stands out - "Advanced Cryptography".',
+                emoji: '📚',
+                interactions: [
+                    {
+                        action: 'Browse books',
+                        result: 'Most of the books are too technical, but one titled "Advanced Cryptography" catches your eye. Behind it you find a journal entry.',
+                        callback: () => {
+                            addToInventory('crypto-book');
+                            addJournalEntry('entry-2');
+                            updateRoomItem('bookshelf', 'The bookshelf has a gap where the cryptography book was.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Check behind books',
+                        result: 'Behind the books, you find a safe with a strange symbol lock.',
+                        callback: () => {
+                            updateRoomItem('bookshelf', 'There\'s a hidden safe behind the books.');
+                            playSound('click-sound');
+                            addRoomItem({
+                                id: 'safe',
+                                name: 'Hidden Safe',
+                                description: 'A small safe with a symbol-based lock.',
+                                imageDesc: 'A metal safe with 4 rotating dials, each with different symbols.',
+                                emoji: '🔒',
+                                interactions: [
+                                    {
+                                        action: 'Examine safe',
+                                        result: 'The safe has four dials with symbols: ☀️, ☽, ★, and ♞.',
+                                        callback: () => {}
+                                    },
+                                    {
+                                        action: 'Try to open safe',
+                                        result: 'You need to find the correct combination of symbols.',
+                                        requiredItem: 'symbol-note',
+                                        successResult: 'The note shows the sequence: ☽, ★, ♞, ☀️. The safe opens! Inside is a USB drive.',
+                                        callback: () => {
+                                            addToInventory('usb-drive');
+                                            addClue('safe-combination');
+                                            updateRoomItem('safe', 'The safe is now open and empty.');
+                                            addNotebookEntry('Safe combination', '☽, ★, ♞, ☀️');
+                                            playSound('success-sound');
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'computer',
+                name: 'Computer Terminal',
+                description: 'An old computer covered in dust.',
+                imageDesc: 'A CRT monitor and bulky keyboard from the 1990s. The screen is dark but the power light is on.',
+                emoji: '💻',
+                interactions: [
+                    {
+                        action: 'Turn on computer',
+                        result: 'The computer boots up to a login screen. The username "DR.ALCHEM" is already entered.',
+                        callback: () => {
+                            updateRoomItem('computer', 'The computer is on, waiting for a password.');
+                            playSound('computer-sound');
+                            addRoomItem({
+                                id: 'login-screen',
+                                name: 'Login Screen',
+                                description: 'The computer is asking for a password.',
+                                imageDesc: 'A terminal login prompt with username DR.ALCHEM and a blinking cursor for password.',
+                                emoji: '⌨️',
+                                interactions: [
+                                    {
+                                        action: 'Guess password',
+                                        result: 'You need to find the password somewhere.',
+                                        callback: () => showPasswordPuzzle()
+                                    },
+                                    {
+                                        action: 'Insert USB drive',
+                                        result: 'Maybe the USB drive has something useful.',
+                                        requiredItem: 'usb-drive',
+                                        successResult: 'The USB contains a file with the password: "EUREKA". There\'s also an audio file.',
+                                        callback: () => {
+                                            addClue('computer-password');
+                                            addAudioLog('audio-3');
+                                            gameState.usedItems.push('usb-drive');
+                                            updateRoomItem('login-screen', 'You now know the password is "EUREKA".');
+                                            addNotebookEntry('Computer password', 'EUREKA');
+                                            playSound('success-sound');
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'door',
+                name: 'Exit Door',
+                description: 'A heavy metal door with a digital keypad.',
+                imageDesc: 'A reinforced door with a glowing keypad. The display shows: "ENTER 4-DIGIT CODE".',
+                emoji: '🚪',
+                interactions: [
+                    {
+                        action: 'Examine door',
+                        result: 'The door is locked with a 4-digit keypad. There\'s a small note taped to the side.',
+                        callback: () => {
+                            addToInventory('door-note');
+                            updateRoomItem('door', 'The door is still locked, but you found a note.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Enter code',
+                        result: 'You need to find the code first.',
+                        callback: () => showDoorCodeInput()
+                    },
+                    {
+                        action: 'Force door open',
+                        result: 'The door is too strong. You\'ll need the code.',
+                        requiredItem: 'crowbar',
+                        successResult: 'Despite your efforts, the door won\'t budge. The crowbar bends under the strain.',
+                        callback: () => {
+                            playSound('click-sound');
+                            decreaseHealth(10);
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'chemical-chart',
+                name: 'Chemical Chart',
+                description: 'A periodic table with some elements circled.',
+                imageDesc: 'A large periodic table poster. Elements 8, 15, 16, and 34 are circled in red. There\'s a hidden compartment behind it.',
+                emoji: '🧪',
+                interactions: [
+                    {
+                        action: 'Examine chart',
+                        result: 'The elements O (8), P (15), S (16), and Se (34) are circled. There\'s a note: "Combine for truth".',
+                        callback: () => {
+                            addClue('elements-combined');
+                            updateRoomItem('chemical-chart', 'The chart shows some elements that might form a word.');
+                            addNotebookEntry('Circled elements', 'O (8), P (15), S (16), Se (34) - "Combine for truth"');
+                            playSound('click-sound');
+                        }
+                    },
+                    {
+                        action: 'Mix chemicals',
+                        result: 'You need to find the right combination of elements.',
+                        callback: () => showChemistryPuzzle()
+                    },
+                    {
+                        action: 'Check behind chart',
+                        result: 'Behind the chart you find a hidden panel with a wiring puzzle to restore power.',
+                        callback: () => showWiringPuzzle()
+                    }
+                ]
+            },
+            {
+                id: 'whiteboard',
+                name: 'Whiteboard',
+                description: 'A whiteboard covered in equations and diagrams.',
+                imageDesc: 'A large whiteboard with complex chemical equations. One corner has a doodle of a key.',
+                emoji: '📝',
+                interactions: [
+                    {
+                        action: 'Study equations',
+                        result: 'The equations are too complex, but the doodle looks like a key with numbers: 3-1-4.',
+                        callback: () => {
+                            addClue('key-numbers');
+                            updateRoomItem('whiteboard', 'The equations remain mysterious, but you noticed the key doodle.');
+                            addNotebookEntry('Whiteboard doodle', 'Key with numbers: 3-1-4');
+                            playSound('click-sound');
+                        }
+                    },
+                    {
+                        action: 'Solve sequence puzzle',
+                        result: 'There\'s a sequence of colored dots that might be a memory game.',
+                        callback: () => showSequenceGame()
+                    }
+                ]
+            },
+            {
+                id: 'storage-room',
+                name: 'Storage Room',
+                description: 'A small storage room filled with boxes and equipment.',
+                imageDesc: 'Dusty boxes and old equipment. One box is labeled "Fragile - Handle With Care".',
+                emoji: '📦',
+                interactions: [
+                    {
+                        action: 'Search boxes',
+                        result: 'You find a torn document that seems important and a journal entry.',
+                        callback: () => {
+                            addToInventory('torn-document');
+                            addJournalEntry('entry-3');
+                            updateRoomItem('storage-room', 'The boxes have been searched.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Examine equipment',
+                        result: 'Most is broken, but you find a crowbar that might be useful.',
+                        callback: () => {
+                            addToInventory('crowbar');
+                            updateRoomItem('storage-room', 'The equipment has been examined.');
+                            playSound('item-sound');
+                        }
+                    },
+                    {
+                        action: 'Check electrical panel',
+                        result: 'The power is out. You need to replace the fuse and fix the wiring.',
+                        requiredItem: 'fuse',
+                        successResult: 'With the fuse in hand, you can attempt to restore power.',
+                        callback: () => showWiringPuzzle()
+                    }
+                ]
+            },
+            {
+                id: 'break-room',
+                name: 'Break Room',
+                description: 'A small area with a coffee maker and fridge.',
+                imageDesc: 'A dingy break area with an old coffee maker and a fridge that hums loudly. There\'s a vent cover on the wall.',
+                emoji: '☕',
+                interactions: [
+                    {
+                        action: 'Check fridge',
+                        result: 'The fridge contains spoiled food and a note with part of a code: "The first digit is half of eight".',
+                        callback: () => {
+                            addClue('fridge-note');
+                            updateRoomItem('break-room', 'The fridge contains spoiled food and a note.');
+                            addNotebookEntry('Fridge note', '"The first digit is half of eight"');
+                            playSound('click-sound');
+                        }
+                    },
+                    {
+                        action: 'Examine coffee maker',
+                        result: 'There\'s a sticky note underneath: "Password hint: Archimedes\' famous word". You also find an audio recorder.',
+                        callback: () => {
+                            addClue('coffee-note');
+                            addAudioLog('audio-2');
+                            updateRoomItem('break-room', 'The coffee maker has been examined.');
+                            addNotebookEntry('Coffee maker note', '"Password hint: Archimedes\' famous word"');
+                            playSound('click-sound');
+                        }
+                    },
+                    {
+                        action: 'Check vent',
+                        result: 'The vent cover is loose but secured with screws. You might be able to force it open.',
+                        requiredItem: 'crowbar',
+                        successResult: 'You pry open the vent cover with the crowbar. It leads to a narrow passage.',
+                        callback: () => {
+                            gameState.ventUnlocked = true;
+                            updateRoomItem('break-room', 'The vent cover is now open, revealing a dark passage.');
+                            playSound('vent-sound');
+                            addNotebookEntry('Vent Entrance', 'The vent in the break room leads outside.');
+                        }
+                    }
+                ]
+            },
+            {
+                id: 'server-room',                name: 'Server Room',
+                description: 'A room filled with humming computer servers.',
+                imageDesc: 'Rack after rack of blinking servers. The air is warm from the heat they generate. One terminal is still active.',
+                emoji: '🖥️',
+                interactions: [
+                    {
+                        action: 'Check servers',
+                        result: 'Most are offline, but one terminal is still running a diagnostic program.',
+                        callback: () => {
+                            updateRoomItem('server-room', 'The servers are mostly offline, but one terminal is active.');
+                            playSound('computer-sound');
+                            addRoomItem({
+                                id: 'server-terminal',
+                                name: 'Server Terminal',
+                                description: 'A terminal running a system diagnostic.',
+                                imageDesc: 'A green-on-black terminal showing system status. There\'s a command prompt.',
+                                emoji: '💾',
+                                interactions: [
+                                    {
+                                        action: 'Run diagnostics',
+                                        result: 'The system shows a warning: "Power fluctuation detected. Backup required."',
+                                        callback: () => {
+                                            addNotebookEntry('Server status', 'Power fluctuation detected. Backup required.');
+                                            playSound('click-sound');
+                                        }
+                                    },
+                                    {
+                                        action: 'Access files',
+                                        result: 'You need an admin password to access the files.',
+                                        requiredItem: 'admin-card',
+                                        successResult: 'The admin card grants access. You find a file with the door code hint: "The sum of the digits is 13".',
+                                        callback: () => {
+                                            addClue('door-code-hint');
+                                            gameState.usedItems.push('admin-card');
+                                            updateRoomItem('server-terminal', 'You accessed the files and found a hint.');
+                                            addNotebookEntry('Door code hint', '"The sum of the digits is 13"');
+                                            playSound('success-sound');
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    },
+                    {
+                        action: 'Check behind racks',
+                        result: 'Behind the server racks, you find a security badge and a jigsaw puzzle piece.',
+                        callback: () => {
+                            addToInventory('admin-card');
+                            addToInventory('puzzle-piece-1');
+                            updateRoomItem('server-room', 'You found items behind the server racks.');
+                            playSound('item-sound');
+                        }
+                    }
+                ]
+            }
+        ];
+
+        // Initialize the game
+        function initGame() {
+            renderRoomItems();
+            updateInventory();
+            startTimer();
+            playSound('bgm-normal');
+            gameState.currentBGM = 'bgm-normal';
+            
+            // Set up event listeners
+            document.getElementById('light-toggle').addEventListener('click', toggleLightMode);
+            document.getElementById('hint-button').addEventListener('click', showHint);
+            document.getElementById('map-button').addEventListener('click', () => toggleModal('map'));
+            document.getElementById('notebook-button').addEventListener('click', () => toggleModal('notebook'));
+            document.getElementById('map-close').addEventListener('click', () => toggleModal('map'));
+            document.getElementById('notebook-close').addEventListener('click', () => toggleModal('notebook'));
+            
+            // Make inventory items draggable
+            document.getElementById('inventory-items').addEventListener('mousedown', startDrag);
+            document.addEventListener('mouseup', endDrag);
+        }
+
+        // Render items in the current room
+        function renderRoomItems() {
+            const container = document.getElementById('room-items');
+            container.innerHTML = '';
+            
+            const currentItems = roomItems.filter(item => 
+                item.room === undefined || item.room === gameState.currentRoom
+            );
+            
+            currentItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'room-item';
+                itemElement.innerHTML = `${item.emoji} ${item.name}`;
+                itemElement.addEventListener('click', () => interactWithItem(item));
+                container.appendChild(itemElement);
+            });
+        }
+
+        // Handle item interactions
+        function interactWithItem(item) {
+            const description = document.getElementById('room-description');
+            description.innerHTML = `<strong>${item.name}</strong>: ${item.imageDesc}<br><br>`;
+            
+            item.interactions.forEach(interaction => {
+                const button = document.createElement('button');
+                button.textContent = interaction.action;
+                button.addEventListener('click', () => {
+                    if (interaction.requiredItem) {
+                        if (gameState.inventory.includes(interaction.requiredItem)) {
+                            description.innerHTML += `<br>${interaction.successResult}<br>`;
+                            if (interaction.callback) interaction.callback();
+                        } else {
+                            description.innerHTML += `<br>${interaction.result}<br>`;
+                            if (interaction.callback) interaction.callback();
+                        }
+                    } else {
+                        description.innerHTML += `<br>${interaction.result}<br>`;
+                        if (interaction.callback) interaction.callback();
+                    }
+                });
+                description.appendChild(button);
+            });
+        }
+
+        // Add a new item to the room
+        function addRoomItem(item) {
+            if (!roomItems.some(existing => existing.id === item.id)) {
+                roomItems.push(item);
+                renderRoomItems();
+            }
+        }
+
+        // Update an existing room item
+        function updateRoomItem(itemId, newDescription) {
+            const item = roomItems.find(i => i.id === itemId);
+            if (item) {
+                item.imageDesc = newDescription;
+                renderRoomItems();
+            }
+        }
+
+        // Add item to inventory
+        function addToInventory(itemId) {
+            if (!gameState.inventory.includes(itemId)) {
+                gameState.inventory.push(itemId);
+                updateInventory();
+                showAchievement(`Found item: ${itemId.replace('-', ' ')}`);
+            }
+        }
+
+        // Update inventory display
+        function updateInventory() {
+            const container = document.getElementById('inventory-items');
+            container.innerHTML = '';
+            
+            gameState.inventory.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'inventory-item';
+                itemElement.textContent = item.replace('-', ' ');
+                itemElement.dataset.item = item;
+                container.appendChild(itemElement);
+            });
+        }
+
+        // Add clue to discovered clues
+        function addClue(clueId) {
+            if (!gameState.discoveredClues.includes(clueId)) {
+                gameState.discoveredClues.push(clueId);
+            }
+        }
+
+        // Add journal entry
+        function addJournalEntry(entryId) {
+            const entry = journalEntries.find(e => e.id === entryId);
+            if (entry && !gameState.discoveredClues.includes(entryId)) {
+                gameState.discoveredClues.push(entryId);
+                gameState.journalEntriesFound++;
+                addNotebookEntry(entry.title, entry.content);
+                showAchievement(`Found journal entry: ${entry.title}`);
+            }
+        }
+
+        // Add audio log
+        function addAudioLog(logId) {
+            const log = audioLogs.find(a => a.id === logId);
+            if (log && !gameState.discoveredClues.includes(logId)) {
+                gameState.discoveredClues.push(logId);
+                gameState.audioLogsFound++;
+                addNotebookEntry(log.title, log.content, true, log.audio);
+                showAchievement(`Found audio log: ${log.title}`);
+            }
+        }
+
+        // Add entry to notebook
+        function addNotebookEntry(title, content, isAudio = false, audioSrc = '') {
+            const entry = {
+                id: `note-${Date.now()}`,
+                title,
+                content,
+                isAudio,
+                audioSrc
+            };
+            
+            const entryElement = document.createElement('div');
+            entryElement.className = 'notebook-clue';
+            entryElement.innerHTML = `<strong>${title}</strong><p>${content}</p>`;
+            
+            if (isAudio) {
+                const audio = document.createElement('audio');
+                audio.src = audioSrc;
+                audio.controls = true;
+                entryElement.appendChild(audio);
+            }
+            
+            document.getElementById('notebook-entries').appendChild(entryElement);
+        }
+
+        // Show achievement popup
+        function showAchievement(text) {
+            const popup = document.getElementById('achievement-popup');
+            document.getElementById('achievement-text').textContent = text;
+            popup.style.display = 'block';
+            playSound('success-sound');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000);
+        }
+
+        // Toggle light/dark mode
+        function toggleLightMode() {
+            gameState.lightMode = !gameState.lightMode;
+            document.body.classList.toggle('light-mode', gameState.lightMode);
+            playSound('click-sound');
+        }
+
+        // Show hint
+        function showHint() {
+            gameState.hintsUsed++;
+            const hint = getCurrentHint();
+            alert(`Hint: ${hint}`);
+            playSound('click-sound');
+        }
+
+        // Get hint based on current progress
+        function getCurrentHint() {
+            if (gameState.puzzlesSolved === 0) {
+                return "Check the desk for items that might help you get started.";
+            } else if (!gameState.inventory.includes('small-key')) {
+                return "The small key is hidden in the desk drawer.";
+            } else if (!gameState.inventory.includes('usb-drive')) {
+                return "The safe behind the bookshelf might contain something useful. Look for clues about the combination.";
+            } else if (!gameState.powerRestored) {
+                return "The power is out. Check the storage room for electrical components.";
+            } else {
+                return "Combine all the clues you've found to solve the final puzzle and escape.";
+            }
+        }
+
+        // Toggle modal windows
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            playSound('click-sound');
+        }
+
+        // Start drag for inventory items
+        function startDrag(e) {
+            if (e.target.classList.contains('inventory-item')) {
+                e.target.classList.add('dragging');
+                gameState.draggedItem = e.target.dataset.item;
+            }
+        }
+
+        // End drag
+        function endDrag() {
+            const dragging = document.querySelector('.inventory-item.dragging');
+            if (dragging) {
+                dragging.classList.remove('dragging');
+                gameState.draggedItem = null;
+            }
+        }
+
+        // Play sound effect
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play();
+            }
+        }
+
+        // Change background music
+        function changeBGM(newBGM) {
+            if (gameState.currentBGM !== newBGM) {
+                const current = document.getElementById(gameState.currentBGM);
+                if (current) {
+                    current.pause();
+                }
+                
+                const next = document.getElementById(newBGM);
+                if (next) {
+                    next.currentTime = 0;
+                    next.play();
+                    gameState.currentBGM = newBGM;
+                }
+            }
+        }
+
+        // Decrease player health
+        function decreaseHealth(amount) {
+            gameState.health -= amount;
+            if (gameState.health <= 0) {
+                gameState.health = 0;
+                gameOver(false);
+            }
+            
+            updateHealthBar();
+        }
+
+        // Update health bar display
+        function updateHealthBar() {
+            const healthBar = document.getElementById('health-bar');
+            healthBar.style.width = `${gameState.health}%`;
+            
+            if (gameState.health < 30) {
+                healthBar.style.backgroundColor = '#f44336';
+                changeBGM('bgm-danger');
+            } else if (gameState.health < 60) {
+                healthBar.style.backgroundColor = '#ff9800';
+                changeBGM('bgm-tense');
+            } else {
+                healthBar.style.backgroundColor = '#8bc34a';
+                changeBGM('bgm-normal');
+            }
+        }
+
+        // Game timer
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimerDisplay();
+                
+                if (gameState.timeLeft <= 0) {
+                    gameOver(false);
+                } else if (gameState.timeLeft === 300) { // 5 minutes left
+                    alert("Warning: Only 5 minutes remaining!");
+                    changeBGM('bgm-danger');
+                }
+            }, 1000);
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(gameState.timeLeft / 60);
+            const seconds = gameState.timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        // Game over
+        function gameOver(success) {
+            clearInterval(gameState.timerInterval);
+            
+            const container = document.getElementById('game-container');
+            container.innerHTML = `
+                <div class="ending-screen">
+                    <h2>${success ? 'ESCAPE SUCCESSFUL!' : 'GAME OVER'}</h2>
+                    <p>${success ? 
+                        'You managed to escape the laboratory!' : 
+                        'You failed to escape in time.'}</p>
+                    <p>Puzzles solved: ${gameState.puzzlesSolved}/10</p>
+                    <p>Time remaining: ${Math.floor(gameState.timeLeft / 60)}:${gameState.timeLeft % 60}</p>
+                    <p>Hints used: ${gameState.hintsUsed}</p>
+                    <button onclick="location.reload()">Play Again</button>
+                </div>
+            `;
+            
+            if (success) {
+                playSound('bgm-success');
+            } else {
+                playSound('alarm-sound');
+            }
+        }
+
+        // Show door code input
+        function showDoorCodeInput() {
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = `
+                <h3>Enter Door Code</h3>
+                <input type="text" id="door-code-input" maxlength="4" placeholder="4-digit code">
+                <button id="submit-door-code">Submit</button>
+                <div id="door-code-feedback"></div>
+            `;
+            container.style.display = 'block';
+            
+            document.getElementById('submit-door-code').addEventListener('click', () => {
+                const input = document.getElementById('door-code-input').value;
+                const feedback = document.getElementById('door-code-feedback');
+                
+                if (input === gameState.doorCode) {
+                    feedback.innerHTML = '<p class="success">Code accepted! The door unlocks.</p>';
+                    playSound('door-sound');
+                    setTimeout(() => gameOver(true), 2000);
+                } else {
+                    feedback.innerHTML = '<p class="error">Incorrect code!</p>';
+                    decreaseHealth(10);
+                    playSound('click-sound');
+                }
+            });
+        }
+
+        // Show chemistry puzzle
+        function showChemistryPuzzle() {
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = `
+                <h3>Chemistry Puzzle</h3>
+                <p>Combine the correct elements to form the antidote:</p>
+                <div id="chemistry-lab">
+                    <div id="beaker">
+                        <div id="liquid"></div>
+                    </div>
+                    <div class="chemical-options">
+                        <div class="chemical" data-element="O">Oxygen (O)</div>
+                        <div class="chemical" data-element="P">Phosphorus (P)</div>
+                        <div class="chemical" data-element="S">Sulfur (S)</div>
+                        <div class="chemical" data-element="Se">Selenium (Se)</div>
+                    </div>
+                    <div id="chemistry-feedback"></div>
+                    <button id="reset-chemistry">Reset</button>
+                </div>
+            `;
+            container.style.display = 'block';
+            
+            const chemicals = document.querySelectorAll('.chemical');
+            const liquid = document.getElementById('liquid');
+            const feedback = document.getElementById('chemistry-feedback');
+            let sequence = [];
+            
+            chemicals.forEach(chem => {
+                chem.addEventListener('click', () => {
+                    if (sequence.length < 4) {
+                        sequence.push(chem.dataset.element);
+                        updateBeaker(sequence.length);
+                        playSound('click-sound');
+                    }
+                    
+                    if (sequence.length === 4) {
+                        checkChemistrySolution(sequence.join(''));
+                    }
+                });
+            });
+            
+            document.getElementById('reset-chemistry').addEventListener('click', () => {
+                sequence = [];
+                liquid.style.height = '0';
+                feedback.innerHTML = '';
+                playSound('click-sound');
+            });
+            
+            function updateBeaker(step) {
+                liquid.style.height = `${step * 25}%`;
+                
+                if (step === 1) liquid.style.backgroundColor = '#ff0000';
+                else if (step === 2) liquid.style.backgroundColor = '#ff9900';
+                else if (step === 3) liquid.style.backgroundColor = '#ffff00';
+                else if (step === 4) liquid.style.backgroundColor = '#00ff00';
+            }
+            
+            function checkChemistrySolution(solution) {
+                if (solution === 'OPSSe') {
+                    feedback.innerHTML = '<p class="success">Correct! The liquid turns green. You found the antidote formula.</p>';
+                    gameState.hasAntidote = true;
+                    addNotebookEntry('Antidote Formula', 'Combine O, P, S, Se in sequence');
+                    playSound('success-sound');
+                    gameState.puzzlesSolved++;
+                } else {
+                    feedback.innerHTML = '<p class="error">Wrong combination! The mixture bubbles violently.</p>';
+                    decreaseHealth(15);
+                    playSound('alarm-sound');
+                }
+            }
+        }
+
+        // Show wiring puzzle
+        function showWiringPuzzle() {
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = `
+                <h3>Wiring Puzzle</h3>
+                <p>Connect the wires to restore power:</p>
+                <div class="wiring-puzzle">
+                    <div class="wire" data-id="1"></div>
+                    <div class="wire" data-id="2"></div>
+                    <div class="wire" data-id="3"></div>
+                    <div class="wire" data-id="4"></div>
+                    <div class="wire" data-id="5"></div>
+                </div>
+                <p>Connect wires 1, 3, and 5 to restore power.</p>
+                <div id="wiring-feedback"></div>
+                <button id="submit-wiring">Test Connection</button>
+            `;
+            container.style.display = 'block';
+            
+            const wires = document.querySelectorAll('.wire');
+            const connectedWires = [];
+            
+            wires.forEach(wire => {
+                wire.addEventListener('click', () => {
+                    wire.classList.toggle('connected');
+                    playSound('click-sound');
+                });
+            });
+            
+            document.getElementById('submit-wiring').addEventListener('click', () => {
+                const selected = Array.from(document.querySelectorAll('.wire.connected'))
+                    .map(w => parseInt(w.dataset.id));
+                
+                const feedback = document.getElementById('wiring-feedback');
+                
+                if (selected.length === 3 && selected.includes(1) && selected.includes(3) && selected.includes(5)) {
+                    feedback.innerHTML = '<p class="success">Power restored!</p>';
+                    gameState.powerRestored = true;
+                    playSound('power-sound');
+                    gameState.puzzlesSolved++;
+                    setTimeout(() => {
+                        container.style.display = 'none';
+                    }, 1500);
+                } else {
+                    feedback.innerHTML = '<p class="error">Incorrect wiring! Try again.</p>';
+                    playSound('click-sound');
+                }
+            });
+        }
+
+        // Show sequence game
+        function showSequenceGame() {
+            const sequences = [
+                [1, 2, 3, 4],
+                [3, 1, 4, 2],
+                [2, 4, 1, 3]
+            ];
+            const currentSequence = sequences[Math.floor(Math.random() * sequences.length)];
+            let playerSequence = [];
+            
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = `
+                <h3>Sequence Puzzle</h3>
+                <p>Repeat the sequence shown:</p>
+                <div class="sequence-game">
+                    <div class="sequence-button" data-id="1">1</div>
+                    <div class="sequence-button" data-id="2">2</div>
+                    <div class="sequence-button" data-id="3">3</div>
+                    <div class="sequence-button" data-id="4">4</div>
+                </div>
+                <div id="sequence-feedback"></div>
+            `;
+            container.style.display = 'block';
+            
+            // Show the sequence to remember
+            showSequence(currentSequence);
+            
+            function showSequence(sequence) {
+                let i = 0;
+                const buttons = document.querySelectorAll('.sequence-button');
+                const interval = setInterval(() => {
+                    if (i >= sequence.length) {
+                        clearInterval(interval);
+                        enableButtons();
+                        return;
+                    }
+                    
+                    const button = buttons[sequence[i] - 1];
+                    button.classList.add('active');
+                    playSound('click-sound');
+                    
+                    setTimeout(() => {
+                        button.classList.remove('active');
+                    }, 500);
+                    
+                    i++;
+                }, 1000);
+            }
+            
+            function enableButtons() {
+                const buttons = document.querySelectorAll('.sequence-button');
+                buttons.forEach(button => {
+                    button.addEventListener('click', handleButtonClick);
+                });
+            }
+            
+            function handleButtonClick(e) {
+                const button = e.target;
+                const id = parseInt(button.dataset.id);
+                playerSequence.push(id);
+                
+                button.classList.add('active');
+                playSound('click-sound');
+                
+                setTimeout(() => {
+                    button.classList.remove('active');
+                }, 300);
+                
+                checkSequence();
+            }
+            
+            function checkSequence() {
+                const feedback = document.getElementById('sequence-feedback');
+                
+                if (playerSequence.length === currentSequence.length) {
+                    let correct = true;
+                    for (let i = 0; i < currentSequence.length; i++) {
+                        if (playerSequence[i] !== currentSequence[i]) {
+                            correct = false;
+                            break;
+                        }
+                    }
+                    
+                    if (correct) {
+                        feedback.innerHTML = '<p class="success">Correct sequence! You found a key with numbers 3-1-4.</p>';
+                        addClue('key-numbers');
+                        addNotebookEntry('Sequence puzzle', 'Correct sequence revealed numbers: 3-1-4');
+                        playSound('success-sound');
+                        gameState.puzzlesSolved++;
+                        setTimeout(() => {
+                            container.style.display = 'none';
+                        }, 2000);
+                    } else {
+                        feedback.innerHTML = '<p class="error">Wrong sequence! Try again.</p>';
+                        playerSequence = [];
+                        playSound('click-sound');
+                        setTimeout(() => {
+                            showSequence(currentSequence);
+                        }, 1000);
+                    }
+                }
+            }
+        }
+
+        // Show password puzzle
+        function showPasswordPuzzle() {
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = `\
+                <h3>Computer Login</h3>
+                <p>Enter password for DR.ALCHEM:</p>
+                <div class="crossword">
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+                    <div class="crossword-cell"><input type="te"
+                    <div class="crossword-cell"><input type="text" maxlength="1"></div>
+
+    
+                </div>
+                <p class="hint">Hint: Archimedes' famous word (6 letters)</p>
+                <button id="submit-password">Login</button>
+                <div id="password-feedback"></div>
+            `;
+            container.style.display = 'block';
+            
+            document.getElementById('submit-password').addEventListener('click', () => {
+                const inputs = document.querySelectorAll('.crossword-cell input');
+                const password = Array.from(inputs).map(input => input.value).join('').toUpperCase();
+                const feedback = document.getElementById('password-feedback');
+                
+                if (password === 'EUREKA') {
+                    feedback.innerHTML = '<p class="success">Login successful! Accessing files...</p>';
+                    addClue('computer-password');
+                    addNotebookEntry('Computer password', 'EUREKA');
+                    playSound('success-sound');
+                    gameState.puzzlesSolved++;
+                    setTimeout(() => {
+                        container.style.display = 'none';
+                        // Show computer files or next puzzle
+                    }, 1500);
+                } else {
+                    feedback.innerHTML = '<p class="error">Incorrect password!</p>';
+                    playSound('click-sound');
+                }
+            });
+        }
+
+        // Initialize the game when the page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
