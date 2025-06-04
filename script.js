@@ -133,42 +133,33 @@ const roomItems = [
         id: 'computer',
         name: 'Computer Terminal',
         description: 'An obsolete computer setup that somehow still hums with power.',
-        imageDesc: 'The CRT monitor\'s glow paints everything an eerie green. A sticky note on the keyboard reads "Remember - password changes every full moon!" The username "DR.ALCHEM" is already entered.',
+        imageDesc: 'The CRT monitor\'s glow paints everything an eerie green. A sticky note on the keyboard reads "Password hint: Solve the lab crossword (check drawer)" The username "DR.ALCHEM" is already entered.',
         interactions: [
-            {
-                action: 'Turn on computer',
-                result: 'The ancient hard drive whirs to life, displaying: "Project Phoenix Mainframe - Access Restricted". The login screen blinks expectantly.',
-                callback: () => {
-                    updateRoomItem('computer', 'The terminal awaits your command, its fan whirring like a nervous breath.');
-                    addRoomItem({
-                        id: 'login-screen',
-                        name: 'Login Screen',
-                        description: 'The system demands authentication.',
-                        imageDesc: 'The cursor blinks rhythmically after "Password:". A screensaver flickers - an animated phoenix rising from flames that form the project logo.',
-                        interactions: [
-                            {
-                                action: 'Guess password',
-                                result: 'The system beeps angrily at random attempts. A message appears: "2 attempts remaining before security lockdown."',
-                                callback: () => showPasswordPuzzle()
-                            },
-                            {
-                                action: 'Insert USB drive',
-                                result: 'The drive slots in smoothly. The screen updates: "Recognized Project Phoenix storage device. Decrypting...". A moment later: "Password hint: Archimedes\' triumphant cry (6 letters)".',
-                                requiredItem: 'usb-drive',
-                                successResult: 'The USB contains a password file. The computer chimes: "Welcome Dr. Alchem. Final notes loaded." The screen displays a document with the door code clearly labeled: EMERGENCY OVERRIDE CODE.',
-                                callback: () => {
-                                    addClue('computer-password');
-                                    gameState.usedItems.push('usb-drive');
-                                    updateRoomItem('login-screen', 'The computer displays classified research notes alongside the door code.');
-                                    addStoryReveal("The document describes 'Subject 314' showing promising results before catastrophic failure. The last entry reads: 'If you're reading this, the transformation sequence cannot be reversed. Destroy all samples.'");
-                                }
-                            }
-                        ]
-                    });
-                }
-            }
+            
+                // In the computer terminal interactions:
+{
+    action: 'Turn on computer',
+    result: 'The ancient hard drive whirs to life, displaying: "Project Phoenix Mainframe - Access Restricted". The login screen shows a crossword puzzle instead of the usual password field.',
+    callback: () => {
+        updateRoomItem('computer', 'The terminal displays a crossword puzzle that must be solved to gain access.');
+        showCrosswordPuzzle();
+    }
+},
+{
+    action: 'Insert USB drive',
+    result: 'The drive slots in smoothly. The screen updates: "Recognized Project Phoenix storage device. Decrypting...". The crossword puzzle now shows some letters filled in to help you.',
+    requiredItem: 'usb-drive',
+    successResult: 'The USB contains crossword hints. Some letters are now pre-filled to help solve the puzzle.',
+    callback: () => {
+        addClue('crossword-hints');
+        gameState.usedItems.push('usb-drive');
+        showCrosswordPuzzle(true);
+    }
+}
+            
         ]
     },
+
     {
         id: 'door',
         name: 'Exit Door',
@@ -505,20 +496,148 @@ function checkComputerPassword() {
     }
 }
 
-// Login to computer after password is known
+// Crossword puzzle data
+const crosswordData = {
+    solution: [
+        ['S', 'E', 'R', 'U', 'M'],
+        ['V', 'I', 'A', 'L', 'S'],
+        ['D', 'N', 'A', 'T', 'E'],
+        ['G', 'E', 'N', 'E', 'S'],
+        ['M', 'O', 'L', 'E', 'C']
+    ],
+    across: {
+        1: { clue: "Experimental liquid given to subjects", row: 0, col: 0, length: 5 },
+        4: { clue: "Genetic material (abbr.)", row: 2, col: 0, length: 3 },
+        5: { clue: "Units of heredity", row: 3, col: 0, length: 5 },
+        6: { clue: "____cule (smallest unit of a compound)", row: 4, col: 0, length: 4 }
+    },
+    down: {
+        1: { clue: "Glass containers for chemicals", row: 0, col: 1, length: 5 },
+        2: { clue: "RNA's counterpart", row: 0, col: 2, length: 3 },
+        3: { clue: "PH scale measures this", row: 0, col: 4, length: 3 }
+    }
+};
+
+// Show the crossword puzzle
+function showCrosswordPuzzle(withHints = false) {
+    const puzzleContainer = document.getElementById('puzzle-container');
+    
+    // Build the crossword grid
+    let gridHTML = '<div class="crossword-container">';
+    gridHTML += '<h3>Laboratory Crossword</h3>';
+    gridHTML += '<p>Solve the puzzle to reveal the password</p>';
+    
+    // Create the grid
+    gridHTML += '<div class="crossword-grid">';
+    for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cellValue = withHints && (row === 0 || col === 0) ? crosswordData.solution[row][col] : '';
+            const isLocked = withHints && (row === 0 || col === 0);
+            
+            // Add clue numbers
+            let clueNumber = '';
+            if ((row === 0 && col === 0) || (row === 0 && col === 1) || 
+                (row === 0 && col === 2) || (row === 0 && col === 4) ||
+                (row === 2 && col === 0) || (row === 3 && col === 0) ||
+                (row === 4 && col === 0)) {
+                const acrossClue = Object.entries(crosswordData.across).find(([num, data]) => 
+                    data.row === row && data.col === col);
+                const downClue = Object.entries(crosswordData.down).find(([num, data]) => 
+                    data.row === row && data.col === col);
+                
+                if (acrossClue) clueNumber = acrossClue[0];
+                else if (downClue) clueNumber = downClue[0];
+            }
+            
+            gridHTML += `
+                <div class="crossword-cell">
+                    ${clueNumber ? `<span class="clue-number">${clueNumber}</span>` : ''}
+                    <input type="text" maxlength="1" id="${cellId}" 
+                           value="${cellValue}" 
+                           ${isLocked ? 'readonly style="color:#8bc34a;"' : ''}
+                           oninput="this.value = this.value.toUpperCase(); checkCrosswordCompletion()">
+                </div>
+            `;
+        }
+    }
+    gridHTML += '</div>';
+    
+    // Add clues
+    gridHTML += '<div class="crossword-clues">';
+    gridHTML += '<div class="clue-list"><h4>Across</h4><ol>';
+    for (const [num, clue] of Object.entries(crosswordData.across)) {
+        gridHTML += `<li>${clue.clue}</li>`;
+    }
+    gridHTML += '</ol></div>';
+    
+    gridHTML += '<div class="clue-list"><h4>Down</h4><ol>';
+    for (const [num, clue] of Object.entries(crosswordData.down)) {
+        gridHTML += `<li>${clue.clue}</li>`;
+    }
+    gridHTML += '</ol></div>';
+    gridHTML += '</div>';
+    
+    // Add success message area
+    gridHTML += `
+        <div id="crossword-success" class="crossword-success">
+            Puzzle solved! The password is "SERUM" (from 1 Across)
+        </div>
+        <button onclick="document.getElementById('puzzle-container').style.display='none'">Close</button>
+    `;
+    
+    gridHTML += '</div>';
+    puzzleContainer.innerHTML = gridHTML;
+    puzzleContainer.style.display = 'block';
+    
+    // If using hints, lock the first row and column
+    if (withHints) {
+        for (let i = 0; i < 5; i++) {
+            document.getElementById(`cell-0-${i}`).readOnly = true;
+            document.getElementById(`cell-${i}-0`).readOnly = true;
+        }
+    }
+}
+
+// Check if crossword is completed correctly
+function checkCrosswordCompletion() {
+    let allCorrect = true;
+    
+    for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+            const cell = document.getElementById(`cell-${row}-${col}`);
+            if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
+                allCorrect = false;
+            }
+        }
+    }
+    
+    if (allCorrect) {
+        const successDiv = document.getElementById('crossword-success');
+        successDiv.style.display = 'block';
+        addClue('computer-password');
+        
+        // Automatically log in after a short delay
+        setTimeout(loginToComputer, 1500);
+    }
+}
+    
+
+
 function loginToComputer() {
     const puzzleContainer = document.getElementById('puzzle-container');
     puzzleContainer.innerHTML = `
         <h3>Computer Login</h3>
         <div class="success">
-            <p>Login successful!</p>
+            <p>Login successful! (Password: SERUM)</p>
             <p>The screen displays:</p>
             <div style="background: #000; color: #0f0; padding: 10px; font-family: monospace;">
                 PROJECT PHOENIX - FINAL NOTES<br><br>
                 Subject 314 results:<br>
                 - Full cellular regeneration achieved<br>
                 - Memory loss side effect confirmed<br>
-                - Degeneration begins at 314 minutes<br><br>
+                - Degeneration begins at 314 minutes<br>
+                - No reversal possible<br><br>
                 EMERGENCY OVERRIDE CODE: ${gameState.doorCode}<br>
                 Use only if primary systems fail.<br>
                 Remember - the serum must not leave this room.
@@ -529,7 +648,6 @@ function loginToComputer() {
     addClue('door-code-revealed');
     addClue('phoenix-details');
 }
-
 // Show door code input
 function showDoorCodeInput() {
     const puzzleContainer = document.getElementById('puzzle-container');
