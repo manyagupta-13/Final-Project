@@ -115,12 +115,9 @@ const roomItems = [
                                 action: 'Try to open safe',
                                 result: 'The safe beeps - it requires a specific word or phrase to be entered using the scrambled letters.',
                                 requiredItem: 'subject-note',
-                                successResult: 'Using the note "Subject 314: le poisson steve", you realize it\'s an anagram. Rearranging the letters forms "the poison vessels" - the safe accepts this phrase and opens with a hiss. Inside rests a USB drive labeled "Project Phoenix - Final Notes".',
+                                successResult: 'The safe beeps and displays scrambled letters that can form "the poison vessels".',
                                 callback: () => {
-                                    addToInventory('usb-drive');
-                                    addClue('safe-combination');
-                                    updateRoomItem('safe', 'The safe stands open, its contents taken.');
-                                    addStoryReveal("A faint scent of lavender wafts from the safe's interior - the same smell you noticed when first waking up.");
+                                    showAnagramPuzzle();
                                 }
                             }
                         ]
@@ -718,6 +715,50 @@ function checkDoorCode() {
         alert('INCORRECT CODE\nAccess denied!');
     }
 }
+// Show anagram puzzle for the safe
+function showAnagramPuzzle() {
+    const puzzleContainer = document.getElementById('puzzle-container');
+    const letters = "THEPOISONVESSELS".split('');
+    const scrambledLetters = shuffleArray([...letters]).join(' ');
+    
+    puzzleContainer.innerHTML = `
+        <h3>Letter Combination Safe</h3>
+        <p>Rearrange these letters to form the correct phrase:</p>
+        <div class="anagram-letters">${scrambledLetters}</div>
+        <p>Your note says: "Subject 314: le poisson steve"</p>
+        <input type="text" id="anagram-input" size="20">
+        <button onclick="checkAnagramSolution()">Submit</button>
+        <div id="anagram-feedback"></div>
+    `;
+    puzzleContainer.style.display = 'block';
+}
 
+// Check anagram solution
+function checkAnagramSolution() {
+    const input = document.getElementById('anagram-input').value.toUpperCase().replace(/\s/g, '');
+    const feedback = document.getElementById('anagram-feedback');
+    
+    if (input === "Le Poisson Steve") {
+        feedback.innerHTML = '<p class="success">Correct! The safe opens with a hiss. Inside rests a USB drive labeled "Project Phoenix - Final Notes".</p>';
+        addToInventory('usb-drive');
+        addClue('safe-combination');
+        updateRoomItem('safe', 'The safe stands open, its contents taken.');
+        addStoryReveal("A faint scent of lavender wafts from the safe's interior - the same smell you noticed when first waking up.");
+        
+        // Add a close button after solving
+        feedback.innerHTML += '<button onclick="document.getElementById(\'puzzle-container\').style.display=\'none\'">Close</button>';
+    } else {
+        feedback.innerHTML = '<p class="error">Incorrect! The safe beeps angrily. Try again.</p>';
+    }
+}
+
+// Helper function to shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 // Initialize the game when page loads
 window.onload = initGame;
