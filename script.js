@@ -1,5 +1,5 @@
-  // Game state
-  const gameState = {
+// Game state
+const gameState = {
     inventory: [],
     discoveredClues: [],
     puzzlesSolved: 0,
@@ -20,10 +20,10 @@ const roomItems = [
         interactions: [
             {
                 action: 'Search the desk',
-                result: 'Your fingers brush against something metallic beneath a stack of papers - a small brass key. Underneath it, a note shows four alchemical symbols: ☽, ★, ♞, ☀️ arranged in that exact order.',
+                result: 'Your fingers brush against something metallic beneath a stack of papers - a small brass key. Underneath it, a torn piece of paper shows the words: "Subject 314: le poisson steve".',
                 callback: () => {
                     addToInventory('small-key');
-                    addToInventory('symbol-note');
+                    addToInventory('subject-note');
                     updateRoomItem('desk', 'The desk has been thoroughly searched. Only the microscope remains undisturbed.');
                     addStoryReveal("A hastily scrawled note reads: 'The transformation sequence must follow lunar phases - new moon first, then the knight's journey.'");
                 }
@@ -97,25 +97,25 @@ const roomItems = [
             },
             {
                 action: 'Check behind books',
-                result: 'Shifting volumes reveals a wall safe unlike any you\'ve seen - its dials show celestial symbols instead of numbers. Four dials: ☀️, ☽, ★, and ♞.',
+                result: 'Shifting volumes reveals a wall safe with an unusual keypad - it displays scrambled letters instead of numbers. A small label reads: "Subject 314 holds the key".',
                 callback: () => {
-                    updateRoomItem('bookshelf', 'The safe lurks behind the books, its symbols gleaming.');
+                    updateRoomItem('bookshelf', 'The safe lurks behind the books, its letter keypad visible.');
                     addRoomItem({
                         id: 'safe',
-                        name: 'Celestial Safe',
-                        description: 'An antique safe with celestial symbol dials.',
-                        imageDesc: 'The safe\'s metal is cold to the touch. Each dial clicks precisely as you turn it through the four symbols: sun, moon, star, and knight.',
+                        name: 'Letter Combination Safe',
+                        description: 'A secure safe with a letter-based keypad.',
+                        imageDesc: 'The safe\'s surface is cold to the touch. The keypad shows scrambled letters that can be rearranged. Above it, the label "Subject 314" glows faintly.',
                         interactions: [
                             {
                                 action: 'Examine safe',
-                                result: 'Up close, you notice tiny inscriptions beneath each symbol: ☀️="Sol Invictus", ☽="Luna Madre", ★="Stella Guidem", ♞="Eques Perdit". The mechanism hums faintly when touched.',
+                                result: 'The safe has 12 buttons displaying scrambled letters. A small screen above shows: "Enter the hidden message from Subject 314".',
                                 callback: () => {}
                             },
                             {
                                 action: 'Try to open safe',
-                                result: 'The dials resist random turning. There must be a specific sequence...',
-                                requiredItem: 'symbol-note',
-                                successResult: 'Following the note\'s sequence (☽, ★, ♞, ☀️), the safe emits a musical chime. Inside rests a USB drive labeled "Project Phoenix - Final Notes".',
+                                result: 'The safe beeps - it requires a specific word or phrase to be entered using the scrambled letters.',
+                                requiredItem: 'subject-note',
+                                successResult: 'Using the note "Subject 314: le poisson steve", you realize it\'s an anagram. Rearranging the letters forms "the poison vessels" - the safe accepts this phrase and opens with a hiss. Inside rests a USB drive labeled "Project Phoenix - Final Notes".',
                                 callback: () => {
                                     addToInventory('usb-drive');
                                     addClue('safe-combination');
@@ -509,7 +509,7 @@ const crosswordData = {
         1: { clue: "Experimental liquid given to subjects", row: 0, col: 0, length: 5 },
         4: { clue: "Genetic material (abbr.)", row: 2, col: 0, length: 3 },
         5: { clue: "Units of heredity", row: 3, col: 0, length: 5 },
-        6: { clue: "____cule (smallest unit of a compound)", row: 4, col: 0, length: 4 }
+        6: { clue: "____ule (smallest unit of a compound)", row: 4, col: 0, length: 4 }
     },
     down: {
         1: { clue: "Glass containers for chemicals", row: 0, col: 1, length: 5 },
