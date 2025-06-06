@@ -183,6 +183,89 @@
         .pulsing {
             animation: pulse 2s infinite;
         }
+
+        /* Crossword Puzzle Styles */
+        .crossword-container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .crossword-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 40px);
+            grid-template-rows: repeat(5, 40px);
+            gap: 2px;
+            margin: 20px auto;
+            justify-content: center;
+        }
+        
+        .crossword-cell {
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .crossword-cell input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .crossword-cell input:focus {
+            outline: 1px solid #8bc34a;
+        }
+        
+        .crossword-clues {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .clue-list {
+            width: 45%;
+        }
+        
+        .clue-number {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 10px;
+            color: #8bc34a;
+        }
+        
+        .crossword-success {
+            color: #8bc34a;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        /* Anagram Puzzle Styles */
+        .anagram-letters {
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 5px;
+        }
+
+        #anagram-feedback {
+            margin-top: 15px;
+            min-height: 30px;
+        }
     </style>
 </head>
 <body>
@@ -700,6 +783,21 @@
         scene.add(whiteboard);
         interactiveObjects.push(whiteboard);
 
+        // Safe (hidden behind books)
+        const safe = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5, 0.5, 0.1),
+            new THREE.MeshStandardMaterial({ color: 0x333333 })
+        );
+        safe.position.set(0, 1.5, -4.5);
+        safe.visible = false;
+        safe.userData = {
+            name: "Hidden Safe",
+            description: "A secure safe hidden behind the bookshelf.",
+            onClick: () => showSafeInteraction()
+        };
+        scene.add(safe);
+        interactiveObjects.push(safe);
+
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
@@ -1028,6 +1126,7 @@
             const interactions = `
                 <div class="interaction-buttons">
                     <button class="interaction-button" onclick="browseBooks(event)">Browse Books</button>
+                    <button class="interaction-button" onclick="checkBehindBooks(event)">Check Behind Books</button>
                 </div>
             `;
             showModal("Bookshelf", "A collection of scientific tomes, some looking well-used.", interactions);
@@ -1043,6 +1142,81 @@
             `;
             
             showModal("Cryptography Book", result, `<button class="interaction-button" onclick="showBookshelfInteraction(event)">Back to Bookshelf</button>`);
+        }
+
+        function checkBehindBooks(e) {
+            if (e) e.stopPropagation();
+            addClue('safe-discovered');
+            
+            // Make the safe visible
+            safe.visible = true;
+            
+            const result = `
+                <p>Shifting volumes reveals a wall safe with an unusual keypad - it displays scrambled letters instead of numbers.</p>
+                <p>A small label reads: "Subject 314 holds the key".</p>
+            `;
+            
+            showModal("Hidden Safe", result, `
+                <button class="interaction-button" onclick="showSafeInteraction(event)">Examine Safe</button>
+                <button class="interaction-button" onclick="showBookshelfInteraction(event)">Back to Bookshelf</button>
+            `);
+        }
+
+        function showSafeInteraction(e) {
+            if (e) e.stopPropagation();
+            
+            if (gameState.inventory.includes('subject-note')) {
+                showAnagramPuzzle();
+            } else {
+                showModal("Letter Combination Safe", `
+                    <p>The safe has 12 buttons displaying scrambled letters.</p>
+                    <p>A small screen above shows: "Enter the hidden message from Subject 314".</p>
+                    <p class="hint">You might need to find a clue about Subject 314 first.</p>
+                `, `
+                    <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+                `);
+            }
+        }
+
+        function showAnagramPuzzle() {
+            const letters = "THEPOISONVESSELS".split('');
+            const scrambledLetters = shuffleArray([...letters]).join(' ');
+            
+            showModal("Letter Combination Safe", `
+                <p>Rearrange these letters to form the correct phrase:</p>
+                <div class="anagram-letters">${scrambledLetters}</div>
+                <p>Your note says: "Subject 314: le poisson steve"</p>
+                <input type="text" id="anagram-input" size="20">
+                <button class="interaction-button" onclick="checkAnagramSolution(event)">Submit</button>
+                <div id="anagram-feedback"></div>
+            `, `
+                <button class="interaction-button" onclick="showSafeInteraction(event)">Back to Safe</button>
+            `);
+        }
+
+        function checkAnagramSolution(e) {
+            if (e) e.stopPropagation();
+            const input = document.getElementById('anagram-input').value.toUpperCase().replace(/\s/g, '');
+            const feedback = document.getElementById('anagram-feedback');
+            
+            if (input === "THEPOISONVESSELS") {
+                feedback.innerHTML = '<p class="success">Correct! The safe opens with a hiss. Inside rests a USB drive labeled "Project Phoenix - Final Notes".</p>';
+                addToInventory('usb-drive');
+                addClue('safe-combination');
+                safe.visible = false; // Hide the safe after opening
+                addStoryReveal("A faint scent of lavender wafts from the safe's interior - the same smell you noticed when first waking up.");
+            } else {
+                feedback.innerHTML = '<p class="error">Incorrect! The safe beeps angrily. Try again.</p>';
+            }
+        }
+
+        // Helper function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
 
         function showComputerInteraction() {
@@ -1066,49 +1240,133 @@
             `;
             
             showModal("Computer Login", result, `
-                <button class="interaction-button" onclick="showPasswordPuzzle(event)">Attempt Login</button>
+                <button class="interaction-button" onclick="showCrosswordPuzzle(event)">Attempt Login</button>
                 <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
             `);
         }
 
-        function showPasswordPuzzle(e) {
-            if (e) e.stopPropagation();
-            if (gameState.inventory.includes('usb-drive')) {
-                loginToComputer();
-            } else {
-                const passwordHTML = `
-                    <p>Username: DR.ALCHEM</p>
-                    <p>Password: <input type="password" id="computer-password-input"></p>
-                    <button class="interaction-button" onclick="checkComputerPassword(event)">Login</button>
-                    <p class="hint">Hint: The password might be related to Archimedes' famous exclamation.</p>
-                `;
-                
-                showModal("Computer Login", "The system demands authentication.", passwordHTML);
+        // Crossword puzzle data
+        const crosswordData = {
+            solution: [
+                ['S', 'E', 'R', 'U', 'M'],
+                ['V', 'I', 'A', 'L', 'S'],
+                ['D', 'N', 'A', 'T', 'E'],
+                ['G', 'E', 'N', 'E', 'S'],
+                ['M', 'O', 'L', 'E', 'C']
+            ],
+            across: {
+                1: { clue: "Experimental liquid given to subjects", row: 0, col: 0, length: 5 },
+                4: { clue: "Genetic material (abbr.)", row: 2, col: 0, length: 3 },
+                5: { clue: "Units of heredity", row: 3, col: 0, length: 5 },
+                6: { clue: "____ule (smallest unit of a compound)", row: 4, col: 0, length: 4 }
+            },
+            down: {
+                1: { clue: "Glass containers for chemicals", row: 0, col: 1, length: 5 },
+                2: { clue: "RNA's counterpart", row: 0, col: 2, length: 3 },
+                3: { clue: "PH scale measures this", row: 0, col: 4, length: 3 }
             }
-        }
+        };
 
-        function checkComputerPassword(e) {
+        function showCrosswordPuzzle(e, withHints = false) {
             if (e) e.stopPropagation();
-            const input = document.getElementById('computer-password-input').value.toUpperCase();
             
-            if (input === 'EUREKA') {
-                loginToComputer();
-            } else {
-                alert('ACCESS DENIED\nIncorrect password!');
+            // Build the crossword grid
+            let gridHTML = '<div class="crossword-container">';
+            gridHTML += '<h3>Laboratory Crossword</h3>';
+            gridHTML += '<p>Solve the puzzle to reveal the password</p>';
+            
+            // Create the grid
+            gridHTML += '<div class="crossword-grid">';
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const cellId = `cell-${row}-${col}`;
+                    const cellValue = withHints && (row === 0 || col === 0) ? crosswordData.solution[row][col] : '';
+                    const isLocked = withHints && (row === 0 || col === 0);
+                    
+                    // Add clue numbers
+                    let clueNumber = '';
+                    if ((row === 0 && col === 0) || (row === 0 && col === 1) || 
+                        (row === 0 && col === 2) || (row === 0 && col === 4) ||
+                        (row === 2 && col === 0) || (row === 3 && col === 0) ||
+                        (row === 4 && col === 0)) {
+                        const acrossClue = Object.entries(crosswordData.across).find(([num, data]) => 
+                            data.row === row && data.col === col);
+                        const downClue = Object.entries(crosswordData.down).find(([num, data]) => 
+                            data.row === row && data.col === col);
+                        
+                        if (acrossClue) clueNumber = acrossClue[0];
+                        else if (downClue) clueNumber = downClue[0];
+                    }
+                    
+                    gridHTML += `
+                        <div class="crossword-cell">
+                            ${clueNumber ? `<span class="clue-number">${clueNumber}</span>` : ''}
+                            <input type="text" maxlength="1" id="${cellId}" 
+                                   value="${cellValue}" 
+                                   ${isLocked ? 'readonly style="color:#8bc34a;"' : ''}
+                                   oninput="this.value = this.value.toUpperCase(); checkCrosswordCompletion()">
+                        </div>
+                    `;
+                }
+            }
+            gridHTML += '</div>';
+            
+            // Add clues
+            gridHTML += '<div class="crossword-clues">';
+            gridHTML += '<div class="clue-list"><h4>Across</h4><ol>';
+            for (const [num, clue] of Object.entries(crosswordData.across)) {
+                gridHTML += `<li>${num}. ${clue.clue}</li>`;
+            }
+            gridHTML += '</ol></div>';
+            
+            gridHTML += '<div class="clue-list"><h4>Down</h4><ol>';
+            for (const [num, clue] of Object.entries(crosswordData.down)) {
+                gridHTML += `<li>${num}. ${clue.clue}</li>`;
+            }
+            gridHTML += '</ol></div>';
+            gridHTML += '</div>';
+            
+            // Add success message area
+            gridHTML += `
+                <div id="crossword-success" class="crossword-success">
+                    Puzzle solved! The password is "EUREKA" (from the first word in 1 Across)
+                </div>
+                <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
+            `;
+            
+            gridHTML += '</div>';
+            
+            showModal("Computer Login - Crossword Puzzle", gridHTML, '');
+            
+            // If using hints, lock the first row and column
+            if (withHints) {
+                for (let i = 0; i < 5; i++) {
+                    document.getElementById(`cell-0-${i}`).readOnly = true;
+                    document.getElementById(`cell-${i}-0`).readOnly = true;
+                }
             }
         }
 
-        function insertUSB(e) {
-            if (e) e.stopPropagation();
-            if (gameState.inventory.includes('usb-drive')) {
-                addClue('usb-inserted');
+        // Check if crossword is completed correctly
+        function checkCrosswordCompletion() {
+            let allCorrect = true;
+            
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
+                        allCorrect = false;
+                    }
+                }
+            }
+            
+            if (allCorrect) {
+                const successDiv = document.getElementById('crossword-success');
+                successDiv.style.display = 'block';
+                addClue('computer-password');
                 
-                const result = `
-                    <p>The USB drive contains Project Phoenix files, including the emergency door code: ${gameState.doorCode}</p>
-                    <p class="story-reveal">The files mention "Subject 314" and "cellular regeneration".</p>
-                `;
-                
-                showModal("USB Drive Contents", result, `<button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>`);
+                // Automatically log in after a short delay
+                setTimeout(loginToComputer, 1500);
             }
         }
 
@@ -1125,6 +1383,23 @@
             `;
             
             showModal("Computer System", result, `<button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>`);
+        }
+
+        function insertUSB(e) {
+            if (e) e.stopPropagation();
+            if (gameState.inventory.includes('usb-drive')) {
+                addClue('usb-inserted');
+                
+                const result = `
+                    <p>The USB drive contains Project Phoenix files, including the emergency door code: ${gameState.doorCode}</p>
+                    <p class="story-reveal">The files mention "Subject 314" and "cellular regeneration".</p>
+                `;
+                
+                showModal("USB Drive Contents", result, `
+                    <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
+                    <button class="interaction-button" onclick="showCrosswordPuzzle(event, true)">View Crossword with Hints</button>
+                `);
+            }
         }
 
         function showWhiteboardInteraction() {
