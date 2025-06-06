@@ -227,6 +227,9 @@
         
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
         directionalLight.position.set(5, 10, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
         scene.add(directionalLight);
         
         // Camera setup
@@ -236,6 +239,7 @@
         // Renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
         document.getElementById('threejs-container').appendChild(renderer.domElement);
         
         // Controls with better navigation
@@ -329,6 +333,7 @@
             new THREE.MeshStandardMaterial({ color: 0x8844ff })
         );
         door.position.set(0, 2, roomSize/2 - 0.05);
+        door.castShadow = true;
         door.userData = {
             name: "Exit Door",
             description: "Reinforced steel door with a keypad. The only way out.",
@@ -348,9 +353,14 @@
         // Lab desk
         const desk = new THREE.Mesh(
             new THREE.BoxGeometry(3, 0.8, 1.5),
-            new THREE.MeshStandardMaterial({ color: 0x555555 })
+            new THREE.MeshStandardMaterial({ 
+                color: 0x555555,
+                roughness: 0.7
+            })
         );
         desk.position.set(-3, 0.4, -3);
+        desk.castShadow = true;
+        desk.receiveShadow = true;
         desk.userData = {
             name: "Lab Desk",
             description: "Cluttered with research notes and equipment.",
@@ -359,96 +369,320 @@
         scene.add(desk);
         interactiveObjects.push(desk);
 
-        // Cabinet with drawers
+        // ===== ENHANCED CABINET =====
         const cabinet = new THREE.Group();
         cabinet.position.set(3, 1.5, -3);
         
-        // Cabinet frame
+        // Cabinet frame (wooden texture)
+        const cabinetTexture = new THREE.MeshStandardMaterial({
+            color: 0x5a3a2a,
+            roughness: 0.7,
+            metalness: 0.1
+        });
+        
         const cabinetFrame = new THREE.Mesh(
             new THREE.BoxGeometry(2, 3, 1),
-            new THREE.MeshStandardMaterial({ color: 0x333333 })
+            cabinetTexture
         );
+        cabinetFrame.castShadow = true;
+        cabinetFrame.receiveShadow = true;
         cabinet.add(cabinetFrame);
         
-        // Drawer 1 (top)
-        const drawer1 = new THREE.Mesh(
-            new THREE.BoxGeometry(1.8, 0.8, 0.9),
-            new THREE.MeshStandardMaterial({ color: 0x444444 })
-        );
-        drawer1.position.set(0, 0.7, 0);
-        drawer1.userData = {
-            isDrawer: true,
-            drawerNumber: 1,
-            locked: false
-        };
-        cabinet.add(drawer1);
+        // Drawers with handles
+        const drawerPositions = [0.7, 0, -0.7];
+        const drawerMaterials = [
+            new THREE.MeshStandardMaterial({ color: 0x6b4b3a }), // Darker wood
+            new THREE.MeshStandardMaterial({ color: 0x5a3a2a }), // Medium wood
+            new THREE.MeshStandardMaterial({ color: 0x4a2a1a })  // Darkest wood
+        ];
+
+        const drawers = [];
+        drawerPositions.forEach((yPos, i) => {
+            const drawer = new THREE.Mesh(
+                new THREE.BoxGeometry(1.8, 0.7, 0.9),
+                drawerMaterials[i]
+            );
+            drawer.position.set(0, yPos, 0.05);
+            drawer.castShadow = true;
+            drawer.receiveShadow = true;
+            
+            // Add drawer handle
+            const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16);
+            const handleMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+            const handle = new THREE.Mesh(handleGeometry, handleMaterial);
+            handle.rotation.z = Math.PI/2;
+            handle.position.set(0.8, yPos, 0.4);
+            handle.castShadow = true;
+            
+            drawer.userData = {
+                isDrawer: true,
+                drawerNumber: i+1,
+                locked: i !== 0 // First drawer unlocked
+            };
+            
+            cabinet.add(drawer);
+            cabinet.add(handle);
+            drawers.push(drawer);
+        });
+
+        // Add cabinet legs
+        const legGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.1, 16);
+        const legPositions = [
+            { x: 0.9, z: 0.45 },
+            { x: -0.9, z: 0.45 },
+            { x: 0.9, z: -0.45 },
+            { x: -0.9, z: -0.45 }
+        ];
         
-        // Drawer 2 (middle)
-        const drawer2 = new THREE.Mesh(
-            new THREE.BoxGeometry(1.8, 0.8, 0.9),
-            new THREE.MeshStandardMaterial({ color: 0x444444 })
-        );
-        drawer2.position.set(0, 0, 0);
-        drawer2.userData = {
-            isDrawer: true,
-            drawerNumber: 2,
-            locked: true
-        };
-        cabinet.add(drawer2);
-        
-        // Drawer 3 (bottom)
-        const drawer3 = new THREE.Mesh(
-            new THREE.BoxGeometry(1.8, 0.8, 0.9),
-            new THREE.MeshStandardMaterial({ color: 0x444444 })
-        );
-        drawer3.position.set(0, -0.7, 0);
-        drawer3.userData = {
-            isDrawer: true,
-            drawerNumber: 3,
-            locked: true
-        };
-        cabinet.add(drawer3);
+        legPositions.forEach(pos => {
+            const leg = new THREE.Mesh(legGeometry, new THREE.MeshStandardMaterial({ color: 0x333333 }));
+            leg.position.set(pos.x, -1.55, pos.z);
+            leg.castShadow = true;
+            cabinet.add(leg);
+        });
 
         cabinet.userData = {
             name: "Supply Cabinet",
-            description: "Heavy steel cabinet with three drawers.",
+            description: "A sturdy wooden cabinet with three drawers.",
             onClick: () => showCabinetInteraction(),
             isCabinet: true,
-            drawers: [drawer1, drawer2, drawer3]
+            drawers: drawers
         };
         scene.add(cabinet);
         interactiveObjects.push(cabinet);
-        interactiveObjects.push(drawer1);
-        interactiveObjects.push(drawer2);
-        interactiveObjects.push(drawer3);
+        drawers.forEach(drawer => interactiveObjects.push(drawer));
 
-        // Bookshelf
-        const bookshelf = new THREE.Mesh(
-            new THREE.BoxGeometry(4, 5, 0.5),
-            new THREE.MeshStandardMaterial({ color: 0x3a2a1f })
-        );
+        // ===== ENHANCED BOOKSHELF =====
+        const bookshelf = new THREE.Group();
         bookshelf.position.set(0, 2.5, -4);
+
+        // Bookshelf frame
+        const frameMaterial = new THREE.MeshStandardMaterial({
+            color: 0x3a2a1f,
+            roughness: 0.6
+        });
+        
+        const frame = new THREE.Mesh(
+            new THREE.BoxGeometry(4, 5, 0.5),
+            frameMaterial
+        );
+        frame.castShadow = true;
+        frame.receiveShadow = true;
+        bookshelf.add(frame);
+
+        // Shelves
+        const shelfPositions = [1.5, 0.5, -0.5, -1.5];
+        shelfPositions.forEach(yPos => {
+            const shelf = new THREE.Mesh(
+                new THREE.BoxGeometry(3.8, 0.1, 0.4),
+                frameMaterial
+            );
+            shelf.position.set(0, yPos, 0);
+            shelf.castShadow = true;
+            shelf.receiveShadow = true;
+            bookshelf.add(shelf);
+        });
+
+        // Books - different colors and sizes
+        const bookColors = [
+            0x8b0000, 0x006400, 0x00008b, 0x8b008b, 
+            0x8b4513, 0x2f4f4f, 0x4682b4, 0x556b2f
+        ];
+        
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 8; j++) {
+                const bookHeight = 0.5 + Math.random() * 0.5;
+                const bookWidth = 0.2 + Math.random() * 0.1;
+                const bookDepth = 0.15 + Math.random() * 0.05;
+                
+                const book = new THREE.Mesh(
+                    new THREE.BoxGeometry(bookWidth, bookHeight, bookDepth),
+                    new THREE.MeshStandardMaterial({ 
+                        color: bookColors[j % bookColors.length],
+                        roughness: 0.3
+                    })
+                );
+                book.castShadow = true;
+                book.receiveShadow = true;
+                
+                book.position.set(
+                    -1.5 + j * 0.4,
+                    shelfPositions[i] + bookHeight/2 + 0.05,
+                    0.1
+                );
+                
+                // Add book spine text
+                const spineText = new THREE.Mesh(
+                    new THREE.PlaneGeometry(bookWidth * 0.9, bookHeight * 0.8),
+                    new THREE.MeshStandardMaterial({ 
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: 0.7
+                    })
+                );
+                spineText.position.set(
+                    book.position.x,
+                    book.position.y,
+                    book.position.z + bookDepth/2 + 0.01
+                );
+                spineText.rotation.y = Math.PI;
+                
+                bookshelf.add(book);
+                bookshelf.add(spineText);
+            }
+        }
+
         bookshelf.userData = {
             name: "Bookshelf",
-            description: "Floor-to-ceiling case of scientific tomes.",
+            description: "A floor-to-ceiling bookshelf filled with scientific tomes.",
             onClick: () => showBookshelfInteraction()
         };
         scene.add(bookshelf);
         interactiveObjects.push(bookshelf);
 
-        // Computer terminal
-        const terminal = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 0.8, 1),
+        // ===== ENHANCED COMPUTER TERMINAL =====
+        const terminal = new THREE.Group();
+        terminal.position.set(2, 0.4, 2);
+
+        // Computer base
+        const base = new THREE.Mesh(
+            new THREE.BoxGeometry(0.8, 0.1, 0.8),
             new THREE.MeshStandardMaterial({ color: 0x222222 })
         );
-        terminal.position.set(2, 0.4, 2);
+        base.castShadow = true;
+        base.receiveShadow = true;
+        terminal.add(base);
+
+        // Monitor
+        const monitor = new THREE.Mesh(
+            new THREE.BoxGeometry(0.7, 0.5, 0.02),
+            new THREE.MeshStandardMaterial({ color: 0x111111 })
+        );
+        monitor.position.set(0, 0.35, 0.4);
+        monitor.castShadow = true;
+        terminal.add(monitor);
+
+        // Monitor screen
+        const screen = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.65, 0.45),
+            new THREE.MeshStandardMaterial({ 
+                color: 0x00aa00,
+                emissive: 0x00aa00,
+                emissiveIntensity: 0.5
+            })
+        );
+        screen.position.set(0, 0.35, 0.41);
+        terminal.add(screen);
+
+        // Keyboard
+        const keyboard = new THREE.Mesh(
+            new THREE.BoxGeometry(0.6, 0.02, 0.3),
+            new THREE.MeshStandardMaterial({ color: 0x333333 })
+        );
+        keyboard.position.set(0, 0.1, 0.1);
+        keyboard.castShadow = true;
+        terminal.add(keyboard);
+
+        // Add some keyboard keys
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 10; j++) {
+                const key = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.05, 0.02, 0.05),
+                    new THREE.MeshStandardMaterial({ color: 0x555555 })
+                );
+                key.position.set(
+                    -0.25 + j * 0.055,
+                    0.11,
+                    0.1 - i * 0.1
+                );
+                key.castShadow = true;
+                terminal.add(key);
+            }
+        }
+
         terminal.userData = {
             name: "Computer Terminal",
-            description: "Obsolete computer that still hums with power.",
+            description: "An old CRT computer terminal with green monochrome display.",
             onClick: () => showComputerInteraction()
         };
         scene.add(terminal);
         interactiveObjects.push(terminal);
+
+        // ===== ENHANCED PERIODIC TABLE =====
+        const chart = new THREE.Group();
+        chart.position.set(4, 1.5, 0);
+        chart.rotation.y = -Math.PI/2;
+
+        // Chart background
+        const background = new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 1.5),
+            new THREE.MeshStandardMaterial({ color: 0x88aaff })
+        );
+        background.receiveShadow = true;
+        chart.add(background);
+
+        // Create periodic table grid
+        const gridMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+        const gridGeometry = new THREE.BufferGeometry();
+        
+        // Vertical lines
+        const positions = [];
+        for (let x = -0.9; x <= 0.9; x += 0.2) {
+            positions.push(x, -0.75, 0.01, x, 0.75, 0.01);
+        }
+        
+        // Horizontal lines
+        for (let y = -0.75; y <= 0.75; y += 0.25) {
+            positions.push(-0.9, y, 0.01, 0.9, y, 0.01);
+        }
+        
+        gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        
+        const grid = new THREE.LineSegments(gridGeometry, gridMaterial);
+        chart.add(grid);
+
+        // Add element boxes with "POSSESS" highlighted
+        const elements = [
+            { symbol: "H", x: -0.8, y: 0.5 },
+            { symbol: "He", x: 0.8, y: 0.5 },
+            // ... more elements would go here
+            { symbol: "P", x: -0.6, y: -0.5, highlight: true },
+            { symbol: "O", x: -0.4, y: -0.5, highlight: true },
+            { symbol: "S", x: -0.2, y: -0.5, highlight: true },
+            { symbol: "S", x: 0, y: -0.5, highlight: true },
+            { symbol: "E", x: 0.2, y: -0.5, highlight: true },
+            { symbol: "S", x: 0.4, y: -0.5, highlight: true }
+        ];
+        
+        elements.forEach(el => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const context = canvas.getContext('2d');
+            context.fillStyle = el.highlight ? '#ff0000' : '#ffffff';
+            context.fillRect(0, 0, 64, 64);
+            context.font = '24px Arial';
+            context.fillStyle = '#000000';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText(el.symbol, 32, 32);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const element = new THREE.Mesh(
+                new THREE.PlaneGeometry(0.15, 0.15),
+                new THREE.MeshStandardMaterial({ map: texture })
+            );
+            element.position.set(el.x, el.y, 0.02);
+            chart.add(element);
+        });
+
+        chart.userData = {
+            name: "Chemical Chart",
+            description: "A periodic table with certain elements highlighted to spell 'POSSESS'.",
+            onClick: () => showChartInteraction()
+        };
+        scene.add(chart);
+        interactiveObjects.push(chart);
 
         // Whiteboard
         const whiteboard = new THREE.Mesh(
@@ -457,6 +691,7 @@
         );
         whiteboard.position.set(-2, 1.5, 2.5);
         whiteboard.rotation.y = Math.PI;
+        whiteboard.receiveShadow = true;
         whiteboard.userData = {
             name: "Whiteboard",
             description: "Covered in equations and diagrams.",
@@ -464,21 +699,6 @@
         };
         scene.add(whiteboard);
         interactiveObjects.push(whiteboard);
-
-        // Chemical chart
-        const chart = new THREE.Mesh(
-            new THREE.PlaneGeometry(2, 1.5),
-            new THREE.MeshStandardMaterial({ color: 0x88aaff })
-        );
-        chart.position.set(4, 1.5, 0);
-        chart.rotation.y = -Math.PI/2;
-        chart.userData = {
-            name: "Chemical Chart",
-            description: "Periodic table with disturbing annotations.",
-            onClick: () => showChartInteraction()
-        };
-        scene.add(chart);
-        interactiveObjects.push(chart);
 
         // Animation loop
         function animate() {
@@ -930,37 +1150,37 @@
         }
 
         // Raycaster for object interaction
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    
-    function onMouseClick(event) {
-        // Don't process clicks if modal is open
-        if (modal.style.display === 'flex') return;
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
         
-        // Calculate mouse position in normalized device coordinates
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        
-        // Update the raycaster
-        raycaster.setFromCamera(mouse, camera);
-        
-        // Calculate objects intersecting the raycaster
-        const intersects = raycaster.intersectObjects(interactiveObjects, true); // Note the 'true' for recursive checking
-        
-        if (intersects.length > 0) {
-            // Find the first object with an onClick handler
-            let clickedObj = intersects[0].object;
-            while (clickedObj && !clickedObj.userData.onClick) {
-                clickedObj = clickedObj.parent;
-            }
+        function onMouseClick(event) {
+            // Don't process clicks if modal is open
+            if (modal.style.display === 'flex') return;
             
-            if (clickedObj && clickedObj.userData.onClick) {
-                clickedObj.userData.onClick();
+            // Calculate mouse position in normalized device coordinates
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Update the raycaster
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Calculate objects intersecting the raycaster
+            const intersects = raycaster.intersectObjects(interactiveObjects, true); // Note the 'true' for recursive checking
+            
+            if (intersects.length > 0) {
+                // Find the first object with an onClick handler
+                let clickedObj = intersects[0].object;
+                while (clickedObj && !clickedObj.userData.onClick) {
+                    clickedObj = clickedObj.parent;
+                }
+                
+                if (clickedObj && clickedObj.userData.onClick) {
+                    clickedObj.userData.onClick();
+                }
             }
         }
-    }
 
-    window.addEventListener('click', onMouseClick, false);
+        window.addEventListener('click', onMouseClick, false);
 
         // Initialize the game
         updateInventory();
