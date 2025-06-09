@@ -913,12 +913,16 @@
             const interactions = `
                 <div class="interaction-buttons">
                     <button class="interaction-button" onclick="showDoorCodeInput(event)">Examine Keypad</button>
+<<<<<<< Updated upstream
                     <button class="interaction-button" onclick="showDoorNote(event)">Search Around Door</button>
+=======
+>>>>>>> Stashed changes
                 </div>
             `;
             showModal("Exit Door", "The reinforced door is your only way out. A keypad demands a 4-digit code.", interactions);
         }
 
+<<<<<<< Updated upstream
         function showDoorNote(e) {
             if (e) e.stopPropagation();
             if (!gameState.inventory.includes('door-note')) {
@@ -938,6 +942,8 @@
                 showModal("Exit Door", "You've already found the hidden note near the door.", `<button class="interaction-button" onclick="showDoorInteraction(event)">Back to Door</button>`);
             }
         }
+=======
+>>>>>>> Stashed changes
 
         function showDoorCodeInput(e) {
             if (e) e.stopPropagation();
@@ -961,7 +967,11 @@
                     <button onclick="addCodeDigit('8', event)">8</button>
                     <button onclick="addCodeDigit('9', event)">9</button>
                     <button onclick="addCodeDigit('0', event)">0</button>
+<<<<<<< Updated upstream
                     <button onclick="clearCode(event)">C</button>
+=======
+                    <button onclick="clearCode(event)">CLEAR</button>
+>>>>>>> Stashed changes
                     <button onclick="submitCode(event)">ENTER</button>
                 </div>
                 ${hint}
@@ -1240,13 +1250,17 @@
             `;
             
             showModal("Computer Login", result, `
+<<<<<<< Updated upstream
                 <button class="interaction-button" onclick="showCrosswordPuzzle(event)">Attempt Login</button>
+=======
+>>>>>>> Stashed changes
                 <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
             `);
         }
 
         // Crossword puzzle data
         const crosswordData = {
+<<<<<<< Updated upstream
             solution: [
                 ['S', 'E', 'R', 'U', 'M'],
                 ['V', 'I', 'A', 'L', 'S'],
@@ -1266,6 +1280,30 @@
                 3: { clue: "PH scale measures this", row: 0, col: 4, length: 3 }
             }
         };
+=======
+
+    solution: [
+        ['S', 'E', 'R', 'U', 'M'],
+        ['V', 'I', 'A', 'L', 'S'],
+        ['G', 'E', 'N', 'E', 'S'],
+        ['M', 'O', 'L', 'E', 'S'],
+        ['A', 'T', 'O', 'M', 'S']
+    ],
+    across: {
+        1: { clue: "Experimental liquid given to subjects", row: 0, col: 0, length: 5 },
+        2: { clue: "Glass containers for chemicals", row: 1, col: 1, length: 5 },
+        3: { clue: "Units of heredity", row: 2, col: 2, length: 5 },
+        4: { clue: "Unit of measurement representing a specific number of particles", row: 3, col: 3, length: 5 },
+        5: { clue: "Basic building blocks of chemistry", row: 4, col: 4, length: 5 }
+    },
+    down: {
+        1: { clue: "Vertical clue 1", row: 0, col: 0, length: 5 },
+        2: { clue: "Vertical clue 2", row: 0, col: 1, length: 5 },
+        // Add more down clues as needed
+    }
+
+            };
+>>>>>>> Stashed changes
 
         function showCrosswordPuzzle(e, withHints = false) {
             if (e) e.stopPropagation();
@@ -1397,11 +1435,33 @@
                 
                 showModal("USB Drive Contents", result, `
                     <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
+<<<<<<< Updated upstream
                     <button class="interaction-button" onclick="showCrosswordPuzzle(event, true)">View Crossword with Hints</button>
+=======
+                    <button class="interaction-button" onclick="attemptCrosswordAccess(event)">Attempt Login</button>
+>>>>>>> Stashed changes
                 `);
             }
         }
 
+<<<<<<< Updated upstream
+=======
+        function attemptCrosswordAccess(e) {
+    if (e) e.stopPropagation();
+
+    if (gameState.inventory.includes('usb-drive')) {
+        showCrosswordPuzzle(e, false); // No hints even with USB
+    } else {
+        showModal("Access Denied", `
+            <p>You try to access the crossword puzzle, but it's locked.</p>
+            <p class="hint">Maybe there's something on a USB drive that could help...</p>
+        `, `
+            <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+        `);
+    }
+}
+
+>>>>>>> Stashed changes
         function showWhiteboardInteraction() {
             addClue('whiteboard-examined');
             
