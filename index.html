@@ -410,6 +410,306 @@
         // Interactive objects
         const interactiveObjects = [];
 
+        // ===== LABORATORY EQUIPMENT ADDITIONS =====
+
+// Glass material to reuse
+const glassMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x88ccff,
+    transmission: 0.9,
+    roughness: 0.1,
+    metalness: 0.0,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    ior: 1.5,
+    thickness: 0.5,
+    transparent: true,
+    opacity: 0.7
+});
+
+// Metal material for equipment
+const metalMaterial = new THREE.MeshStandardMaterial({
+    color: 0xaaaaaa,
+    roughness: 0.3,
+    metalness: 0.8
+});
+
+// 1. CHEMISTRY WORKBENCH
+const workbench = new THREE.Group();
+workbench.position.set(-4, 0, 2);
+
+// Bench surface
+const benchSurface = new THREE.Mesh(
+    new THREE.BoxGeometry(2, 0.1, 1.5),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x333333,
+        roughness: 0.7
+    })
+);
+benchSurface.position.set(0, 0.05, 0);
+benchSurface.receiveShadow = true;
+workbench.add(benchSurface);
+
+// Test tube rack
+const tubeRack = new THREE.Group();
+for (let i = 0; i < 6; i++) {
+    const tube = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
+        glassMaterial
+    );
+    tube.position.set(-0.4 + i * 0.16, 0.4, 0);
+    tube.castShadow = true;
+    
+    // Add colored liquid
+    if (i % 2 === 0) {
+        const liquid = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
+            new THREE.MeshPhysicalMaterial({
+                color: [0xff0000, 0x00ff00, 0x0000ff][i % 3],
+                transmission: 0.5,
+                roughness: 0.2,
+                emissive: [0xff0000, 0x00ff00, 0x0000ff][i % 3],
+                emissiveIntensity: 0.3
+            })
+        );
+        liquid.position.set(-0.4 + i * 0.16, 0.25, 0);
+        tubeRack.add(liquid);
+    }
+    tubeRack.add(tube);
+}
+tubeRack.position.set(0, 0, -0.3);
+workbench.add(tubeRack);
+
+// Bunsen burner
+const burnerBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.15, 0.15, 0.2, 32),
+    metalMaterial
+);
+burnerBase.position.set(0.5, 0.1, 0.4);
+workbench.add(burnerBase);
+
+const burnerTube = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.05, 0.3, 16),
+    metalMaterial
+);
+burnerTube.position.set(0.5, 0.3, 0.4);
+burnerTube.rotation.x = Math.PI/4;
+workbench.add(burnerTube);
+
+// Flame effect
+const flame = new THREE.Mesh(
+    new THREE.ConeGeometry(0.08, 0.3, 4),
+    new THREE.MeshBasicMaterial({
+        color: 0xff6600,
+        transparent: true,
+        opacity: 0.7
+    })
+);
+flame.position.set(0.5, 0.45, 0.55);
+workbench.add(flame);
+
+// Make flame flicker
+function animateFlame() {
+    const scale = 0.8 + Math.random() * 0.4;
+    flame.scale.set(scale, scale, scale);
+    setTimeout(animateFlame, 100);
+}
+animateFlame();
+
+// 2. MICROSCOPE SETUP
+const microscope = new THREE.Group();
+microscope.position.set(1, 0.8, -1);
+
+// Base
+const microBase = new THREE.Mesh(
+    new THREE.BoxGeometry(0.4, 0.2, 0.4),
+    metalMaterial
+);
+microBase.castShadow = true;
+microscope.add(microBase);
+
+// Arm
+const arm = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16),
+    metalMaterial
+);
+arm.position.set(0, 0.5, 0.2);
+arm.rotation.x = Math.PI * 0.3;
+microscope.add(arm);
+
+// Eyepiece
+const eyepiece = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5),
+    metalMaterial
+);
+eyepiece.position.set(0, 0.9, 0.35);
+microscope.add(eyepiece);
+
+// Objective lens
+const lens = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.1, 0.1, 0.05, 32),
+    new THREE.MeshPhysicalMaterial({
+        color: 0x000000,
+        transmission: 0.9,
+        roughness: 0.0,
+        metalness: 0.1,
+        ior: 1.5
+    })
+);
+lens.position.set(0, 0.5, -0.1);
+microscope.add(lens);
+
+// Slide
+const slide = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3, 0.01, 0.1),
+    new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.1
+    })
+);
+slide.position.set(0, 0.2, -0.2);
+microscope.add(slide);
+
+// 3. ERRLENMEYER FLASK WITH GLOWING LIQUID
+const flask = new THREE.Group();
+flask.position.set(3, 0.5, 1);
+
+// Flask body
+const flaskBody = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5, 0.3, 1.2, 32),
+    glassMaterial
+);
+flaskBody.position.y = 0.6;
+flask.add(flaskBody);
+
+// Glowing liquid
+const glowingLiquid = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.48, 0.28, 0.8, 32),
+    new THREE.MeshPhysicalMaterial({
+        color: 0x00ff88,
+        transmission: 0.7,
+        roughness: 0.2,
+        emissive: 0x00ff88,
+        emissiveIntensity: 0.5
+    })
+);
+glowingLiquid.position.y = 0.4;
+flask.add(glowingLiquid);
+
+// Bubbles
+for (let i = 0; i < 10; i++) {
+    const bubble = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05 + Math.random() * 0.03, 16, 16),
+        new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            transmission: 1.0,
+            roughness: 0.0,
+            metalness: 0.0,
+            ior: 1.33
+        })
+    );
+    bubble.position.set(
+        (Math.random() - 0.5) * 0.4,
+        Math.random() * 0.7,
+        (Math.random() - 0.5) * 0.4
+    );
+    flask.add(bubble);
+}
+
+// 4. CENTRIFUGE MACHINE
+const centrifuge = new THREE.Group();
+centrifuge.position.set(-2, 0.5, 3);
+
+// Machine body
+const centrifugeBody = new THREE.Mesh(
+    new THREE.BoxGeometry(0.8, 0.6, 0.6),
+    new THREE.MeshStandardMaterial({
+        color: 0xcccccc,
+        roughness: 0.5,
+        metalness: 0.7
+    })
+);
+centrifuge.add(centrifugeBody);
+
+// Lid
+const centrifugeLid = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.35, 0.35, 0.05, 32),
+    new THREE.MeshStandardMaterial({
+        color: 0x999999,
+        roughness: 0.4,
+        metalness: 0.8
+    })
+);
+centrifugeLid.position.set(0, 0.325, 0);
+centrifuge.add(centrifugeLid);
+
+// Control panel
+const panel = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.4, 0.2),
+    new THREE.MeshStandardMaterial({
+        color: 0x111111,
+        emissive: 0x111111,
+        emissiveIntensity: 0.2
+    })
+);
+panel.position.set(0, 0.2, 0.31);
+panel.rotation.x = -Math.PI/2;
+centrifuge.add(panel);
+
+// Add buttons
+for (let i = 0; i < 3; i++) {
+    const button = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16),
+        new THREE.MeshStandardMaterial({
+            color: [0xff0000, 0xffff00, 0x00ff00][i],
+            emissive: [0xff0000, 0xffff00, 0x00ff00][i],
+            emissiveIntensity: 0.3
+        })
+    );
+    button.position.set(-0.1 + i * 0.1, 0.21, 0.31);
+    centrifuge.add(button);
+}
+
+// Add all equipment to scene
+scene.add(workbench);
+scene.add(microscope);
+scene.add(flask);
+scene.add(centrifuge);
+
+// Add interaction data for new objects
+workbench.userData = {
+    name: "Chemistry Workbench",
+    description: "A workstation with test tubes, burners, and various glassware.",
+    onClick: () => showModal("Workbench", "The workbench contains various chemistry equipment. Some test tubes contain colorful liquids.", `
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
+
+microscope.userData = {
+    name: "Microscope",
+    description: "A high-powered microscope focused on a specimen slide.",
+    onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures unlike anything natural.", `
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
+
+flask.userData = {
+    name: "Glowing Flask",
+    description: "An Erlenmeyer flask containing a luminescent green liquid.",
+    onClick: () => showModal("Mysterious Flask", "The liquid pulses gently with an inner light. It feels warm to the touch.", `
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
+
+centrifuge.userData = {
+    name: "Centrifuge",
+    description: "A laboratory centrifuge for separating substances.",
+    onClick: () => showModal("Centrifuge", "The machine hums quietly. A label reads: 'Subject 314 samples only'.", `
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
+
+// Add to interactive objects array
+interactiveObjects.push(workbench, microscope, flask, centrifuge);
         // Door (purple as you liked)
         const door = new THREE.Mesh(
             new THREE.BoxGeometry(2, 4, 0.1),
@@ -913,16 +1213,14 @@
             const interactions = `
                 <div class="interaction-buttons">
                     <button class="interaction-button" onclick="showDoorCodeInput(event)">Examine Keypad</button>
-<<<<<<< Updated upstream
+
                     <button class="interaction-button" onclick="showDoorNote(event)">Search Around Door</button>
-=======
->>>>>>> Stashed changes
                 </div>
             `;
             showModal("Exit Door", "The reinforced door is your only way out. A keypad demands a 4-digit code.", interactions);
         }
 
-<<<<<<< Updated upstream
+
         function showDoorNote(e) {
             if (e) e.stopPropagation();
             if (!gameState.inventory.includes('door-note')) {
@@ -942,8 +1240,6 @@
                 showModal("Exit Door", "You've already found the hidden note near the door.", `<button class="interaction-button" onclick="showDoorInteraction(event)">Back to Door</button>`);
             }
         }
-=======
->>>>>>> Stashed changes
 
         function showDoorCodeInput(e) {
             if (e) e.stopPropagation();
@@ -967,11 +1263,8 @@
                     <button onclick="addCodeDigit('8', event)">8</button>
                     <button onclick="addCodeDigit('9', event)">9</button>
                     <button onclick="addCodeDigit('0', event)">0</button>
-<<<<<<< Updated upstream
                     <button onclick="clearCode(event)">C</button>
-=======
                     <button onclick="clearCode(event)">CLEAR</button>
->>>>>>> Stashed changes
                     <button onclick="submitCode(event)">ENTER</button>
                 </div>
                 ${hint}
@@ -1250,17 +1543,13 @@
             `;
             
             showModal("Computer Login", result, `
-<<<<<<< Updated upstream
                 <button class="interaction-button" onclick="showCrosswordPuzzle(event)">Attempt Login</button>
-=======
->>>>>>> Stashed changes
                 <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
             `);
         }
 
         // Crossword puzzle data
         const crosswordData = {
-<<<<<<< Updated upstream
             solution: [
                 ['S', 'E', 'R', 'U', 'M'],
                 ['V', 'I', 'A', 'L', 'S'],
@@ -1280,30 +1569,6 @@
                 3: { clue: "PH scale measures this", row: 0, col: 4, length: 3 }
             }
         };
-=======
-
-    solution: [
-        ['S', 'E', 'R', 'U', 'M'],
-        ['V', 'I', 'A', 'L', 'S'],
-        ['G', 'E', 'N', 'E', 'S'],
-        ['M', 'O', 'L', 'E', 'S'],
-        ['A', 'T', 'O', 'M', 'S']
-    ],
-    across: {
-        1: { clue: "Experimental liquid given to subjects", row: 0, col: 0, length: 5 },
-        2: { clue: "Glass containers for chemicals", row: 1, col: 1, length: 5 },
-        3: { clue: "Units of heredity", row: 2, col: 2, length: 5 },
-        4: { clue: "Unit of measurement representing a specific number of particles", row: 3, col: 3, length: 5 },
-        5: { clue: "Basic building blocks of chemistry", row: 4, col: 4, length: 5 }
-    },
-    down: {
-        1: { clue: "Vertical clue 1", row: 0, col: 0, length: 5 },
-        2: { clue: "Vertical clue 2", row: 0, col: 1, length: 5 },
-        // Add more down clues as needed
-    }
-
-            };
->>>>>>> Stashed changes
 
         function showCrosswordPuzzle(e, withHints = false) {
             if (e) e.stopPropagation();
@@ -1460,7 +1725,7 @@
     }
 }
 
->>>>>>> Stashed changes
+
         function showWhiteboardInteraction() {
             addClue('whiteboard-examined');
             
