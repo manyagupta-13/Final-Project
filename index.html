@@ -407,6 +407,188 @@
         ceiling.rotation.x = Math.PI / 2;
         scene.add(ceiling);
 
+        // ===== HANGING WIRES FOR ABANDONED LAB AESTHETIC =====
+function createHangingWires() {
+    const wireGroup = new THREE.Group();
+    const wireMaterial = new THREE.MeshStandardMaterial({
+        color: 0x333333,
+        roughness: 0.8,
+        metalness: 0.2
+    });
+
+    // Create a grid of hanging wires across the ceiling
+    const wireCount = 10; // Increased number of wires
+    const gridSize = Math.ceil(Math.sqrt(wireCount));
+    const spacing = roomSize / (gridSize + 1);
+    
+    for (let i = 0; i < wireCount; i++) {
+        // Calculate grid position with some randomness
+        const gridX = i % gridSize;
+        const gridZ = Math.floor(i / gridSize);
+        
+        // Position with slight randomness to avoid perfect grid
+        const x = -roomSize/2 + (gridX + 0.5 + (Math.random()-0.5)*0.3) * spacing;
+        const z = -roomSize/2 + (gridZ + 0.5 + (Math.random()-0.5)*0.3) * spacing;
+        
+        // Random wire length (longer wires, between 2-4 meters)
+        const length = 2 + Math.random() * 2;
+        
+        // Create wire using a cylinder
+        const wireGeometry = new THREE.CylinderGeometry(0.02, 0.02, length, 8);
+        const wire = new THREE.Mesh(wireGeometry, wireMaterial);
+        
+        // Position at ceiling and let hang straight down
+        wire.position.set(x, wallHeight - length/2, z);
+        
+        // Remove all rotation randomness - wires hang perfectly straight down
+        wire.rotation.set(0, 0, 0);
+        
+        wire.castShadow = true;
+        wireGroup.add(wire);
+        
+        // Add electrical box/connector at top (more detailed)
+        if (Math.random() > 0.3) {
+            const connector = new THREE.Mesh(
+                new THREE.BoxGeometry(0.1, 0.05, 0.1),
+                new THREE.MeshStandardMaterial({ color: 0x666666 })
+            );
+            connector.position.set(x, wallHeight, z);
+            wireGroup.add(connector);
+            
+            // Add small wires coming out of connector
+            for (let j = 0; j < 3; j++) {
+                const smallWire = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.01, 0.01, 0.2, 6),
+                    wireMaterial
+                );
+                smallWire.position.set(
+                    x + (Math.random() - 0.5) * 0.05,
+                    wallHeight - 0.1,
+                    z + (Math.random() - 0.5) * 0.05
+                );
+                smallWire.rotation.x = Math.random() * Math.PI;
+                smallWire.rotation.z = Math.random() * Math.PI;
+                wireGroup.add(smallWire);
+            }
+        }
+        
+        // Add sparking effect to some wires (20% chance)
+        if (Math.random() > 0.8) {
+            createSparkEffect(x, wallHeight - length, z, wireGroup);
+        }
+    }
+    
+    // Remove the curved wires section completely to ensure all wires are straight
+    
+    return wireGroup;
+}
+
+function createSparkEffect(x, y, z, parentGroup) {
+    const sparkGroup = new THREE.Group();
+    sparkGroup.position.set(x, y, z);
+    
+    // Create small sparks
+    const sparkCount = 3 + Math.floor(Math.random() * 3);
+    const sparks = [];
+    
+    for (let i = 0; i < sparkCount; i++) {
+        const spark = new THREE.Mesh(
+            new THREE.SphereGeometry(0.02, 8, 8),
+            new THREE.MeshBasicMaterial({ 
+                color: 0xffff00,
+                transparent: true,
+                opacity: 0.8
+            })
+        );
+        spark.position.set(
+            (Math.random() - 0.5) * 0.1,
+            (Math.random() - 0.5) * 0.1,
+            (Math.random() - 0.5) * 0.1
+        );
+        sparks.push(spark);
+        sparkGroup.add(spark);
+    }
+    
+    // Animation for sparks
+    let time = 0;
+    function animateSparks() {
+        time += 0.1;
+        sparks.forEach((spark, i) => {
+            spark.position.y = Math.sin(time * 2 + i) * 0.05;
+            spark.material.opacity = 0.5 + Math.sin(time * 3 + i) * 0.3;
+            spark.scale.setScalar(0.8 + Math.sin(time * 5 + i) * 0.3);
+        });
+        requestAnimationFrame(animateSparks);
+    }
+    animateSparks();
+    
+    parentGroup.add(sparkGroup);
+}
+
+// Add hanging wires to scene
+const hangingWires = createHangingWires();
+scene.add(hangingWires);
+
+// ===== DANGEROUS EXPOSED WIRING =====
+function createExposedWiring() {
+    const wiringGroup = new THREE.Group();
+    const wireMaterial = new THREE.MeshStandardMaterial({
+        color: 0xcccccc,
+        roughness: 0.7,
+        metalness: 0.5,
+        emissive: 0xffaa00,
+        emissiveIntensity: 0.3
+    });
+
+    // Create several wiring runs along walls and ceiling
+    const wiringPaths = [
+        // Wall wiring
+        { 
+            points: [
+                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 1, -roomSize/2 + 1),
+                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 1.5, -roomSize/2 + 3),
+                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 2, -roomSize/2 + 5)
+            ],
+            broken: true
+        },
+        // Ceiling wiring
+        {
+            points: [
+                new THREE.Vector3(-2, wallHeight - 0.1, 0),
+                new THREE.Vector3(0, wallHeight - 0.2, 1),
+                new THREE.Vector3(2, wallHeight - 0.3, 0),
+                new THREE.Vector3(3, wallHeight - 0.4, -2)
+            ],
+            broken: false
+        }
+    ];
+
+    wiringPaths.forEach(path => {
+        // Create the curve path
+        const curve = new THREE.CatmullRomCurve3(path.points);
+        const geometry = new THREE.TubeGeometry(curve, 20, 0.03, 8, false);
+        const wire = new THREE.Mesh(geometry, wireMaterial);
+        wiringGroup.add(wire);
+
+        // Add broken ends if needed
+        if (path.broken) {
+            const lastPoint = path.points[path.points.length - 1];
+            const brokenEnd = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.04, 0.01, 0.2, 8),
+                new THREE.MeshStandardMaterial({ color: 0x888888 })
+            );
+            brokenEnd.position.copy(lastPoint);
+            brokenEnd.rotation.x = Math.PI/2;
+            wiringGroup.add(brokenEnd);
+        }
+    });
+
+    return wiringGroup;
+}
+
+const exposedWiring = createExposedWiring();
+scene.add(exposedWiring);
+
         // Interactive objects
         const interactiveObjects = [];
 
