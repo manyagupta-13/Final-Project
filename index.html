@@ -266,6 +266,59 @@
             margin-top: 15px;
             min-height: 30px;
         }
+        .connections-game {
+    margin: 20px 0;
+}
+
+.connections-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.connections-card {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.connections-card.selected {
+    background-color: #8bc34a;
+    color: white;
+}
+
+.connections-selected {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+}
+
+.selected-item {
+    display: inline-block;
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #555;
+    border-radius: 3px;
+}
+
+#connections-feedback {
+    margin-top: 15px;
+    min-height: 50px;
+}
+
+.success {
+    color: #8bc34a;
+}
+
+.error {
+    color: #f44336;
+}
     </style>
 </head>
 <body>
@@ -523,7 +576,7 @@ createFlickeringLights(roomSize, wallHeight, scene);
 // 2. Add dark stains, blood, and "handprint" decals on walls/floor
 function addWallStains(roomSize, wallHeight, scene) {
     const stainMaterial = new THREE.MeshBasicMaterial({
-        map: new THREE.TextureLoader().load('https://www.pngarts.com/files/9/Blood-Splatter-PNG-Download-Image.png'), // transparent blood splatter PNG
+        map: new THREE.TextureLoader().load('https://i.etsystatic.com/7477300/r/il/a0a0cb/1373080092/il_570xN.1373080092_czkm.jpg'), // transparent blood splatter PNG
         transparent: true,
         depthWrite: false,
         depthTest: true
@@ -1625,8 +1678,35 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
             doorCode: Math.floor(1000 + Math.random() * 9000).toString(),
             storyProgress: 0,
             usedItems: [],
-            endingsDiscovered: []
-        };
+            endingsDiscovered: [],
+            connectionsSolved: false, // Add this flag
+            connectionsGameData: {
+            categories: [
+        {
+            name: "Celestial Bodies",
+            items: ["Moon", "Sun", "Star", "Comet"],
+            color: "blue"
+        },
+        {
+            name: "Laboratory Equipment",
+            items: ["Beaker", "Flask", "Vial", "Tube"],
+            color: "yellow"
+        },
+        {
+            name: "Chemical Elements",
+            items: ["Gold", "Iron", "Lead", "Copper"],
+            color: "green"
+        },
+        {
+            name: "Scientific Terms",
+            items: ["Atom", "Gene", "Cell", "Mole"],
+            color: "purple"
+        }
+    ],
+    // Shuffled items will be stored here when game starts
+    shuffledItems: []
+    }
+};
 
         // Modal functionality
         const modal = document.getElementById('interaction-modal');
@@ -1635,6 +1715,8 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
         const modalDescription = document.getElementById('modal-description');
         const modalInteractions = document.getElementById('modal-interactions');
         const modalClose = document.querySelector('.modal-close');
+        
+
 
         function showModal(title, description, interactions) {
             modalTitle.innerHTML = `<h2>${title}</h2>`;
@@ -1827,6 +1909,146 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
             }
         }
 
+        function showConnectionsGame() {
+    // Shuffle the items if not already done
+    if (gameState.connectionsGameData.shuffledItems.length === 0) {
+        const allItems = [];
+        gameState.connectionsGameData.categories.forEach(category => {
+            category.items.forEach(item => allItems.push(item));
+        });
+        gameState.connectionsGameData.shuffledItems = shuffleArray([...allItems]);
+    }
+
+    // Create the game HTML
+    let gameHTML = `
+        <div class="connections-game">
+            <h3>Make 4 groups of 4 connected items</h3>
+            <div class="connections-grid">
+    `;
+
+    // Add the cards
+    gameState.connectionsGameData.shuffledItems.forEach((item, index) => {
+        gameHTML += `
+            <div class="connections-card" data-item="${item}" onclick="selectConnectionCard(this, '${item}')">
+                ${item}
+            </div>
+        `;
+    });
+
+    gameHTML += `
+            </div>
+            <div class="connections-selected">
+                <h4>Selected: <span id="connections-selected-count">0</span>/4</h4>
+                <div id="connections-selected-items"></div>
+                <button class="interaction-button" onclick="submitConnectionSelection()" disabled id="connections-submit">Submit Group</button>
+            </div>
+            <div id="connections-feedback"></div>
+        </div>
+    `;
+
+    showModal("Connections Puzzle", `
+        <p>You found a set of cards with various words. Group them into 4 categories of 4 related items.</p>
+        ${gameHTML}
+    `, `<button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>`);
+}
+
+// Add these helper functions for the connections game
+window.selectConnectionCard = function(cardElement, item) {
+    const selectedCount = document.getElementById('connections-selected-count');
+    const selectedItemsDiv = document.getElementById('connections-selected-items');
+    const submitButton = document.getElementById('connections-submit');
+    
+    // Toggle selection
+    if (cardElement.classList.contains('selected')) {
+        cardElement.classList.remove('selected');
+        // Remove from selected items
+        const itemElements = selectedItemsDiv.querySelectorAll('.selected-item');
+        itemElements.forEach(el => {
+            if (el.textContent === item) {
+                el.remove();
+            }
+        });
+    } else {
+        // Check if we can select more (max 4)
+        if (selectedItemsDiv.querySelectorAll('.selected-item').length >= 4) {
+            return;
+        }
+        cardElement.classList.add('selected');
+        // Add to selected items
+        const itemEl = document.createElement('span');
+        itemEl.className = 'selected-item';
+        itemEl.textContent = item;
+        selectedItemsDiv.appendChild(itemEl);
+    }
+    
+    // Update count and enable/disable submit button
+    const selectedCountNum = selectedItemsDiv.querySelectorAll('.selected-item').length;
+    selectedCount.textContent = selectedCountNum;
+    submitButton.disabled = selectedCountNum !== 4;
+};
+
+window.submitConnectionSelection = function() {
+    const selectedItemsDiv = document.getElementById('connections-selected-items');
+    const selectedItems = Array.from(selectedItemsDiv.querySelectorAll('.selected-item')).map(el => el.textContent);
+    const feedbackDiv = document.getElementById('connections-feedback');
+    
+    // Find which category these items belong to
+    let foundCategory = null;
+    for (const category of gameState.connectionsGameData.categories) {
+        const allPresent = category.items.every(item => selectedItems.includes(item));
+        if (allPresent) {
+            foundCategory = category;
+            break;
+        }
+    }
+    
+    if (foundCategory) {
+        // Correct category
+        feedbackDiv.innerHTML = `<p class="success">Correct! Category: ${foundCategory.name}</p>`;
+        
+        // Remove these items from the game
+        gameState.connectionsGameData.shuffledItems = gameState.connectionsGameData.shuffledItems.filter(
+            item => !selectedItems.includes(item)
+        );
+        
+        // Mark category as solved
+        foundCategory.solved = true;
+        
+        // Clear selection
+        document.querySelectorAll('.connections-card.selected').forEach(card => {
+            card.classList.remove('selected');
+            card.style.display = 'none'; // Hide solved cards
+        });
+        selectedItemsDiv.innerHTML = '';
+        document.getElementById('connections-selected-count').textContent = '0';
+        document.getElementById('connections-submit').disabled = true;
+        
+        // Check if game is complete
+        const unsolvedCategories = gameState.connectionsGameData.categories.filter(cat => !cat.solved);
+        if (unsolvedCategories.length === 0) {
+            // Game solved!
+            setTimeout(() => {
+                gameState.connectionsSolved = true;
+                showModal("Connections Solved!", `
+                    <p>You've successfully grouped all the cards!</p>
+                    <p>The first digit of the door code is revealed: ${gameState.doorCode[0]}☽</p>
+                    <p class="story-reveal">The moon symbol reminds you of the lunar phases mentioned in the desk note.</p>
+                `, `<button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>`);
+            }, 1000);
+        }
+    } else {
+        // Incorrect grouping
+        feedbackDiv.innerHTML = '<p class="error">These items do not belong to the same category. Try again.</p>';
+        
+        // Clear selection but keep cards visible
+        document.querySelectorAll('.connections-card.selected').forEach(card => {
+            card.classList.remove('selected');
+        });
+        selectedItemsDiv.innerHTML = '';
+        document.getElementById('connections-selected-count').textContent = '0';
+        document.getElementById('connections-submit').disabled = true;
+    }
+};
         function showDeskInteraction() {
             const interactions = `
                 <div class="interaction-buttons">
@@ -1867,67 +2089,94 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
         }
 
         function openCabinetDrawer(drawerNumber, e) {
-            if (e) e.stopPropagation();
+    if (e) e.stopPropagation();
+    
+    const cabinetObj = interactiveObjects.find(obj => obj.userData.isCabinet);
+    if (!cabinetObj) return;
+    
+    const drawer = cabinetObj.userData.drawers[drawerNumber - 1];
+    if (!drawer) return;
+    
+    if (drawer.userData.locked) {
+        if (drawerNumber === 1 || gameState.inventory.includes('small-key')) {
+            // Unlock the drawer
+            drawer.userData.locked = false;
             
-            const cabinetObj = interactiveObjects.find(obj => obj.userData.isCabinet);
-            if (!cabinetObj) return;
-            
-            const drawer = cabinetObj.userData.drawers[drawerNumber - 1];
-            if (!drawer) return;
-            
-            if (drawer.userData.locked) {
-                if (drawerNumber === 1 || gameState.inventory.includes('small-key')) {
-                    // Unlock the drawer
-                    drawer.userData.locked = false;
-                    
-                    if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
-                        addToInventory('usb-drive');
-                        gameState.usedItems.push('small-key');
-                        addClue('cabinet-opened');
-                        
-                        const result = `
-                            <p>You unlock and open drawer ${drawerNumber}. Inside is a USB drive labeled "Project Phoenix".</p>
-                            <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
-                        `;
-                        
-                        // Animate drawer opening
-                        gsap.to(drawer.position, {
-                            z: 0.5,
-                            duration: 0.5,
-                            onComplete: () => {
-                                showModal("Cabinet Contents", result, `
-                                    <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
-                                `);
-                            }
-                        });
-                    } else {
-                        showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
+            if (drawerNumber === 1) {
+                // Top drawer - contains the connections game cards
+                const result = `
+                    <p>You open the top drawer and find 16 cards with various words printed on them.</p>
+                    <p class="story-reveal">A note says: "Group these into 4 categories to reveal the first digit of the code."</p>
+                `;
+                
+                // Animate drawer opening
+                gsap.to(drawer.position, {
+                    z: 0.5,
+                    duration: 0.5,
+                    onComplete: () => {
+                        showModal("Cabinet Contents", result, `
+                            <button class="interaction-button" onclick="showConnectionsGame(event)">Examine Cards</button>
                             <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
                         `);
                     }
-                } else {
-                    showModal("Locked Drawer", `Drawer ${drawerNumber} is locked. You need a key to open it.`, `
-                        <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
-                    `);
-                }
+                });
+            } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
+                // Middle drawer - USB drive (existing code)
+                addToInventory('usb-drive');
+                gameState.usedItems.push('small-key');
+                addClue('cabinet-opened');
+                
+                const result = `
+                    <p>You unlock and open drawer ${drawerNumber}. Inside is a USB drive labeled "Project Phoenix".</p>
+                    <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
+                `;
+                
+                // Animate drawer opening
+                gsap.to(drawer.position, {
+                    z: 0.5,
+                    duration: 0.5,
+                    onComplete: () => {
+                        showModal("Cabinet Contents", result, `
+                            <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+                        `);
+                    }
+                });
             } else {
-                // Drawer is already unlocked
-                if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
-                    addToInventory('usb-drive');
-                    const result = `
-                        <p>The drawer contains a USB drive labeled "Project Phoenix".</p>
-                        <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
-                    `;
-                    showModal("Cabinet Contents", result, `
-                        <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
-                    `);
-                } else {
-                    showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
-                        <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
-                    `);
-                }
+                showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
+                    <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+                `);
             }
+        } else {
+            showModal("Locked Drawer", `Drawer ${drawerNumber} is locked. You need a key to open it.`, `
+                <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+            `);
         }
+    } else {
+        // Drawer is already unlocked
+        if (drawerNumber === 1) {
+            // Top drawer - connections game
+            showModal("Cabinet Drawer", "The top drawer contains the set of word cards.", `
+                <button class="interaction-button" onclick="showConnectionsGame(event)">Examine Cards</button>
+                <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+            `);
+        } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
+            // Middle drawer - USB drive (existing code)
+            addToInventory('usb-drive');
+            const result = `
+                <p>The drawer contains a USB drive labeled "Project Phoenix".</p>
+                <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
+            `;
+            showModal("Cabinet Contents", result, `
+                <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+            `);
+        } else {
+            showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
+                <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
+            `);
+        }
+    }
+}
+
 
         function showBookshelfInteraction() {
             const interactions = `
