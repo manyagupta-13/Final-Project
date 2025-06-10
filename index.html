@@ -339,73 +339,395 @@
         const wallHeight = 7;
         const wallThickness = 0.5;
 
-        // Floor
-        const floor = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize, roomSize),
-            new THREE.MeshStandardMaterial({ 
-                color: 0x333333,
-                roughness: 0.8
+        // Floor with puddles and dirt
+const floorTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_roughness.jpg'); // Replace with concrete texture
+const floorNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_normal.jpg'); // Replace with concrete normal map
+
+const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize, roomSize, 100, 100),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x3a3a3a,
+        roughness: 0.9,
+        metalness: 0.1,
+        map: floorTexture,
+        normalMap: floorNormalMap,
+        normalScale: new THREE.Vector2(0.5, 0.5)
+    })
+);
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// Create puddles
+const createPuddles = () => {
+    const puddleGeometry = new THREE.CircleGeometry(0.5, 32);
+    const puddleMaterial = new THREE.MeshStandardMaterial({
+        color: 0x333355,
+        transparent: true,
+        opacity: 0.7,
+        roughness: 0.1,
+        metalness: 0.8
+    });
+    
+    for (let i = 0; i < 8; i++) {
+        const puddle = new THREE.Mesh(puddleGeometry, puddleMaterial);
+        puddle.rotation.x = -Math.PI / 2;
+        puddle.position.set(
+            (Math.random() - 0.5) * roomSize * 0.8,
+            0.01, // Slightly above floor
+            (Math.random() - 0.5) * roomSize * 0.8
+        );
+        puddle.scale.set(1 + Math.random(), 1 + Math.random(), 1);
+        scene.add(puddle);
+    }
+};
+createPuddles();
+
+// Wall material with dirt and decay
+const wallTexture = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with concrete/dirty wall texture
+wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+wallTexture.repeat.set(4, 2);
+
+const wallNormalMap = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with appropriate normal map
+wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
+wallNormalMap.repeat.set(4, 2);
+
+const wallMaterial = new THREE.MeshStandardMaterial({ 
+    color: 0x3a3a4a,
+    roughness: 0.8,
+    metalness: 0.1,
+    map: wallTexture,
+    normalMap: wallNormalMap,
+    side: THREE.DoubleSide
+});
+
+// Add grime and stains to walls
+const addWallDecay = (wall) => {
+    // You could add decals or additional geometry here for more detail
+    wall.material = wallMaterial.clone();
+    wall.material.color.setHSL(0.66, 0.2, 0.3 + Math.random() * 0.1);
+    
+    // Random discoloration
+    if (Math.random() > 0.7) {
+        wall.material.color.offsetHSL(0, 0, -0.1 - Math.random() * 0.1);
+    }
+};
+
+// Left wall
+const leftWall = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize, wallHeight),
+    wallMaterial
+);
+leftWall.position.set(-roomSize/2, wallHeight/2, 0);
+leftWall.rotation.y = Math.PI / 2;
+addWallDecay(leftWall);
+scene.add(leftWall);
+
+// Right wall
+const rightWall = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize, wallHeight),
+    wallMaterial
+);
+rightWall.position.set(roomSize/2, wallHeight/2, 0);
+rightWall.rotation.y = -Math.PI / 2;
+addWallDecay(rightWall);
+scene.add(rightWall);
+
+// Back wall
+const backWall = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize, wallHeight),
+    wallMaterial
+);
+backWall.position.set(0, wallHeight/2, -roomSize/2);
+addWallDecay(backWall);
+scene.add(backWall);
+
+// Front wall with door opening
+const frontWallLeft = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
+    wallMaterial
+);
+frontWallLeft.position.set(-roomSize/4 - 0.5, wallHeight/2, roomSize/2);
+addWallDecay(frontWallLeft);
+scene.add(frontWallLeft);
+
+const frontWallRight = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
+    wallMaterial
+);
+frontWallRight.position.set(roomSize/4 + 0.5, wallHeight/2, roomSize/2);
+addWallDecay(frontWallRight);
+scene.add(frontWallRight);
+
+// Ceiling with stains
+const ceilingTexture = new THREE.TextureLoader().load('https://static.vecteezy.com/system/resources/previews/002/243/394/large_2x/old-rusty-wall-photo.jpg'); 
+ceilingTexture.wrapS = ceilingTexture.wrapT = THREE.RepeatWrapping;
+ceilingTexture.repeat.set(4, 4);
+
+const ceiling = new THREE.Mesh(
+    new THREE.PlaneGeometry(roomSize, roomSize),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x2a2a3a,
+        roughness: 0.9,
+        metalness: 0.05,
+        map: ceilingTexture
+    })
+);
+ceiling.position.set(0, wallHeight, 0);
+ceiling.rotation.x = Math.PI / 2;
+scene.add(ceiling);
+
+// ====== EVIL SCIENTIST LAB ENHANCEMENTS ======
+
+// 1. Flickering and broken lights (ceiling)
+function createFlickeringLights(roomSize, wallHeight, scene) {
+    const lightPositions = [
+        [-roomSize/3, wallHeight-0.1, -roomSize/3],
+        [ roomSize/3, wallHeight-0.1, -roomSize/3],
+        [ 0, wallHeight-0.1, roomSize/3]
+    ];
+    const lightObjs = [];
+
+    lightPositions.forEach(pos => {
+        const tube = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 2, 12),
+            new THREE.MeshStandardMaterial({
+                color: 0xcccccc,
+                emissive: 0xffffcc,
+                emissiveIntensity: 1.2
             })
         );
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
+        tube.position.set(...pos);
+        tube.rotation.z = Math.PI/2;
+        scene.add(tube);
 
-        // Outer walls only (no internal dividers)
-        const wallMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x222244,
-            side: THREE.DoubleSide
+        const light = new THREE.PointLight(0xfffbe0, 1, 10, 2);
+        light.position.set(pos[0], pos[1] - 0.1, pos[2]);
+        scene.add(light);
+        lightObjs.push({ light, tube });
+    });
+
+    // Animate flickering
+    function flicker() {
+        lightObjs.forEach((obj, i) => {
+            const base = 0.9 + Math.sin(Date.now()/170 + i*200)*0.1 + Math.random()*0.1;
+            obj.light.intensity = Math.max(0, base + (Math.random()>0.8 ? -0.7 : 0));
+            obj.tube.material.emissiveIntensity = obj.light.intensity;
         });
-        
-        // Left wall
-        const leftWall = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize, wallHeight),
-            wallMaterial
-        );
-        leftWall.position.set(-roomSize/2, wallHeight/2, 0);
-        leftWall.rotation.y = Math.PI / 2;
-        scene.add(leftWall);
-        
-        // Right wall
-        const rightWall = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize, wallHeight),
-            wallMaterial
-        );
-        rightWall.position.set(roomSize/2, wallHeight/2, 0);
-        rightWall.rotation.y = -Math.PI / 2;
-        scene.add(rightWall);
-        
-        // Back wall
-        const backWall = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize, wallHeight),
-            wallMaterial
-        );
-        backWall.position.set(0, wallHeight/2, -roomSize/2);
-        scene.add(backWall);
+        requestAnimationFrame(flicker);
+    }
+    flicker();
+}
+createFlickeringLights(roomSize, wallHeight, scene);
 
-        // Front wall with door opening
-        const frontWallLeft = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
-            wallMaterial
+// 2. Add dark stains, blood, and "handprint" decals on walls/floor
+function addWallStains(roomSize, wallHeight, scene) {
+    const stainMaterial = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load('https://www.pngarts.com/files/9/Blood-Splatter-PNG-Download-Image.png'), // transparent blood splatter PNG
+        transparent: true,
+        depthWrite: false,
+        depthTest: true
+    });
+    for (let i = 0; i < 5; i++) {
+        const stain = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.6 + Math.random(), 0.4 + Math.random()*0.5),
+            stainMaterial
         );
-        frontWallLeft.position.set(-roomSize/4 - 0.5, wallHeight/2, roomSize/2);
-        scene.add(frontWallLeft);
+        stain.position.set(
+            (Math.random()-0.5)*roomSize*0.90,
+            wallHeight*0.2 + Math.random()*wallHeight*0.6,
+            -roomSize/2 + 0.02 + Math.random()*0.1 // slightly off the back wall
+        );
+        stain.rotation.y = (Math.random()-0.5)*0.3;
+        stain.rotation.z = (Math.random()-0.5)*Math.PI*2;
+        stain.renderOrder = 10;
+        scene.add(stain);
+    }
+    // Bloody handprint
+    const handprintMat = stainMaterial.clone();
+    handprintMat.map = new THREE.TextureLoader().load('https://www.pngarts.com/files/9/Blood-Splatter-PNG-Download-Image.png');
+    const handprint = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.4, 0.4),
+        handprintMat
+    );
+    handprint.position.set(roomSize/2-0.06, wallHeight*0.8, (Math.random()-0.5)*roomSize*0.5);
+    handprint.rotation.y = -Math.PI/2;
+    handprint.renderOrder = 10;
+    scene.add(handprint);
+}
+addWallStains(roomSize, wallHeight, scene);
 
-        const frontWallRight = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
-            wallMaterial
-        );
-        frontWallRight.position.set(roomSize/4 + 0.5, wallHeight/2, roomSize/2);
-        scene.add(frontWallRight);
+// 3. Cracked glass on floor or equipment
+function addCrackedGlass(scene) {
+    const texture = new THREE.TextureLoader().load('https://www.textures.com/system/gallery/photos/Decals/Damage/Floor/116572/DecalsDamageFloor0022_1_350.jpg'); // PNG crack decal
+    const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const crack = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), mat);
+    crack.position.set((Math.random()-0.5)*2, 0.011, (Math.random()-0.5)*2);
+    crack.rotation.x = -Math.PI/2;
+    crack.renderOrder = 20;
+    scene.add(crack);
+}
+addCrackedGlass(scene);
 
-        // Ceiling
-        const ceiling = new THREE.Mesh(
-            new THREE.PlaneGeometry(roomSize, roomSize),
-            new THREE.MeshStandardMaterial({ color: 0x111122 })
+// 4. Broken glass shards on the floor
+function scatterGlassShards(scene, roomSize) {
+    const shardMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xbbfaff,
+        transmission: 0.7,
+        roughness: 0.05,
+        metalness: 0.1,
+        opacity: 0.5,
+        transparent: true
+    });
+    for (let i = 0; i < 8; i++) {
+        const geom = new THREE.BoxGeometry(0.1 + Math.random()*0.2, 0.01, 0.05 + Math.random()*0.08);
+        const mesh = new THREE.Mesh(geom, shardMaterial);
+        mesh.position.set(
+            (Math.random()-0.5)*roomSize*0.9,
+            0.015,
+            (Math.random()-0.5)*roomSize*0.9
         );
-        ceiling.position.set(0, wallHeight, 0);
-        ceiling.rotation.x = Math.PI / 2;
-        scene.add(ceiling);
+        mesh.rotation.y = Math.random()*Math.PI;
+        mesh.rotation.x = (Math.random()-0.5)*0.2;
+        scene.add(mesh);
+    }
+}
+scatterGlassShards(scene, roomSize);
+
+// 5. Add a toppled chair, broken and left to rot
+function addToppledChair(scene, roomSize) {
+    const chair = new THREE.Group();
+    // Seat
+    const seat = new THREE.Mesh(
+        new THREE.BoxGeometry(0.7, 0.08, 0.7),
+        new THREE.MeshStandardMaterial({ color: 0x353535, roughness: 0.8 })
+    );
+    chair.add(seat);
+    seat.position.set(0, 0, 0);
+    // Back
+    const back = new THREE.Mesh(
+        new THREE.BoxGeometry(0.7, 0.5, 0.08),
+        new THREE.MeshStandardMaterial({ color: 0x252525, roughness: 0.85 })
+    );
+    back.position.set(0, 0.29, -0.31);
+    back.rotation.x = 0.1;
+    chair.add(back);
+    // Legs
+    for (let i=0; i<4; i++) {
+        const leg = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.04, 0.04, 0.38, 12),
+            new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.7 })
+        );
+        leg.position.set(
+            (i<2?-0.28:0.28),
+            -0.23,
+            (i%2?-0.28:0.28)
+        );
+        chair.add(leg);
+    }
+    // Randomly topple
+    chair.position.set(
+        (Math.random()-0.5)*roomSize*0.7,
+        0.18,
+        (Math.random()-0.5)*roomSize*0.7
+    );
+    chair.rotation.y = Math.random()*Math.PI;
+    chair.rotation.x = Math.PI/6 + Math.random()*0.2;
+    chair.rotation.z = Math.random()*0.3;
+    scene.add(chair);
+}
+addToppledChair(scene, roomSize);
+
+// 6. Add a shadowy, subtle mist/fog near the floor
+scene.fog = new THREE.FogExp2(0x1a1a2a, 0.06); // Or customize color and density
+
+// 7. Add a leaking pipe dripping onto the floor (puddle area)
+function addLeakingPipe(scene, wallHeight, roomSize) {
+    const pipe = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.1, 0.1, 2, 16),
+        new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8, metalness: 0.4 })
+    );
+    pipe.rotation.z = Math.PI/2;
+    pipe.position.set(-roomSize/2+0.8, wallHeight*0.7, -1.5);
+    scene.add(pipe);
+
+    // Dripping water (sphere drops)
+    const drop = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0x99ccff, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.7 })
+    );
+    scene.add(drop);
+    function animateDrop() {
+        drop.position.set(-roomSize/2+0.8, wallHeight*0.7-1.0 + Math.abs(Math.sin(Date.now()/500))*0.8, -1.5);
+        requestAnimationFrame(animateDrop);
+    }
+    animateDrop();
+}
+addLeakingPipe(scene, wallHeight, roomSize);
+
+// 8. Add cobwebs in upper corners
+function addCobwebs(scene, roomSize, wallHeight) {
+    const cobwebTex = new THREE.TextureLoader().load('https://i.imgur.com/KVQbtuE.png');
+    for (let i=0; i<3; i++) {
+        const cobweb = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.7+Math.random()*0.6, 0.7+Math.random()*0.4),
+            new THREE.MeshBasicMaterial({ map: cobwebTex, transparent: true, opacity: 0.7 })
+        );
+        // Place in a random upper corner
+        const x = i%2 ? -roomSize/2+0.01 : roomSize/2-0.01;
+        const z = i<2 ? roomSize/2-0.01 : -roomSize/2+0.01;
+        cobweb.position.set(x, wallHeight-0.2, z);
+        cobweb.rotation.y = i%2 ? Math.PI/2 : -Math.PI/2;
+        cobweb.rotation.z = (Math.random()-0.5)*0.2;
+        scene.add(cobweb);
+    }
+}
+addCobwebs(scene, roomSize, wallHeight);
+
+// 9. Add writing on the wall ("HELP", "NO ESCAPE", etc.)
+function addWallWriting(scene, roomSize, wallHeight) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.font = "bold 48px 'Creepster', Arial, sans-serif";
+    ctx.fillStyle = "#AA0000";
+    ctx.fillText("NO ESCAPE", 10, 60);
+    ctx.strokeStyle = "#440000";
+    ctx.lineWidth = 3;
+    ctx.strokeText("NO ESCAPE", 10, 60);
+    ctx.globalAlpha = 0.7;
+    ctx.font = "italic 28px Arial";
+    ctx.fillText("it watches", 45, 110);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    const graffiti = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.8, 0.9),
+        new THREE.MeshBasicMaterial({ map: tex, transparent: true })
+    );
+    graffiti.position.set(0, wallHeight*0.65, -roomSize/2+0.03);
+    scene.add(graffiti);
+}
+addWallWriting(scene, roomSize, wallHeight);
+
+// Add some hanging wires or pipes for detail
+const addHangingWires = () => {
+    const wireGeometry = new THREE.BufferGeometry();
+    const points = [];
+    for (let i = 0; i < 5; i++) {
+        points.push(new THREE.Vector3(
+            (Math.random() - 0.5) * roomSize * 0.8,
+            wallHeight * 0.9 - Math.random() * wallHeight * 0.5,
+            (Math.random() - 0.5) * roomSize * 0.8
+        ));
+    }
+    wireGeometry.setFromPoints(points);
+    
+    const wireMaterial = new THREE.LineBasicMaterial({ color: 0x666666 });
+    const wire = new THREE.Line(wireGeometry, wireMaterial);
+    scene.add(wire);
+};
+addHangingWires();
 
         // ===== HANGING WIRES FOR ABANDONED LAB AESTHETIC =====
 function createHangingWires() {
