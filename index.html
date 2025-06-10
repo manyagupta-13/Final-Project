@@ -2276,30 +2276,34 @@ window.submitConnectionSelection = function() {
         }
 
         function showComputerInteraction() {
-            const interactions = `
-                <div class="interaction-buttons">
-                    <button class="interaction-button" onclick="turnOnComputer(event)">Turn On Computer</button>
-                    ${gameState.inventory.includes('usb-drive') ? 
-                        `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
-                </div>
-            `;
-            showModal("Computer Terminal", "An old computer terminal with a glowing screen.", interactions);
-        }
+    const interactions = `
+        <div class="interaction-buttons">
+            <button class="interaction-button" onclick="turnOnComputer(event)">Turn On Computer</button>
+            ${gameState.inventory.includes('usb-drive') ? 
+                `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
+        </div>
+    `;
+    showModal("Computer Terminal", "An old computer terminal with a glowing screen.", interactions);
+}
 
         function turnOnComputer(e) {
-            if (e) e.stopPropagation();
-            addClue('computer-on');
-            
-            const result = `
-                <p>The computer displays a login screen with username "DR.ALCHEM" already entered.</p>
-                <p class="hint">The sticky note on the keyboard says: "Remember - password changes every full moon!"</p>
-            `;
-            
-            showModal("Computer Login", result, `
-                <button class="interaction-button" onclick="showCrosswordPuzzle(event)">Attempt Login</button>
-                <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
-            `);
-        }
+    if (e) e.stopPropagation();
+    addClue('computer-on');
+    
+    const result = `
+        <p>The computer displays a login screen with username "DR.ALCHEM" already entered.</p>
+        <p class="hint">The sticky note on the keyboard says: "Remember - password changes every full moon!"</p>
+        ${gameState.inventory.includes('usb-drive') ? 
+            '<p>A USB port is available on the side of the computer.</p>' : 
+            '<p class="hint">You notice a USB port on the side of the computer - maybe you need something to insert?</p>'}
+    `;
+    
+    showModal("Computer Login", result, `
+        ${gameState.inventory.includes('usb-drive') ? 
+            `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
+        <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
+    `);
+}
 
         // Crossword puzzle data
         const crosswordData = {
@@ -2405,26 +2409,30 @@ window.submitConnectionSelection = function() {
 
         // Check if crossword is completed correctly
         function checkCrosswordCompletion() {
-            let allCorrect = true;
-            
-            for (let row = 0; row < 5; row++) {
-                for (let col = 0; col < 5; col++) {
-                    const cell = document.getElementById(`cell-${row}-${col}`);
-                    if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
-                        allCorrect = false;
-                    }
-                }
-            }
-            
-            if (allCorrect) {
-                const successDiv = document.getElementById('crossword-success');
-                successDiv.style.display = 'block';
-                addClue('computer-password');
-                
-                // Automatically log in after a short delay
-                setTimeout(loginToComputer, 1500);
+    let allCorrect = true;
+    
+    for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+            const cell = document.getElementById(`cell-${row}-${col}`);
+            if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
+                allCorrect = false;
             }
         }
+    }
+    
+    if (allCorrect) {
+        const successDiv = document.getElementById('crossword-success');
+        successDiv.innerHTML = `
+            <p>Puzzle solved! The last digit of the door code is revealed: ${gameState.doorCode.slice(-1)}☀️</p>
+            <p class="story-reveal">The sun symbol matches one of the symbols from the desk note.</p>
+        `;
+        successDiv.style.display = 'block';
+        addClue('computer-password');
+        
+        // Automatically log in after a short delay
+        setTimeout(loginToComputer, 1500);
+    }
+}
 
         function loginToComputer() {
             addClue('computer-login');
@@ -2442,36 +2450,34 @@ window.submitConnectionSelection = function() {
         }
 
         function insertUSB(e) {
-            if (e) e.stopPropagation();
-            if (gameState.inventory.includes('usb-drive')) {
-                addClue('usb-inserted');
-                
-                const result = `
-                    <p>The USB drive contains Project Phoenix files, including the emergency door code: ${gameState.doorCode}</p>
-                    <p class="story-reveal">The files mention "Subject 314" and "cellular regeneration".</p>
-                `;
-                
-                showModal("USB Drive Contents", result, `
-                    <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
-
-                    <button class="interaction-button" onclick="showCrosswordPuzzle(event, true)">View Crossword with Hints</button>
-                    <button class="interaction-button" onclick="attemptCrosswordAccess(event)">Attempt Login</button>
-
-                `);
-            }
-        }
+    if (e) e.stopPropagation();
+    if (gameState.inventory.includes('usb-drive')) {
+        addClue('usb-inserted');
+        
+        const result = `
+            <p>The USB drive contains Project Phoenix files, including the emergency door code: ${gameState.doorCode}</p>
+            <p class="story-reveal">The files mention "Subject 314" and "cellular regeneration".</p>
+            <p>The computer now allows login attempts.</p>
+        `;
+        
+        showModal("USB Drive Contents", result, `
+            <button class="interaction-button" onclick="showCrosswordPuzzle(event, true)">Attempt Login</button>
+            <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
+        `);
+    }
+}
 
 
 
         function attemptCrosswordAccess(e) {
     if (e) e.stopPropagation();
 
-    if (gameState.inventory.includes('usb-drive')) {
+    if (gameState.clues.includes('usb-inserted')) {
         showCrosswordPuzzle(e, false); // No hints even with USB
     } else {
         showModal("Access Denied", `
             <p>You try to access the crossword puzzle, but it's locked.</p>
-            <p class="hint">Maybe there's something on a USB drive that could help...</p>
+            <p class="hint">You need to insert a USB drive first to attempt login.</p>
         `, `
             <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
         `);
