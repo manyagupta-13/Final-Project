@@ -768,43 +768,51 @@ scatterGlassShards(scene, roomSize);
 // 5. Add a toppled chair, broken and left to rot
 function addToppledChair(scene, roomSize) {
     const chair = new THREE.Group();
+    
     // Seat
     const seat = new THREE.Mesh(
-        new THREE.BoxGeometry(0.7, 0.08, 0.7),
-        new THREE.MeshStandardMaterial({ color: 0x353535, roughness: 0.8 })
+        new THREE.BoxGeometry(0.5, 0.05, 0.5),
+        new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.8 })
     );
+    seat.position.set(0, 0.025, 0);
     chair.add(seat);
-    seat.position.set(0, 0, 0);
-    // Back
+    
+    // Backrest
     const back = new THREE.Mesh(
-        new THREE.BoxGeometry(0.7, 0.5, 0.08),
-        new THREE.MeshStandardMaterial({ color: 0x252525, roughness: 0.85 })
+        new THREE.BoxGeometry(0.5, 0.5, 0.05),
+        new THREE.MeshStandardMaterial({ color: 0x4a2a1a, roughness: 0.85 })
     );
-    back.position.set(0, 0.29, -0.31);
-    back.rotation.x = 0.1;
+    back.position.set(0, 0.25, -0.225);
     chair.add(back);
+    
     // Legs
-    for (let i=0; i<4; i++) {
+    const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
+    const legPositions = [
+        { x: -0.2, z: -0.2 },
+        { x: 0.2, z: -0.2 },
+        { x: -0.2, z: 0.2 },
+        { x: 0.2, z: 0.2 }
+    ];
+    
+    legPositions.forEach(pos => {
         const leg = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.04, 0.04, 0.38, 12),
-            new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.7 })
+            new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
+            legMaterial
         );
-        leg.position.set(
-            (i<2?-0.28:0.28),
-            -0.23,
-            (i%2?-0.28:0.28)
-        );
+        leg.position.set(pos.x, -0.2, pos.z);
         chair.add(leg);
-    }
-    // Randomly topple
+    });
+    
+    // Position and rotate the chair randomly
     chair.position.set(
         (Math.random()-0.5)*roomSize*0.7,
-        0.18,
+        0.2,
         (Math.random()-0.5)*roomSize*0.7
     );
     chair.rotation.y = Math.random()*Math.PI;
     chair.rotation.x = Math.PI/6 + Math.random()*0.2;
     chair.rotation.z = Math.random()*0.3;
+    
     scene.add(chair);
 }
 addToppledChair(scene, roomSize);
@@ -1609,93 +1617,160 @@ interactiveObjects.push(desk);
         interactiveObjects.push(cabinet);
         drawers.forEach(drawer => interactiveObjects.push(drawer));
 
-        // ===== ENHANCED BOOKSHELF =====
-        const bookshelf = new THREE.Group();
-        bookshelf.position.set(0, 2.5, -4);
+        // ===== ENHANCED BOOKSHELF WITH MORE BOOKS =====
+const bookshelf = new THREE.Group();
+bookshelf.position.set(0, 2.5, -4);
 
-        // Bookshelf frame
-        const frameMaterial = new THREE.MeshStandardMaterial({
-            color: 0x3a2a1f,
-            roughness: 0.6
-        });
+// Bookshelf frame (semi-transparent)
+const frameMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3a2a1f,
+    roughness: 0.6,
+    transparent: true,
+    opacity: 0.7
+});
+
+const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(4, 5, 0.5),
+    frameMaterial
+);
+frame.castShadow = true;
+frame.receiveShadow = true;
+bookshelf.add(frame);
+
+// Shelves (more transparent)
+const shelfMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3a2a1f,
+    roughness: 0.6,
+    transparent: true,
+    opacity: 0.2
+});
+
+const shelfPositions = [1.8, 1.0, 0.2, -0.6, -1.4]; // 5 shelves now
+shelfPositions.forEach(yPos => {
+    const shelf = new THREE.Mesh(
+        new THREE.BoxGeometry(3.8, 0.1, 0.4),
+        shelfMaterial
+    );
+    shelf.position.set(0, yPos, 0);
+    shelf.castShadow = true;
+    shelf.receiveShadow = true;
+    bookshelf.add(shelf);
+});
+
+// Expanded book colors (24 distinct colors)
+const bookColors = [
+    0x8b0000, 0xa52a2a, 0xb22222, // Reds
+    0x006400, 0x2e8b57, 0x3cb371, // Greens
+    0x00008b, 0x1e90ff, 0x4169e1, // Blues
+    0x8b008b, 0x9932cc, 0x9400d3, // Purples
+    0x8b4513, 0xd2691e, 0xcd853f, // Browns
+    0x2f4f4f, 0x708090, 0x778899, // Grays
+    0x4682b4, 0x5f9ea0, 0x48d1cc, // Teals
+    0x556b2f, 0x6b8e23, 0x9acd32  // Olive greens
+];
+
+// Create books for all shelves
+for (let i = 0; i < shelfPositions.length; i++) {
+    const booksPerShelf = 6 + Math.floor(Math.random() * 3); // 6-8 books per shelf
+    
+    for (let j = 0; j < booksPerShelf; j++) {
+        // Random book dimensions
+        const bookHeight = 0.4 + Math.random() * 0.4;
+        const bookWidth = 0.15 + Math.random() * 0.15;
+        const bookDepth = 0.1 + Math.random() * 0.1;
         
-        const frame = new THREE.Mesh(
-            new THREE.BoxGeometry(4, 5, 0.5),
-            frameMaterial
+        // Random color from our expanded palette
+        const colorIndex = Math.floor(Math.random() * bookColors.length);
+        
+        const book = new THREE.Mesh(
+            new THREE.BoxGeometry(bookWidth, bookHeight, bookDepth),
+            new THREE.MeshStandardMaterial({ 
+                color: bookColors[colorIndex],
+                roughness: 0.3,
+                metalness: 0.1
+            })
         );
-        frame.castShadow = true;
-        frame.receiveShadow = true;
-        bookshelf.add(frame);
-
-        // Shelves
-        const shelfPositions = [1.5, 0.5, -0.5, -1.5];
-        shelfPositions.forEach(yPos => {
-            const shelf = new THREE.Mesh(
-                new THREE.BoxGeometry(3.8, 0.1, 0.4),
-                frameMaterial
-            );
-            shelf.position.set(0, yPos, 0);
-            shelf.castShadow = true;
-            shelf.receiveShadow = true;
-            bookshelf.add(shelf);
-        });
-
-        // Books - different colors and sizes
-        const bookColors = [
-            0x8b0000, 0x006400, 0x00008b, 0x8b008b, 
-            0x8b4513, 0x2f4f4f, 0x4682b4, 0x556b2f
-        ];
         
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 8; j++) {
-                const bookHeight = 0.5 + Math.random() * 0.5;
-                const bookWidth = 0.2 + Math.random() * 0.1;
-                const bookDepth = 0.15 + Math.random() * 0.05;
-                
-                const book = new THREE.Mesh(
-                    new THREE.BoxGeometry(bookWidth, bookHeight, bookDepth),
-                    new THREE.MeshStandardMaterial({ 
-                        color: bookColors[j % bookColors.length],
-                        roughness: 0.3
-                    })
-                );
-                book.castShadow = true;
-                book.receiveShadow = true;
-                
-                book.position.set(
-                    -1.5 + j * 0.4,
-                    shelfPositions[i] + bookHeight/2 + 0.05,
-                    0.1
-                );
-                
-                // Add book spine text
-                const spineText = new THREE.Mesh(
-                    new THREE.PlaneGeometry(bookWidth * 0.9, bookHeight * 0.8),
-                    new THREE.MeshStandardMaterial({ 
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: 0.7
-                    })
-                );
-                spineText.position.set(
-                    book.position.x,
-                    book.position.y,
-                    book.position.z + bookDepth/2 + 0.01
-                );
-                spineText.rotation.y = Math.PI;
-                
-                bookshelf.add(book);
-                bookshelf.add(spineText);
-            }
+        // Position books with some randomness
+        book.position.set(
+            -1.7 + j * 0.35 + Math.random() * 0.1,
+            shelfPositions[i] + bookHeight/2 + 0.05,
+            0.1 + (Math.random() - 0.5) * 0.05
+        );
+        
+        // Random rotation for natural look
+        book.rotation.z = (Math.random() - 0.5) * 0.2;
+        
+        // Add some books leaning against others
+        if (Math.random() > 0.7) {
+            book.rotation.y = (Math.random() - 0.5) * 0.5;
         }
+        
+        book.castShadow = true;
+        book.receiveShadow = true;
+        bookshelf.add(book);
+        
+        // Add some books with different orientations (10% chance)
+        if (Math.random() > 0.9) {
+            const horizontalBook = new THREE.Mesh(
+                new THREE.BoxGeometry(bookDepth, bookWidth, bookHeight),
+                new THREE.MeshStandardMaterial({ 
+                    color: bookColors[(colorIndex + 5) % bookColors.length],
+                    roughness: 0.3
+                })
+            );
+            horizontalBook.position.set(
+                book.position.x + 0.1,
+                book.position.y,
+                book.position.z + 0.1
+            );
+            horizontalBook.rotation.y = Math.PI/2;
+            bookshelf.add(horizontalBook);
+        }
+    }
+}
 
-        bookshelf.userData = {
-            name: "Bookshelf",
-            description: "A floor-to-ceiling bookshelf filled with scientific tomes.",
-            onClick: () => showBookshelfInteraction()
-        };
-        scene.add(bookshelf);
-        interactiveObjects.push(bookshelf);
+// Add some book spines with titles (for detail)
+for (let i = 0; i < 8; i++) {
+    const spineCanvas = document.createElement('canvas');
+    spineCanvas.width = 128;
+    spineCanvas.height = 32;
+    const ctx = spineCanvas.getContext('2d');
+    
+    // Random spine color
+    ctx.fillStyle = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    ctx.fillRect(0, 0, 128, 32);
+    
+    // Add text
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px Arial';
+    const titles = ["CELL BIO", "GENETICS", "CHEM VOL2", "PHYSICS", "ORGANIC", "QUANTUM", "ANATOMY", "NEURO"];
+    ctx.fillText(titles[i], 10, 20);
+    
+    const spineTexture = new THREE.CanvasTexture(spineCanvas);
+    const spine = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.15, 0.4),
+        new THREE.MeshStandardMaterial({ 
+            map: spineTexture,
+            side: THREE.DoubleSide
+        })
+    );
+    spine.position.set(
+        -1.5 + i * 0.4,
+        shelfPositions[2] + 0.25,
+        0.25
+    );
+    spine.rotation.y = Math.PI;
+    bookshelf.add(spine);
+}
+
+bookshelf.userData = {
+    name: "Bookshelf",
+    description: "A fully stocked bookshelf with scientific literature.",
+    onClick: () => showBookshelfInteraction()
+};
+scene.add(bookshelf);
+interactiveObjects.push(bookshelf);
 
         // ===== ENHANCED COMPUTER TERMINAL =====
         const terminal = new THREE.Group();
@@ -1802,7 +1877,30 @@ interactiveObjects.push(desk);
         const elements = [
             { symbol: "H", x: -0.8, y: 0.5 },
             { symbol: "He", x: 0.8, y: 0.5 },
-            // ... more elements would go here
+            { symbol: "Li", x: -0.8, y: 0.25 },
+            { symbol: "Be", x: -0.6, y: 0.25 },
+            { symbol: "B", x: -0.4, y: 0.25 },
+            { symbol: "C", x: -0.2, y: 0.25 },
+            { symbol: "N", x: 0, y: 0.25 },
+            { symbol: "O", x: 0.2, y: 0.25 },
+            { symbol: "F", x: 0.4, y: 0.25 },
+            { symbol: "Ne", x: 0.6, y: 0.25 },
+            { symbol: "Na", x: -0.8, y: 0 },
+            { symbol: "Mg", x: -0.6, y: 0 },
+            { symbol: "Al", x: -0.4, y: 0 },
+            { symbol: "Si", x: -0.2, y: 0 },
+            { symbol: "P", x: 0, y: 0 },
+            { symbol: "S", x: 0.2, y: 0 },
+            { symbol: "Cl", x: 0.4, y: 0 },
+            { symbol: "Ar", x: 0.6, y: 0 },
+            { symbol: "K", x: -0.8, y: -0.25 },
+            { symbol: "Ca", x: -0.6, y: -0.25 },
+            { symbol: "Sc", x: -0.4, y: -0.25 },
+            { symbol: "Ti", x: -0.2, y: -0.25 },
+            { symbol: "V", x: 0, y: -0.25 },
+            { symbol: "Cr", x: 0.2, y: -0.25 },
+            { symbol: "Mn", x: 0.4, y: -0.25 },
+            { symbol: "Fe", x: 0.6, y: -0.25 },
             { symbol: "P", x: -0.6, y: -0.5, highlight: true },
             { symbol: "O", x: -0.4, y: -0.5, highlight: true },
             { symbol: "S", x: -0.2, y: -0.5, highlight: true },
@@ -1810,7 +1908,7 @@ interactiveObjects.push(desk);
             { symbol: "E", x: 0.2, y: -0.5, highlight: true },
             { symbol: "S", x: 0.4, y: -0.5, highlight: true }
         ];
-        
+
         elements.forEach(el => {
             const canvas = document.createElement('canvas');
             canvas.width = 64;
@@ -1834,60 +1932,252 @@ interactiveObjects.push(desk);
         });
 
         chart.userData = {
-    name: "Chemical Chart",
-    description: "A periodic table with certain elements highlighted to spell 'POSSESS'.",
-    onClick: () => showChemicalPuzzle()
-};
+            name: "Chemical Chart",
+            description: "A periodic table with certain elements highlighted to spell 'POSSESS'.",
+            onClick: () => showChemicalPuzzle()
+        };
         scene.add(chart);
         interactiveObjects.push(chart);
 
-        // Whiteboard (updated version)
-const whiteboard = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.5, 1.8),
-    new THREE.MeshStandardMaterial({ 
-        color: 0xffffff,
-        roughness: 0.4,
-        metalness: 0.1
-    })
-);
-whiteboard.position.set(-4.9, 1.8, 0); // Positioned on left wall
-whiteboard.rotation.y = Math.PI/2; // Rotated to face into the room
-whiteboard.receiveShadow = true;
+        // ===== IMPROVED WHITEBOARD =====
+        const whiteboard = new THREE.Mesh(
+            new THREE.PlaneGeometry(2.5, 1.8),
+            new THREE.MeshStandardMaterial({ 
+                color: 0xffffff,
+                roughness: 0.4,
+                metalness: 0.1
+            })
+        );
+        whiteboard.position.set(-4.9, 1.8, 0);
+        whiteboard.rotation.y = Math.PI/2;
+        whiteboard.receiveShadow = true;
 
-// Add whiteboard frame
-const whiteboardFrame = new THREE.Mesh(
-    new THREE.BoxGeometry(2.6, 1.9, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x333333 })
-);
-whiteboardFrame.position.set(-4.95, 1.8, 0);
-scene.add(whiteboardFrame);
+        // Add writing to the whiteboard
+        const canvas = document.createElement('canvas');
+        canvas.width = 1024;
+        canvas.height = 768;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "#000000";
+        ctx.fillText("Subject 314 Results:", 50, 50);
+        ctx.fillText("- Phase 1: Stable", 70, 100);
+        ctx.fillText("- Phase 2: Regeneration", 70, 150);
+        ctx.fillText("- Phase 3: Deterioration", 70, 200);
+        ctx.fillText("Time to collapse: 314min", 70, 250);
+        ctx.fillText("Emergency code: 314 x 2.5", 70, 300);
 
-// Add some writing to the whiteboard
-const canvas = document.createElement('canvas');
-canvas.width = 1024;
-canvas.height = 768;
-const ctx = canvas.getContext('2d');
-ctx.fillStyle = '#ffffff';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.font = "30px Arial";
-ctx.fillStyle = "#000000";
-ctx.fillText("Subject 314 Results:", 50, 50);
-ctx.fillText("- Phase 1: Stable", 70, 100);
-ctx.fillText("- Phase 2: Regeneration", 70, 150);
-ctx.fillText("- Phase 3: Deterioration", 70, 200);
-ctx.fillText("Time to collapse: 314min", 70, 250);
-ctx.fillText("Emergency code: 314 x 2.5", 70, 300);
+        const whiteboardTexture = new THREE.CanvasTexture(canvas);
+        whiteboard.material.map = whiteboardTexture;
 
-const whiteboardTexture = new THREE.CanvasTexture(canvas);
-whiteboard.material.map = whiteboardTexture;
+        whiteboard.userData = {
+            name: "Whiteboard",
+            description: "Contains research notes about Subject 314.",
+            onClick: () => showWhiteboardInteraction()
+        };
+        scene.add(whiteboard);
+        interactiveObjects.push(whiteboard);
 
-whiteboard.userData = {
-    name: "Whiteboard",
-    description: "Contains research notes about Subject 314.",
-    onClick: () => showWhiteboardInteraction()
-};
-scene.add(whiteboard);
-interactiveObjects.push(whiteboard);
+        // ===== IMPROVED CHAIR =====
+        function createChair() {
+            const chair = new THREE.Group();
+            
+            // Seat
+            const seat = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.05, 0.5),
+                new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.8 })
+            );
+            seat.position.set(0, 0.025, 0);
+            chair.add(seat);
+            
+            // Backrest
+            const back = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.8, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0x4a2a1a, roughness: 0.85 })
+            );
+            back.position.set(0, 0.45, -0.225);
+            chair.add(back);
+            
+            // Legs
+            const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
+            const legPositions = [
+                { x: -0.2, z: -0.2 },
+                { x: 0.2, z: -0.2 },
+                { x: -0.2, z: 0.2 },
+                { x: 0.2, z: 0.2 }
+            ];
+            
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
+                    legMaterial
+                );
+                leg.position.set(pos.x, -0.2, pos.z);
+                chair.add(leg);
+            });
+            
+            // Position the chair
+            chair.position.set(
+                (Math.random()-0.5)*roomSize*0.7,
+                0.2,
+                (Math.random()-0.5)*roomSize*0.7
+            );
+            chair.rotation.y = Math.random()*Math.PI;
+            
+            chair.userData = {
+                name: "Lab Chair",
+                description: "A standard laboratory chair.",
+                onClick: () => showModal("Chair", "Just an ordinary lab chair.", `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`)
+            };
+            
+            return chair;
+        }
+
+        // Add two chairs to the scene
+        scene.add(createChair());
+        scene.add(createChair());
+
+        // ===== IMPROVED MICROSCOPE =====
+        function createMicroscope() {
+            const microscope = new THREE.Group();
+            
+            // Base
+            const base = new THREE.Mesh(
+                new THREE.BoxGeometry(0.4, 0.2, 0.4),
+                new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.7, roughness: 0.3 })
+            );
+            microscope.add(base);
+            
+            // Arm
+            const arm = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16),
+                new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.8, roughness: 0.2 })
+            );
+            arm.position.set(0, 0.5, 0.2);
+            arm.rotation.x = Math.PI * 0.3;
+            microscope.add(arm);
+            
+            // Eyepiece
+            const eyepiece = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1, 0.1, 0.3, 16),
+                new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.9, roughness: 0.1 })
+            );
+            eyepiece.position.set(0, 0.9, 0.35);
+            microscope.add(eyepiece);
+            
+            // Objective lens
+            const lens = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.08, 0.08, 0.2, 32),
+                new THREE.MeshStandardMaterial({ color: 0x000000, metalness: 1.0, roughness: 0.05 })
+            );
+            lens.position.set(0, 0.5, -0.1);
+            microscope.add(lens);
+            
+            // Stage
+            const stage = new THREE.Mesh(
+                new THREE.BoxGeometry(0.3, 0.02, 0.2),
+                new THREE.MeshStandardMaterial({ color: 0x444444 })
+            );
+            stage.position.set(0, 0.2, -0.2);
+            microscope.add(stage);
+            
+            // Slide
+            const slide = new THREE.Mesh(
+                new THREE.BoxGeometry(0.2, 0.01, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0x888888 })
+            );
+            slide.position.set(0, 0.21, -0.2);
+            microscope.add(slide);
+            
+            // Position microscope
+            microscope.position.set(1, 0.4, -1);
+            
+            microscope.userData = {
+                name: "Microscope",
+                description: "A high-powered laboratory microscope.",
+                onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures.", `
+                    <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+                `)
+            };
+            
+            return microscope;
+        }
+
+        scene.add(createMicroscope());
+
+        // ===== TEST TUBE RACK =====
+        function createTestTubeRack() {
+            const rack = new THREE.Group();
+            
+            // Rack base
+            const base = new THREE.Mesh(
+                new THREE.BoxGeometry(0.6, 0.1, 0.3),
+                new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.3, roughness: 0.6 })
+            );
+            rack.add(base);
+            
+            // Test tubes
+            const tubeMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                transmission: 0.9,
+                roughness: 0.1,
+                metalness: 0.0,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.1,
+                ior: 1.5,
+                thickness: 0.5,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const tubePositions = [
+                { x: -0.2, z: 0 },
+                { x: -0.1, z: 0 },
+                { x: 0, z: 0 },
+                { x: 0.1, z: 0 },
+                { x: 0.2, z: 0 }
+            ];
+            
+            tubePositions.forEach((pos, i) => {
+                const tube = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.05, 0.05, 0.4, 32),
+                    tubeMaterial
+                );
+                tube.position.set(pos.x, 0.25, pos.z);
+                rack.add(tube);
+                
+                // Add colored liquid
+                const liquidColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff];
+                const liquid = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.04, 0.04, 0.3, 32),
+                    new THREE.MeshPhysicalMaterial({
+                        color: liquidColors[i],
+                        transmission: 0.5,
+                        roughness: 0.2,
+                        emissive: liquidColors[i],
+                        emissiveIntensity: 0.2
+                    })
+                );
+                liquid.position.set(pos.x, 0.15, pos.z);
+                rack.add(liquid);
+            });
+            
+            // Position rack
+            rack.position.set(-2, 0.4, 1);
+            
+            rack.userData = {
+                name: "Test Tube Rack",
+                description: "A rack holding various colored chemical solutions.",
+                onClick: () => showModal("Test Tubes", "The tubes contain unknown chemical solutions of different colors.", `
+                    <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+                `)
+            };
+            
+            return rack;
+        }
+
+        scene.add(createTestTubeRack());
 
         // Safe (hidden behind books)
         const safe = new THREE.Mesh(
@@ -2122,48 +2412,8 @@ function showChemicalPuzzle() {
             roomDesc.innerHTML = baseDescription + additionalText;
         }
 
-        // Object interaction functions
+        // ===== IMPROVED DOOR INTERACTION =====
         function showDoorInteraction() {
-            const interactions = `
-                <div class="interaction-buttons">
-                    <button class="interaction-button" onclick="showDoorCodeInput(event)">Examine Keypad</button>
-
-                    <button class="interaction-button" onclick="showDoorNote(event)">Search Around Door</button>
-                </div>
-            `;
-            showModal("Exit Door", "The reinforced door is your only way out. A keypad demands a 4-digit code.", interactions);
-        }
-
-
-        function showDoorNote(e) {
-            if (e) e.stopPropagation();
-            if (!gameState.inventory.includes('door-note')) {
-                addToInventory('door-note');
-                addClue('door-note-found');
-                
-                const noteContent = `
-                    <p>You find a hidden note near the door frame:</p>
-                    <p style="font-style: italic; background: #333; padding: 10px; border-left: 3px solid #8bc34a;">
-                        "Emergency code: Subject number (314) multiplied by catalyst constant (2.5, round down)"
-                    </p>
-                    <p>The numbers 314 appear frequently in the lab's notes.</p>
-                `;
-                
-                showModal("Hidden Note Found", noteContent, `<button class="interaction-button" onclick="showDoorInteraction(event)">Back to Door</button>`);
-            } else {
-                showModal("Exit Door", "You've already found the hidden note near the door.", `<button class="interaction-button" onclick="showDoorInteraction(event)">Back to Door</button>`);
-            }
-        }
-
-        function showDoorCodeInput(e) {
-            if (e) e.stopPropagation();
-            let hint = '';
-            if (gameState.inventory.includes('door-note')) {
-                hint = `<p class="hint">The note says: 314 × 2.5 = 785 → ${gameState.doorCode}</p>`;
-            } else {
-                hint = '<p class="hint">Look for clues around the lab to find the code.</p>';
-            }
-            
             const keypadHTML = `
                 <div class="keypad">
                     <div class="keypad-display" id="code-display">____</div>
@@ -2178,13 +2428,12 @@ function showChemicalPuzzle() {
                     <button onclick="addCodeDigit('9', event)">9</button>
                     <button onclick="addCodeDigit('0', event)">0</button>
                     <button onclick="clearCode(event)">C</button>
-                    <button onclick="clearCode(event)">CLEAR</button>
                     <button onclick="submitCode(event)">ENTER</button>
                 </div>
-                ${hint}
+                <p class="hint">Enter the 4-digit code to escape</p>
             `;
             
-            showModal("Door Keypad", "Enter the 4-digit code to escape:", keypadHTML);
+            showModal("Door Keypad", "The reinforced door requires a 4-digit code to open.", keypadHTML);
         }
 
         let currentCode = '';
@@ -2868,6 +3117,7 @@ window.submitConnectionSelection = function() {
         window.addEventListener('click', onMouseClick, false);
 
         // Add to your existing raycaster code
+// Hover functionality
 let lastHovered = null;
 
 function onMouseMove(event) {
@@ -2883,7 +3133,10 @@ function onMouseMove(event) {
     
     // Remove hover effect from previous object
     if (lastHovered) {
-        lastHovered.material.emissive.setHex(lastHovered.userData.originalEmissive || 0x000000);
+        if (lastHovered.material) {
+            lastHovered.material.emissive.setHex(lastHovered.userData.originalEmissive || 0x000000);
+        }
+        document.getElementById('ui-container').style.borderColor = '#444'; // Reset border
         lastHovered = null;
     }
     
@@ -2895,103 +3148,78 @@ function onMouseMove(event) {
         }
         
         if (hoveredObj && hoveredObj.userData.name) {
-            // Store original emissive color if not already stored
-            if (hoveredObj.material && !hoveredObj.userData.originalEmissive) {
-                hoveredObj.userData.originalEmissive = hoveredObj.material.emissive.getHex();
-            }
-            
-            // Apply hover effect
             if (hoveredObj.material) {
+                hoveredObj.userData.originalEmissive = hoveredObj.material.emissive?.getHex() || 0x000000;
                 hoveredObj.material.emissive.setHex(0x333333);
             }
             
-            lastHovered = hoveredObj;
+            // Update UI to show hovered object name
+            document.getElementById('ui-container').style.borderColor = '#8bc34a';
+            document.getElementById('room-description').innerHTML = 
+                `<p>Looking at: <strong>${hoveredObj.userData.name}</strong></p>
+                 <p>${hoveredObj.userData.description}</p>`;
             
-            // Show tooltip
-            showTooltip(hoveredObj.userData.name, event.clientX, event.clientY);
+            lastHovered = hoveredObj;
         }
     } else {
-        hideTooltip();
+        // Restore original description if not hovering anything
+        updateStory();
     }
-}
-
-// Tooltip element
-const tooltip = document.createElement('div');
-tooltip.style.position = 'absolute';
-tooltip.style.pointerEvents = 'none';
-tooltip.style.backgroundColor = 'rgba(0,0,0,0.7)';
-tooltip.style.color = 'white';
-tooltip.style.padding = '5px 10px';
-tooltip.style.borderRadius = '3px';
-tooltip.style.fontFamily = 'Courier New, monospace';
-tooltip.style.zIndex = '100';
-tooltip.style.display = 'none';
-document.body.appendChild(tooltip);
-
-function showTooltip(text, x, y) {
-    tooltip.textContent = text;
-    tooltip.style.display = 'block';
-    tooltip.style.left = (x + 15) + 'px';
-    tooltip.style.top = (y + 15) + 'px';
-}
-
-function hideTooltip() {
-    tooltip.style.display = 'none';
 }
 
 window.addEventListener('mousemove', onMouseMove, false);
 
-// Add this after your interactive objects are created
-function addInteractionIndicators() {
-    interactiveObjects.forEach(obj => {
-        // Skip if already has an indicator
-        if (obj.userData.hasIndicator) return;
-        
-        // Create a small sphere indicator
-        const indicator = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 8, 8),
-            new THREE.MeshBasicMaterial({ 
-                color: 0x00ff00,
-                transparent: true,
-                opacity: 0.7
-            })
-        );
-        
-        // Position above the object
-        const box = new THREE.Box3().setFromObject(obj);
-        const size = box.getSize(new THREE.Vector3());
-        indicator.position.copy(obj.position);
-        indicator.position.y += size.y * 0.6;
-        
-        // Make it pulse
-        function pulse() {
-            gsap.to(indicator.scale, {
-                x: 1.2,
-                y: 1.2,
-                z: 1.2,
-                duration: 0.5,
-                yoyo: true,
-                repeat: -1
-            });
-            gsap.to(indicator.material, {
-                opacity: 0.3,
-                duration: 0.5,
-                yoyo: true,
-                repeat: -1
+        // ===== IMPROVED INTERACTION INDICATORS =====
+        function addInteractionIndicators() {
+            interactiveObjects.forEach(obj => {
+                if (obj.userData.hasIndicator) return;
+                
+                // Only add indicators to main objects, not their children
+                if (obj.parent && obj.parent.userData.name) return;
+                
+                const indicator = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.05, 8, 8),
+                    new THREE.MeshBasicMaterial({ 
+                        color: 0x00ff00,
+                        transparent: true,
+                        opacity: 0.7
+                    })
+                );
+                
+                // Position above the object
+                const box = new THREE.Box3().setFromObject(obj);
+                const size = box.getSize(new THREE.Vector3());
+                indicator.position.copy(obj.position);
+                indicator.position.y += size.y * 0.6;
+                
+                // Make it pulse
+                function pulse() {
+                    gsap.to(indicator.scale, {
+                        x: 1.2,
+                        y: 1.2,
+                        z: 1.2,
+                        duration: 0.5,
+                        yoyo: true,
+                        repeat: -1
+                    });
+                    gsap.to(indicator.material, {
+                        opacity: 0.3,
+                        duration: 0.5,
+                        yoyo: true,
+                        repeat: -1
+                    });
+                }
+                
+                scene.add(indicator);
+                pulse();
+                
+                // Store reference
+                obj.userData.indicator = indicator;
+                obj.userData.hasIndicator = true;
             });
         }
-        
-        scene.add(indicator);
-        pulse();
-        
-        // Store reference
-        obj.userData.indicator = indicator;
-        obj.userData.hasIndicator = true;
-    });
-}
-
-// Call this after creating all interactive objects
-addInteractionIndicators();
+        // Call this after creating all interactive objects
+        addInteractionIndicators();
 
         // Initialize the game
         updateInventory();
