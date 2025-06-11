@@ -369,9 +369,43 @@
     margin: 15px 0;
     text-align: center;
 }
+
+#intro-modal .modal-content {
+        max-width: 800px;
+        text-align: center;
+    }
+    
+    #intro-text p {
+        opacity: 0;
+        margin: 20px 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    #intro-modal .interaction-button {
+        margin: 10px;
+        padding: 10px 20px;
+    }
     </style>
 </head>
 <body>
+    <div id="intro-modal" class="modal" style="display: flex;">
+    <div class="modal-content">
+        <span class="modal-close" onclick="skipIntro()">&times;</span>
+        <div id="intro-content">
+            <h2>The Abandoned Laboratory</h2>
+            <div id="intro-text">
+                <p>You were part of a top-secret research team working on "Project Phoenix" - a revolutionary cellular regeneration experiment.</p>
+                <p>After months of failed trials, Subject 314 showed unprecedented results. The subject's cells demonstrated perfect regeneration with no signs of deterioration.</p>
+                <p>But something went wrong during the final phase...</p>
+                <p>You wake up alone in the abandoned lab, your memories fragmented. The last thing you recall is the emergency alarm blaring and a strange lavender scent in the air.</p>
+                <p>Now you must piece together what happened while finding a way out before the facility's self-destruct sequence completes.</p>
+            </div>
+            <button class="interaction-button" onclick="skipIntro()">Skip Intro</button>
+            <button class="interaction-button" onclick="startGameWithIntro()">Play Story</button>
+        </div>
+    </div>
+</div>
     <div id="threejs-container"></div>
     
     <div id="inventory">
@@ -403,6 +437,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 
     <script>
+        function skipIntro() {
+    document.getElementById('intro-modal').style.display = 'none';
+    // Start any background music or ambient sounds here
+}
+
+function startGameWithIntro() {
+    const introText = document.getElementById('intro-text');
+    const paragraphs = introText.querySelectorAll('p');
+    let delay = 0;
+    
+    // Hide all paragraphs initially
+    paragraphs.forEach(p => p.style.opacity = 0);
+    
+    // Animate them in one by one
+    paragraphs.forEach((p, i) => {
+        gsap.to(p, {
+            opacity: 1,
+            duration: 1,
+            delay: delay
+        });
+        delay += 2.5; // 2.5 seconds between paragraphs
+        
+        // Last paragraph - show continue button
+        if (i === paragraphs.length - 1) {
+            setTimeout(() => {
+                const continueBtn = document.createElement('button');
+                continueBtn.className = 'interaction-button';
+                continueBtn.textContent = 'Continue';
+                continueBtn.onclick = skipIntro;
+                introText.appendChild(continueBtn);
+            }, delay * 1000);
+        }
+    });
+}
         // Initialize Three.js scene
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x111111);
