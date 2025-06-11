@@ -1290,24 +1290,123 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
         keypad.position.set(0.8, 1.2, roomSize/2);
         scene.add(keypad);
 
-        // Lab desk
-        const desk = new THREE.Mesh(
-            new THREE.BoxGeometry(3, 0.8, 1.5),
-            new THREE.MeshStandardMaterial({ 
-                color: 0x555555,
-                roughness: 0.7
-            })
-        );
-        desk.position.set(-3, 0.4, -3);
-        desk.castShadow = true;
-        desk.receiveShadow = true;
-        desk.userData = {
-            name: "Lab Desk",
-            description: "Cluttered with research notes and equipment.",
-            onClick: () => showDeskInteraction()
-        };
-        scene.add(desk);
-        interactiveObjects.push(desk);
+        // Update the desk creation code to add more items
+const desk = new THREE.Group();
+desk.position.set(-3, 0.4, -3);
+
+// Desk surface
+const deskSurface = new THREE.Mesh(
+    new THREE.BoxGeometry(3, 0.8, 1.5),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x555555,
+        roughness: 0.7
+    })
+);
+deskSurface.castShadow = true;
+deskSurface.receiveShadow = true;
+desk.add(deskSurface);
+
+// Add desk drawers
+const drawerMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
+for (let i = 0; i < 3; i++) {
+    const drawer = new THREE.Mesh(
+        new THREE.BoxGeometry(2.8, 0.2, 0.4),
+        drawerMaterial
+    );
+    drawer.position.set(0, -0.3 + i * 0.25, 0.55);
+    drawer.castShadow = true;
+    desk.add(drawer);
+    
+    // Add drawer handle
+    const handle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16),
+        new THREE.MeshStandardMaterial({ color: 0x888888 })
+    );
+    handle.rotation.z = Math.PI/2;
+    handle.position.set(0.8, -0.3 + i * 0.25, 0.75);
+    desk.add(handle);
+}
+
+// Add papers
+const paperGeometry = new THREE.PlaneGeometry(0.3, 0.4);
+const paperMaterial = new THREE.MeshStandardMaterial({ 
+    color: 0xffffdd,
+    side: THREE.DoubleSide
+});
+for (let i = 0; i < 5; i++) {
+    const paper = new THREE.Mesh(paperGeometry, paperMaterial);
+    paper.position.set(
+        -1 + Math.random() * 1.5,
+        0.41,
+        -0.5 + Math.random() * 0.8
+    );
+    paper.rotation.x = Math.PI/2;
+    paper.rotation.z = (Math.random() - 0.5) * 0.5;
+    paper.receiveShadow = true;
+    desk.add(paper);
+}
+
+// Add a desk lamp
+const lampBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.1, 0.1, 0.2, 16),
+    new THREE.MeshStandardMaterial({ color: 0x333333 })
+);
+lampBase.position.set(1, 0.5, -0.5);
+desk.add(lampBase);
+
+const lampArm = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.03, 0.03, 0.8, 16),
+    new THREE.MeshStandardMaterial({ color: 0x222222 })
+);
+lampArm.position.set(1, 0.9, -0.5);
+lampArm.rotation.z = Math.PI/4;
+desk.add(lampArm);
+
+const lampShade = new THREE.Mesh(
+    new THREE.ConeGeometry(0.2, 0.3, 16),
+    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+);
+lampShade.position.set(1.25, 1.1, -0.75);
+lampShade.rotation.x = Math.PI/2;
+desk.add(lampShade);
+
+// Add a light to the lamp
+const lampLight = new THREE.PointLight(0xffeedd, 1, 2);
+lampLight.position.set(1.25, 1.05, -0.75);
+desk.add(lampLight);
+
+// Add a stapler
+const staplerBase = new THREE.Mesh(
+    new THREE.BoxGeometry(0.15, 0.05, 0.08),
+    new THREE.MeshStandardMaterial({ color: 0x888888 })
+);
+staplerBase.position.set(-0.5, 0.41, -0.3);
+desk.add(staplerBase);
+
+const staplerTop = new THREE.Mesh(
+    new THREE.BoxGeometry(0.15, 0.03, 0.08),
+    new THREE.MeshStandardMaterial({ color: 0x666666 })
+);
+staplerTop.position.set(-0.5, 0.45, -0.3);
+staplerTop.rotation.x = Math.PI/8;
+desk.add(staplerTop);
+
+// Add a coffee mug
+const mug = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.08, 0.1, 0.12, 16),
+    new THREE.MeshStandardMaterial({ color: 0x442211 })
+);
+mug.position.set(0.8, 0.46, 0.2);
+desk.add(mug);
+
+// Add interactive data
+desk.userData = {
+    name: "Lab Desk",
+    description: "Cluttered with research notes and equipment.",
+    onClick: () => showDeskInteraction()
+};
+scene.add(desk);
+interactiveObjects.push(desk);
 
         // ===== ENHANCED CABINET =====
         const cabinet = new THREE.Group();
@@ -1624,21 +1723,53 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
         scene.add(chart);
         interactiveObjects.push(chart);
 
-        // Whiteboard
-        const whiteboard = new THREE.Mesh(
-            new THREE.PlaneGeometry(2, 1.5),
-            new THREE.MeshStandardMaterial({ color: 0xffffff })
-        );
-        whiteboard.position.set(-2, 1.5, 2.5);
-        whiteboard.rotation.y = Math.PI;
-        whiteboard.receiveShadow = true;
-        whiteboard.userData = {
-            name: "Whiteboard",
-            description: "Covered in equations and diagrams.",
-            onClick: () => showWhiteboardInteraction()
-        };
-        scene.add(whiteboard);
-        interactiveObjects.push(whiteboard);
+        // Whiteboard (updated version)
+const whiteboard = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.5, 1.8),
+    new THREE.MeshStandardMaterial({ 
+        color: 0xffffff,
+        roughness: 0.4,
+        metalness: 0.1
+    })
+);
+whiteboard.position.set(-4.9, 1.8, 0); // Positioned on left wall
+whiteboard.rotation.y = Math.PI/2; // Rotated to face into the room
+whiteboard.receiveShadow = true;
+
+// Add whiteboard frame
+const whiteboardFrame = new THREE.Mesh(
+    new THREE.BoxGeometry(2.6, 1.9, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x333333 })
+);
+whiteboardFrame.position.set(-4.95, 1.8, 0);
+scene.add(whiteboardFrame);
+
+// Add some writing to the whiteboard
+const canvas = document.createElement('canvas');
+canvas.width = 1024;
+canvas.height = 768;
+const ctx = canvas.getContext('2d');
+ctx.fillStyle = '#ffffff';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.font = "30px Arial";
+ctx.fillStyle = "#000000";
+ctx.fillText("Subject 314 Results:", 50, 50);
+ctx.fillText("- Phase 1: Stable", 70, 100);
+ctx.fillText("- Phase 2: Regeneration", 70, 150);
+ctx.fillText("- Phase 3: Deterioration", 70, 200);
+ctx.fillText("Time to collapse: 314min", 70, 250);
+ctx.fillText("Emergency code: 314 x 2.5", 70, 300);
+
+const whiteboardTexture = new THREE.CanvasTexture(canvas);
+whiteboard.material.map = whiteboardTexture;
+
+whiteboard.userData = {
+    name: "Whiteboard",
+    description: "Contains research notes about Subject 314.",
+    onClick: () => showWhiteboardInteraction()
+};
+scene.add(whiteboard);
+interactiveObjects.push(whiteboard);
 
         // Safe (hidden behind books)
         const safe = new THREE.Mesh(
