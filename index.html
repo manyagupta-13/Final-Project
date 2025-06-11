@@ -319,6 +319,56 @@
 .error {
     color: #f44336;
 }
+
+.chemical-puzzle {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.compounds-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.compound-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.compound-formula {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.compound-item input {
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #555;
+    color: white;
+}
+
+.feedback-icon {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.chemical-success {
+    display: none;
+    background: rgba(0,100,0,0.3);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 15px 0;
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -1716,10 +1766,10 @@ interactiveObjects.push(desk);
         });
 
         chart.userData = {
-            name: "Chemical Chart",
-            description: "A periodic table with certain elements highlighted to spell 'POSSESS'.",
-            onClick: () => showChartInteraction()
-        };
+    name: "Chemical Chart",
+    description: "A periodic table with certain elements highlighted to spell 'POSSESS'.",
+    onClick: () => showChemicalPuzzle()
+};
         scene.add(chart);
         interactiveObjects.push(chart);
 
@@ -1839,6 +1889,7 @@ interactiveObjects.push(whiteboard);
     }
 };
 
+
         // Modal functionality
         const modal = document.getElementById('interaction-modal');
         const modalContent = document.getElementById('modal-content');
@@ -1871,6 +1922,84 @@ interactiveObjects.push(whiteboard);
                 modal.style.display = 'none';
             }
         }
+
+        function checkAllCompoundsSolved() {
+    const allSolved = Array.from(document.querySelectorAll('.compound-item input'))
+        .every(input => input.disabled);
+    
+    if (allSolved) {
+        const successDiv = document.getElementById('chemical-success');
+        successDiv.style.display = 'block';
+        addClue('chemical-puzzle-solved');
+    }
+}
+
+window.checkCompoundAnswer = function(inputElement) {
+    const index = inputElement.id.split('-')[1];
+    const feedbackIcon = document.getElementById(`feedback-${index}`);
+    const userAnswer = inputElement.value.toLowerCase().trim();
+    const correctAnswer = inputElement.dataset.answer.toLowerCase();
+    
+    if (userAnswer === correctAnswer) {
+        inputElement.disabled = true;
+        feedbackIcon.innerHTML = '✓';
+        feedbackIcon.style.color = '#4CAF50';
+        checkAllCompoundsSolved();
+    } else if (userAnswer) {
+        feedbackIcon.innerHTML = '✗';
+        feedbackIcon.style.color = '#F44336';
+    } else {
+        feedbackIcon.innerHTML = '';
+    }
+};
+
+function showChemicalPuzzle() {
+    // Chemical compounds and their names
+    const compounds = [
+        { formula: "H₂O", name: "water" },
+        { formula: "CO₂", name: "carbon dioxide" },
+        { formula: "NaCl", name: "sodium chloride" },
+        { formula: "C₆H₁₂O₆", name: "glucose" },
+        { formula: "CH₄", name: "methane" },
+        { formula: "NH₃", name: "ammonia" },
+        { formula: "H₂SO₄", name: "sulfuric acid" },
+        { formula: "NaOH", name: "sodium hydroxide" }
+    ];
+
+    // Shuffle the compounds
+    const shuffledCompounds = [...compounds].sort(() => Math.random() - 0.5);
+
+    // Create the puzzle HTML
+    let puzzleHTML = `
+        <div class="chemical-puzzle">
+            <h3>Name These Chemical Compounds</h3>
+            <p>Identify all 8 common chemical compounds to reveal the second digit of the door code.</p>
+            <div class="compounds-grid">
+    `;
+
+    // Add the compound inputs
+    shuffledCompounds.forEach((compound, index) => {
+        puzzleHTML += `
+            <div class="compound-item">
+                <div class="compound-formula">${compound.formula}</div>
+                <input type="text" id="compound-${index}" data-answer="${compound.name}" 
+                    placeholder="Enter name..." oninput="checkCompoundAnswer(this)">
+                <span class="feedback-icon" id="feedback-${index}"></span>
+            </div>
+        `;
+    });
+
+    puzzleHTML += `
+            </div>
+            <div id="chemical-success" class="chemical-success">
+                Puzzle solved! The second digit of the door code is: ${gameState.doorCode[1]}★
+            </div>
+            <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+        </div>
+    `;
+
+    showModal("Chemical Compounds Puzzle", puzzleHTML, '');
+}
 
         // Update inventory display
         function updateInventory() {
