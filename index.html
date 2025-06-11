@@ -2665,6 +2665,132 @@ window.submitConnectionSelection = function() {
 
         window.addEventListener('click', onMouseClick, false);
 
+        // Add to your existing raycaster code
+let lastHovered = null;
+
+function onMouseMove(event) {
+    // Calculate mouse position
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    // Update the raycaster
+    raycaster.setFromCamera(mouse, camera);
+    
+    // Find intersected objects
+    const intersects = raycaster.intersectObjects(interactiveObjects, true);
+    
+    // Remove hover effect from previous object
+    if (lastHovered) {
+        lastHovered.material.emissive.setHex(lastHovered.userData.originalEmissive || 0x000000);
+        lastHovered = null;
+    }
+    
+    // Add hover effect to new object
+    if (intersects.length > 0) {
+        let hoveredObj = intersects[0].object;
+        while (hoveredObj && !hoveredObj.userData.name) {
+            hoveredObj = hoveredObj.parent;
+        }
+        
+        if (hoveredObj && hoveredObj.userData.name) {
+            // Store original emissive color if not already stored
+            if (hoveredObj.material && !hoveredObj.userData.originalEmissive) {
+                hoveredObj.userData.originalEmissive = hoveredObj.material.emissive.getHex();
+            }
+            
+            // Apply hover effect
+            if (hoveredObj.material) {
+                hoveredObj.material.emissive.setHex(0x333333);
+            }
+            
+            lastHovered = hoveredObj;
+            
+            // Show tooltip
+            showTooltip(hoveredObj.userData.name, event.clientX, event.clientY);
+        }
+    } else {
+        hideTooltip();
+    }
+}
+
+// Tooltip element
+const tooltip = document.createElement('div');
+tooltip.style.position = 'absolute';
+tooltip.style.pointerEvents = 'none';
+tooltip.style.backgroundColor = 'rgba(0,0,0,0.7)';
+tooltip.style.color = 'white';
+tooltip.style.padding = '5px 10px';
+tooltip.style.borderRadius = '3px';
+tooltip.style.fontFamily = 'Courier New, monospace';
+tooltip.style.zIndex = '100';
+tooltip.style.display = 'none';
+document.body.appendChild(tooltip);
+
+function showTooltip(text, x, y) {
+    tooltip.textContent = text;
+    tooltip.style.display = 'block';
+    tooltip.style.left = (x + 15) + 'px';
+    tooltip.style.top = (y + 15) + 'px';
+}
+
+function hideTooltip() {
+    tooltip.style.display = 'none';
+}
+
+window.addEventListener('mousemove', onMouseMove, false);
+
+// Add this after your interactive objects are created
+function addInteractionIndicators() {
+    interactiveObjects.forEach(obj => {
+        // Skip if already has an indicator
+        if (obj.userData.hasIndicator) return;
+        
+        // Create a small sphere indicator
+        const indicator = new THREE.Mesh(
+            new THREE.SphereGeometry(0.05, 8, 8),
+            new THREE.MeshBasicMaterial({ 
+                color: 0x00ff00,
+                transparent: true,
+                opacity: 0.7
+            })
+        );
+        
+        // Position above the object
+        const box = new THREE.Box3().setFromObject(obj);
+        const size = box.getSize(new THREE.Vector3());
+        indicator.position.copy(obj.position);
+        indicator.position.y += size.y * 0.6;
+        
+        // Make it pulse
+        function pulse() {
+            gsap.to(indicator.scale, {
+                x: 1.2,
+                y: 1.2,
+                z: 1.2,
+                duration: 0.5,
+                yoyo: true,
+                repeat: -1
+            });
+            gsap.to(indicator.material, {
+                opacity: 0.3,
+                duration: 0.5,
+                yoyo: true,
+                repeat: -1
+            });
+        }
+        
+        scene.add(indicator);
+        pulse();
+        
+        // Store reference
+        obj.userData.indicator = indicator;
+        obj.userData.hasIndicator = true;
+    });
+}
+
+// Call this after creating all interactive objects
+addInteractionIndicators();
+
         // Initialize the game
         updateInventory();
     </script>
