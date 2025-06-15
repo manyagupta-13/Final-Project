@@ -266,126 +266,161 @@
             margin-top: 15px;
             min-height: 30px;
         }
+        
         .connections-game {
-    margin: 20px 0;
-}
+            margin: 20px 0;
+        }
 
-.connections-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.connections-card {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .connections-card {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-.connections-card.selected {
-    background-color: #8bc34a;
-    color: white;
-}
+        .connections-card.selected {
+            background-color: #8bc34a;
+            color: white;
+        }
 
-.connections-selected {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #333;
-    border-radius: 5px;
-}
+        .connections-selected {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+        }
 
-.selected-item {
-    display: inline-block;
-    margin: 5px;
-    padding: 5px 10px;
-    background-color: #555;
-    border-radius: 3px;
-}
+        .selected-item {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #555;
+            border-radius: 3px;
+        }
 
-#connections-feedback {
-    margin-top: 15px;
-    min-height: 50px;
-}
+        #connections-feedback {
+            margin-top: 15px;
+            min-height: 50px;
+        }
 
-.success {
-    color: #8bc34a;
-}
+        .success {
+            color: #8bc34a;
+        }
 
-.error {
-    color: #f44336;
-}
+        .error {
+            color: #f44336;
+        }
 
-.chemical-puzzle {
-    max-width: 600px;
-    margin: 0 auto;
-}
+        .chemical-puzzle {
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-.compounds-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 20px 0;
-}
+        .compounds-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
 
-.compound-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 5px;
-}
+        .compound-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
 
-.compound-formula {
-    font-size: 24px;
-    margin-bottom: 10px;
-    font-family: 'Courier New', monospace;
-}
+        .compound-formula {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
 
-.compound-item input {
-    width: 100%;
-    padding: 5px;
-    text-align: center;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid #555;
-    color: white;
-}
+        .compound-item input {
+            width: 100%;
+            padding: 5px;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #555;
+            color: white;
+        }
 
-.feedback-icon {
-    margin-top: 5px;
-    font-weight: bold;
-}
+        .feedback-icon {
+            margin-top: 5px;
+            font-weight: bold;
+        }
 
-.chemical-success {
-    display: none;
-    background: rgba(0,100,0,0.3);
-    padding: 10px;
-    border-radius: 5px;
-    margin: 15px 0;
-    text-align: center;
-}
+        .chemical-success {
+            display: none;
+            background: rgba(0,100,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+        }
 
-#intro-modal .modal-content {
-        max-width: 800px;
-        text-align: center;
-    }
-    
-    #intro-text p {
-        opacity: 0;
-        margin: 20px 0;
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-    
-    #intro-modal .interaction-button {
-        margin: 10px;
-        padding: 10px 20px;
-    }
+        #intro-modal .modal-content {
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        #intro-text p {
+            opacity: 0;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        #intro-modal .interaction-button {
+            margin: 10px;
+            padding: 10px 20px;
+        }
+
+        /* Memory Game Styles */
+        .memory-vial {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 10px;
+            border: 2px solid #444;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .memory-vial.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .memory-vial:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .memory-vial:nth-child(1) { background: rgba(255, 0, 0, 0.3); color: #ff0000; }
+        .memory-vial:nth-child(2) { background: rgba(0, 255, 0, 0.3); color: #00ff00; }
+        .memory-vial:nth-child(3) { background: rgba(0, 0, 255, 0.3); color: #0000ff; }
+        .memory-vial:nth-child(4) { background: rgba(255, 255, 0, 0.3); color: #ffff00; }
+        .memory-vial:nth-child(5) { background: rgba(255, 0, 255, 0.3); color: #ff00ff; }
+
+        .memory-game-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -1117,86 +1152,115 @@ const metalMaterial = new THREE.MeshStandardMaterial({
 });
 
 // 1. CHEMISTRY WORKBENCH
-const workbench = new THREE.Group();
-workbench.position.set(-4, 0, 2);
+        const workbench = new THREE.Group();
+        workbench.position.set(-4, 0, 2);
 
-// Bench surface
-const benchSurface = new THREE.Mesh(
-    new THREE.BoxGeometry(2, 0.1, 1.5),
-    new THREE.MeshStandardMaterial({ 
-        color: 0x333333,
-        roughness: 0.7
-    })
-);
-benchSurface.position.set(0, 0.05, 0);
-benchSurface.receiveShadow = true;
-workbench.add(benchSurface);
-
-// Test tube rack
-const tubeRack = new THREE.Group();
-for (let i = 0; i < 6; i++) {
-    const tube = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
-        glassMaterial
-    );
-    tube.position.set(-0.4 + i * 0.16, 0.4, 0);
-    tube.castShadow = true;
-    
-    // Add colored liquid
-    if (i % 2 === 0) {
-        const liquid = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
-            new THREE.MeshPhysicalMaterial({
-                color: [0xff0000, 0x00ff00, 0x0000ff][i % 3],
-                transmission: 0.5,
-                roughness: 0.2,
-                emissive: [0xff0000, 0x00ff00, 0x0000ff][i % 3],
-                emissiveIntensity: 0.3
+        // Bench surface
+        const benchSurface = new THREE.Mesh(
+            new THREE.BoxGeometry(2, 0.1, 1.5),
+            new THREE.MeshStandardMaterial({ 
+                color: 0x333333,
+                roughness: 0.7
             })
         );
-        liquid.position.set(-0.4 + i * 0.16, 0.25, 0);
-        tubeRack.add(liquid);
-    }
-    tubeRack.add(tube);
-}
-tubeRack.position.set(0, 0, -0.3);
-workbench.add(tubeRack);
+        benchSurface.position.set(0, 0.05, 0);
+        benchSurface.receiveShadow = true;
+        workbench.add(benchSurface);
 
-// Bunsen burner
-const burnerBase = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.15, 0.15, 0.2, 32),
-    metalMaterial
-);
-burnerBase.position.set(0.5, 0.1, 0.4);
-workbench.add(burnerBase);
+        // Test tube rack with 5 vials for memory game
+        const tubeRack = new THREE.Group();
+        for (let i = 0; i < 5; i++) {
+            const tube = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
+                glassMaterial
+            );
+            tube.position.set(-0.4 + i * 0.16, 0.4, 0);
+            tube.castShadow = true;
+            
+            // Add colored liquid
+            const liquid = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
+                new THREE.MeshPhysicalMaterial({
+                    color: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
+                    transmission: 0.5,
+                    roughness: 0.2,
+                    emissive: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
+                    emissiveIntensity: 0.3
+                })
+            );
+            liquid.position.set(-0.4 + i * 0.16, 0.25, 0);
+            tubeRack.add(liquid);
+            
+            // Make tubes interactive for memory game
+            tube.userData = {
+                name: `Vial ${i+1}`,
+                description: `A vial containing ${['red', 'green', 'blue', 'yellow', 'purple'][i]} liquid.`,
+                onClick: () => {
+                    if (gameState.currentPuzzle === 'memory') {
+                        handleVialClick(i);
+                    } else {
+                        showModal(`Vial ${i+1}`, 
+                            `This vial contains ${['red', 'green', 'blue', 'yellow', 'purple'][i]} liquid.`,
+                            `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
+                    }
+                }
+            };
+            
+            tubeRack.add(tube);
+            interactiveObjects.push(tube);
+        }
+        tubeRack.position.set(0, 0, -0.3);
+        workbench.add(tubeRack);
 
-const burnerTube = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.05, 0.05, 0.3, 16),
-    metalMaterial
-);
-burnerTube.position.set(0.5, 0.3, 0.4);
-burnerTube.rotation.x = Math.PI/4;
-workbench.add(burnerTube);
+        // Bunsen burner
+        const burnerBase = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.15, 0.15, 0.2, 32),
+            metalMaterial
+        );
+        burnerBase.position.set(0.5, 0.1, 0.4);
+        workbench.add(burnerBase);
 
-// Flame effect
-const flame = new THREE.Mesh(
-    new THREE.ConeGeometry(0.08, 0.3, 4),
-    new THREE.MeshBasicMaterial({
-        color: 0xff6600,
-        transparent: true,
-        opacity: 0.7
-    })
-);
-flame.position.set(0.5, 0.45, 0.55);
-workbench.add(flame);
+        const burnerTube = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 0.3, 16),
+            metalMaterial
+        );
+        burnerTube.position.set(0.5, 0.3, 0.4);
+        burnerTube.rotation.x = Math.PI/4;
+        workbench.add(burnerTube);
 
-// Make flame flicker
-function animateFlame() {
-    const scale = 0.8 + Math.random() * 0.4;
-    flame.scale.set(scale, scale, scale);
-    setTimeout(animateFlame, 100);
-}
-animateFlame();
+        // Flame effect
+        const flame = new THREE.Mesh(
+            new THREE.ConeGeometry(0.08, 0.3, 4),
+            new THREE.MeshBasicMaterial({
+                color: 0xff6600,
+                transparent: true,
+                opacity: 0.7
+            })
+        );
+        flame.position.set(0.5, 0.45, 0.55);
+        workbench.add(flame);
+
+        // Make flame flicker
+        function animateFlame() {
+            const scale = 0.8 + Math.random() * 0.4;
+            flame.scale.set(scale, scale, scale);
+            setTimeout(animateFlame, 100);
+        }
+        animateFlame();
+
+        workbench.userData = {
+            name: "Chemistry Workbench",
+            description: "A workstation with test tubes, burners, and various glassware.",
+            onClick: () => showModal("Workbench", `
+                <p>The workbench contains various chemistry equipment. The colored vials seem to be part of an experiment.</p>
+                <p>A note says: "Memory test - repeat the sequence to proceed."</p>
+            `, `
+                <button class="interaction-button" onclick="createMemoryGame()">Start Memory Challenge</button>
+                <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+            `)
+        };
+        scene.add(workbench);
+        interactiveObjects.push(workbench);
 
 // 2. MICROSCOPE SETUP
 const microscope = new THREE.Group();
@@ -2218,34 +2282,41 @@ interactiveObjects.push(bookshelf);
             storyProgress: 0,
             usedItems: [],
             endingsDiscovered: [],
-            connectionsSolved: false, // Add this flag
+            connectionsSolved: false,
+            currentPuzzle: null, // Add this to track current puzzle
             connectionsGameData: {
-            categories: [
-        {
-            name: "Celestial Bodies",
-            items: ["Moon", "Sun", "Star", "Comet"],
-            color: "blue"
-        },
-        {
-            name: "Laboratory Equipment",
-            items: ["Beaker", "Flask", "Vial", "Tube"],
-            color: "yellow"
-        },
-        {
-            name: "Chemical Elements",
-            items: ["Gold", "Iron", "Lead", "Copper"],
-            color: "green"
-        },
-        {
-            name: "Scientific Terms",
-            items: ["Atom", "Gene", "Cell", "Mole"],
-            color: "purple"
-        }
-    ],
-    // Shuffled items will be stored here when game starts
-    shuffledItems: []
-    }
-};
+                categories: [
+                    {
+                        name: "Celestial Bodies",
+                        items: ["Moon", "Sun", "Star", "Comet"],
+                        color: "blue"
+                    },
+                    {
+                        name: "Laboratory Equipment",
+                        items: ["Beaker", "Flask", "Vial", "Tube"],
+                        color: "yellow"
+                    },
+                    {
+                        name: "Chemical Elements",
+                        items: ["Gold", "Iron", "Lead", "Copper"],
+                        color: "green"
+                    },
+                    {
+                        name: "Scientific Terms",
+                        items: ["Atom", "Gene", "Cell", "Mole"],
+                        color: "purple"
+                    }
+                ],
+                shuffledItems: []
+            },
+            memoryGame: {
+                sequence: [],
+                playerSequence: [],
+                level: 1,
+                maxLevel: 3,
+                currentDigit: null
+            }
+        };
 
 
         // Modal functionality
@@ -2753,6 +2824,145 @@ window.submitConnectionSelection = function() {
         }
     }
 }
+
+/* ========== MEMORY GAME FUNCTIONS ========== */
+function createMemoryGame() {
+            // Set current puzzle
+            gameState.currentPuzzle = 'memory';
+            
+            // Reset game state
+            gameState.memoryGame = {
+                sequence: [],
+                playerSequence: [],
+                level: 1,
+                maxLevel: 3,
+                currentDigit: Math.floor(Math.random() * 10) // Random digit 0-9 for this game
+            };
+            
+            // Generate the initial sequence (3 items)
+            for (let i = 0; i < 3; i++) {
+                gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5)); // 0-4 for 5 vials
+            }
+            
+            // Show instructions
+            showModal("Memory Challenge", `
+                <p>Watch carefully as the vials light up in a sequence.</p>
+                <p>You must repeat the sequence correctly ${gameState.memoryGame.maxLevel} times to succeed.</p>
+                <p>Current level: <span id="memory-level">1</span>/${gameState.memoryGame.maxLevel}</p>
+                <div id="memory-feedback" style="min-height: 30px;"></div>
+                <div class="memory-game-container">
+                    <button class="memory-vial" id="memory-vial-0" onclick="handleVialClick(0)">1</button>
+                    <button class="memory-vial" id="memory-vial-1" onclick="handleVialClick(1)">2</button>
+                    <button class="memory-vial" id="memory-vial-2" onclick="handleVialClick(2)">3</button>
+                    <button class="memory-vial" id="memory-vial-3" onclick="handleVialClick(3)">4</button>
+                    <button class="memory-vial" id="memory-vial-4" onclick="handleVialClick(4)">5</button>
+                </div>
+            `, `
+                <button class="interaction-button" onclick="startMemorySequence()">Begin Challenge</button>
+            `);
+        }
+
+        function startMemorySequence() {
+            const vials = document.querySelectorAll('.memory-vial');
+            vials.forEach(vial => vial.disabled = true);
+            
+            let delay = 0;
+            gameState.memoryGame.sequence.forEach((vialIndex, i) => {
+                setTimeout(() => {
+                    // Highlight the vial
+                    const vial = document.getElementById(`memory-vial-${vialIndex}`);
+                    vial.classList.add('active');
+                    
+                    // Play a sound (optional)
+                    const notes = [262, 330, 392, 523, 659]; // C4, E4, G5, C6, E6
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(notes[vialIndex], audioCtx.currentTime);
+                    oscillator.connect(audioCtx.destination);
+                    oscillator.start();
+                    oscillator.stop(audioCtx.currentTime + 0.5);
+                    
+                    // Unhighlight after delay
+                    setTimeout(() => {
+                        vial.classList.remove('active');
+                        
+                        // Enable vials after last one
+                        if (i === gameState.memoryGame.sequence.length - 1) {
+                            setTimeout(() => {
+                                vials.forEach(vial => vial.disabled = false);
+                                document.getElementById('memory-feedback').innerHTML = 
+                                    '<p>Now repeat the sequence!</p>';
+                            }, 500);
+                        }
+                    }, 500);
+                }, delay);
+                delay += 1000; // 1 second between each
+            });
+        }
+
+        window.handleVialClick = function(index) {
+            // Add to player sequence
+            gameState.memoryGame.playerSequence.push(index);
+            
+            // Highlight the vial
+            const vial = document.getElementById(`memory-vial-${index}`);
+            vial.classList.add('active');
+            setTimeout(() => vial.classList.remove('active'), 300);
+            
+            // Check if sequence is complete
+            if (gameState.memoryGame.playerSequence.length === gameState.memoryGame.sequence.length) {
+                checkMemorySequence();
+            }
+        };
+
+        function checkMemorySequence() {
+            const feedback = document.getElementById('memory-feedback');
+            let correct = true;
+            
+            for (let i = 0; i < gameState.memoryGame.sequence.length; i++) {
+                if (gameState.memoryGame.sequence[i] !== gameState.memoryGame.playerSequence[i]) {
+                    correct = false;
+                    break;
+                }
+            }
+            
+            if (correct) {
+                // Check if they've completed all levels
+                if (gameState.memoryGame.level >= gameState.memoryGame.maxLevel) {
+                    feedback.innerHTML = `
+                        <p class="success">Perfect! You've completed the challenge.</p>
+                        <p>The third digit of the door code is: ${gameState.memoryGame.currentDigit}♞</p>
+                        <p class="story-reveal">The horse symbol matches one from the desk note.</p>
+                    `;
+                    addClue('memory-game-solved');
+                    
+                    // Update the door code with this digit (third position)
+                    const codeArr = gameState.doorCode.split('');
+                    codeArr[2] = gameState.memoryGame.currentDigit.toString();
+                    gameState.doorCode = codeArr.join('');
+                    
+                    // Reset current puzzle
+                    gameState.currentPuzzle = null;
+                } else {
+                    // Advance to next level
+                    gameState.memoryGame.level++;
+                    document.getElementById('memory-level').textContent = gameState.memoryGame.level;
+                    
+                    // Extend the sequence
+                    gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
+                    gameState.memoryGame.playerSequence = [];
+                    
+                    feedback.innerHTML = '<p class="success">Correct! Next level...</p>';
+                    setTimeout(startMemorySequence, 1500);
+                }
+            } else {
+                // Wrong sequence - reset level
+                feedback.innerHTML = '<p class="error">Incorrect sequence! Try again.</p>';
+                gameState.memoryGame.playerSequence = [];
+                setTimeout(startMemorySequence, 1500);
+            }
+        }
 
 
         function showBookshelfInteraction() {
