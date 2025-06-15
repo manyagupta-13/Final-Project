@@ -1209,50 +1209,58 @@ const metalMaterial = new THREE.MeshStandardMaterial({
         benchSurface.receiveShadow = true;
         workbench.add(benchSurface);
 
-        // Test tube rack with 5 vials for memory game
-        const tubeRack = new THREE.Group();
-        for (let i = 0; i < 5; i++) {
-            const tube = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
-                glassMaterial
-            );
-            tube.position.set(-0.4 + i * 0.16, 0.4, 0);
-            tube.castShadow = true;
-            
-            // Add colored liquid
-            const liquid = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
-                new THREE.MeshPhysicalMaterial({
-                    color: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
-                    transmission: 0.5,
-                    roughness: 0.2,
-                    emissive: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
-                    emissiveIntensity: 0.3
-                })
-            );
-            liquid.position.set(-0.4 + i * 0.16, 0.25, 0);
-            tubeRack.add(liquid);
-            
-            // Make tubes interactive for memory game
-            tube.userData = {
-                name: `Vial ${i+1}`,
-                description: `A vial containing ${['red', 'green', 'blue', 'yellow', 'purple'][i]} liquid.`,
-                onClick: () => {
-                    if (gameState.currentPuzzle === 'memory') {
-                        handleVialClick(i);
-                    } else {
-                        showModal(`Vial ${i+1}`, 
-                            `This vial contains ${['red', 'green', 'blue', 'yellow', 'purple'][i]} liquid.`,
-                            `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
-                    }
-                }
-            };
-            
-            tubeRack.add(tube);
-            interactiveObjects.push(tube);
+        const vials = []; // Store vial references globally
+
+// Test tube rack with 5 vials for memory game
+const tubeRack = new THREE.Group();
+for (let i = 0; i < 5; i++) {
+    const tube = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
+        glassMaterial
+    );
+    tube.position.set(-0.4 + i * 0.16, 0.4, 0);
+    tube.castShadow = true;
+    
+    // Add colored liquid
+    const liquid = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
+        new THREE.MeshPhysicalMaterial({
+            color: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
+            transmission: 0.5,
+            roughness: 0.2,
+            emissive: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff][i],
+            emissiveIntensity: 0.3
+        })
+    );
+    liquid.position.set(-0.4 + i * 0.16, 0.25, 0);
+    tube.add(liquid);
+    
+    // Create vial group
+    const vial = new THREE.Group();
+    vial.add(tube);
+    vial.add(liquid);
+    vial.userData = {
+        index: i,
+        color: ['red', 'green', 'blue', 'yellow', 'purple'][i]
+    };
+    vials.push(vial);
+    
+    // Make vials interactive for memory game
+    vial.userData.onClick = () => {
+        if (gameState.currentPuzzle === 'memory') {
+            handleVialClick(i);
+        } else {
+            showModal(`Vial ${i+1}`, 
+                `This vial contains ${['red', 'green', 'blue', 'yellow', 'purple'][i]} liquid.`,
+                `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
         }
-        tubeRack.position.set(0, 0, -0.3);
-        workbench.add(tubeRack);
+    };
+    
+    tubeRack.add(vial);
+    interactiveObjects.push(vial);
+}
+tubeRack.position.set(0, 0, -0.3);
+workbench.add(tubeRack);
 
         // Bunsen burner
         const burnerBase = new THREE.Mesh(
@@ -1291,18 +1299,19 @@ const metalMaterial = new THREE.MeshStandardMaterial({
         animateFlame();
 
         workbench.userData = {
-            name: "Chemistry Workbench",
-            description: "A workstation with test tubes, burners, and various glassware.",
-            onClick: () => showModal("Workbench", `
-                <p>The workbench contains various chemistry equipment. The colored vials seem to be part of an experiment.</p>
-                <p>A note says: "Memory test - repeat the sequence to proceed."</p>
-            `, `
-                <button class="interaction-button" onclick="createMemoryGame()">Start Memory Challenge</button>
-                <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
-            `)
-        };
+    name: "Chemistry Workbench",
+    description: "A workstation with test tubes, burners, and various glassware.",
+    onClick: () => showModal("Workbench", `
+        <p>The workbench contains various chemistry equipment. The colored vials seem to be part of an experiment.</p>
+        <p>A note says: "Memory test - repeat the sequence to proceed."</p>
+    `, `
+        <button class="interaction-button" onclick="createMemoryGame()">Start Memory Challenge</button>
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
         scene.add(workbench);
         interactiveObjects.push(workbench);
+
 // 2. MICROSCOPE
 const microscope = new THREE.Group();
 microscope.position.set(1, 0.8, -1);
@@ -2153,79 +2162,6 @@ interactiveObjects.push(bookshelf);
         scene.add(createChair());
         scene.add(createChair());
 
-        // ===== TEST TUBE RACK =====
-        function createTestTubeRack() {
-            const rack = new THREE.Group();
-            
-            // Rack base
-            const base = new THREE.Mesh(
-                new THREE.BoxGeometry(0.6, 0.1, 0.3),
-                new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.3, roughness: 0.6 })
-            );
-            rack.add(base);
-            
-            // Test tubes
-            const tubeMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0xffffff,
-                transmission: 0.9,
-                roughness: 0.1,
-                metalness: 0.0,
-                clearcoat: 1.0,
-                clearcoatRoughness: 0.1,
-                ior: 1.5,
-                thickness: 0.5,
-                transparent: true,
-                opacity: 0.8
-            });
-            
-            const tubePositions = [
-                { x: -0.2, z: 0 },
-                { x: -0.1, z: 0 },
-                { x: 0, z: 0 },
-                { x: 0.1, z: 0 },
-                { x: 0.2, z: 0 }
-            ];
-            
-            tubePositions.forEach((pos, i) => {
-                const tube = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.05, 0.05, 0.4, 32),
-                    tubeMaterial
-                );
-                tube.position.set(pos.x, 0.25, pos.z);
-                rack.add(tube);
-                
-                // Add colored liquid
-                const liquidColors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff];
-                const liquid = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.04, 0.04, 0.3, 32),
-                    new THREE.MeshPhysicalMaterial({
-                        color: liquidColors[i],
-                        transmission: 0.5,
-                        roughness: 0.2,
-                        emissive: liquidColors[i],
-                        emissiveIntensity: 0.2
-                    })
-                );
-                liquid.position.set(pos.x, 0.15, pos.z);
-                rack.add(liquid);
-            });
-            
-            // Position rack
-            rack.position.set(-2, 0.4, 1);
-            
-            rack.userData = {
-                name: "Test Tube Rack",
-                description: "A rack holding various colored chemical solutions.",
-                onClick: () => showModal("Test Tubes", "The tubes contain unknown chemical solutions of different colors.", `
-                    <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
-                `)
-            };
-            
-            return rack;
-        }
-
-        scene.add(createTestTubeRack());
-
         // Safe (hidden behind books)
         const safe = new THREE.Mesh(
             new THREE.BoxGeometry(0.5, 0.5, 0.1),
@@ -2810,142 +2746,136 @@ window.submitConnectionSelection = function() {
 
 /* ========== MEMORY GAME FUNCTIONS ========== */
 function createMemoryGame() {
-            // Set current puzzle
-            gameState.currentPuzzle = 'memory';
-            
-            // Reset game state
-            gameState.memoryGame = {
-                sequence: [],
-                playerSequence: [],
-                level: 1,
-                maxLevel: 3,
-                currentDigit: Math.floor(Math.random() * 10) // Random digit 0-9 for this game
-            };
-            
-            // Generate the initial sequence (3 items)
-            for (let i = 0; i < 3; i++) {
-                gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5)); // 0-4 for 5 vials
-            }
-            
-            // Show instructions
-            showModal("Memory Challenge", `
-                <p>Watch carefully as the vials light up in a sequence.</p>
-                <p>You must repeat the sequence correctly ${gameState.memoryGame.maxLevel} times to succeed.</p>
-                <p>Current level: <span id="memory-level">1</span>/${gameState.memoryGame.maxLevel}</p>
-                <div id="memory-feedback" style="min-height: 30px;"></div>
-                <div class="memory-game-container">
-                    <button class="memory-vial" id="memory-vial-0" onclick="handleVialClick(0)">1</button>
-                    <button class="memory-vial" id="memory-vial-1" onclick="handleVialClick(1)">2</button>
-                    <button class="memory-vial" id="memory-vial-2" onclick="handleVialClick(2)">3</button>
-                    <button class="memory-vial" id="memory-vial-3" onclick="handleVialClick(3)">4</button>
-                    <button class="memory-vial" id="memory-vial-4" onclick="handleVialClick(4)">5</button>
-                </div>
-            `, `
-                <button class="interaction-button" onclick="startMemorySequence()">Begin Challenge</button>
-            `);
-        }
+    gameState.currentPuzzle = 'memory';
+    gameState.memoryGame = {
+        sequence: [],
+        playerSequence: [],
+        level: 1,
+        maxLevel: 3,
+        currentDigit: Math.floor(Math.random() * 10)
+    };
+    
+    // Generate initial sequence
+    gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
+    
+    showModal("Memory Challenge", `
+        <p>Watch carefully as the vials light up in a sequence.</p>
+        <p>You must repeat the sequence correctly ${gameState.memoryGame.maxLevel} times to succeed.</p>
+        <p>Current level: <span id="memory-level">1</span>/${gameState.memoryGame.maxLevel}</p>
+        <div id="memory-feedback" style="min-height: 30px;"></div>
+    `, `
+        <button class="interaction-button" onclick="startMemorySequence()">Begin Challenge</button>
+    `);
+}
 
-        function startMemorySequence() {
-            const vials = document.querySelectorAll('.memory-vial');
-            vials.forEach(vial => vial.disabled = true);
-            
-            let delay = 0;
-            gameState.memoryGame.sequence.forEach((vialIndex, i) => {
-                setTimeout(() => {
-                    // Highlight the vial
-                    const vial = document.getElementById(`memory-vial-${vialIndex}`);
-                    vial.classList.add('active');
-                    
-                    // Play a sound (optional)
-                    const notes = [262, 330, 392, 523, 659]; // C4, E4, G5, C6, E6
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(notes[vialIndex], audioCtx.currentTime);
-                    oscillator.connect(audioCtx.destination);
-                    oscillator.start();
-                    oscillator.stop(audioCtx.currentTime + 0.5);
-                    
-                    // Unhighlight after delay
-                    setTimeout(() => {
-                        vial.classList.remove('active');
-                        
-                        // Enable vials after last one
-                        if (i === gameState.memoryGame.sequence.length - 1) {
-                            setTimeout(() => {
-                                vials.forEach(vial => vial.disabled = false);
-                                document.getElementById('memory-feedback').innerHTML = 
-                                    '<p>Now repeat the sequence!</p>';
-                            }, 500);
-                        }
-                    }, 500);
-                }, delay);
-                delay += 1000; // 1 second between each
-            });
-        }
-
-        window.handleVialClick = function(index) {
-            // Add to player sequence
-            gameState.memoryGame.playerSequence.push(index);
+function startMemorySequence() {
+    modal.style.display = 'none';
+    
+    // Disable clicking during sequence playback
+    gameState.memoryGame.playerSequence = [];
+    
+    let delay = 0;
+    gameState.memoryGame.sequence.forEach((vialIndex, i) => {
+        setTimeout(() => {
+            const vial = vials[vialIndex];
             
             // Highlight the vial
-            const vial = document.getElementById(`memory-vial-${index}`);
-            vial.classList.add('active');
-            setTimeout(() => vial.classList.remove('active'), 300);
+            const originalColor = vial.children[1].material.color.getHex();
+            vial.children[1].material.color.setHex(0xffffff);
+            vial.children[1].material.emissive.setHex(0xffffff);
+            vial.children[1].material.emissiveIntensity = 1.0;
             
-            // Check if sequence is complete
-            if (gameState.memoryGame.playerSequence.length === gameState.memoryGame.sequence.length) {
-                checkMemorySequence();
-            }
-        };
+            // Add animation
+            gsap.to(vial.scale, {
+                x: 1.2,
+                y: 1.2,
+                z: 1.2,
+                duration: 0.3,
+                yoyo: true,
+                onComplete: () => {
+                    vial.children[1].material.color.setHex(originalColor);
+                    vial.children[1].material.emissiveIntensity = 0.3;
+                    vial.scale.set(1, 1, 1);
+                    
+                    if (i === gameState.memoryGame.sequence.length - 1) {
+                        // Enable interaction after sequence
+                        setTimeout(() => {
+                            document.getElementById('memory-feedback').innerHTML = 
+                                '<p>Now repeat the sequence!</p>';
+                        }, 500);
+                    }
+                }
+            });
+        }, delay);
+        delay += 1000;
+    });
+}
 
-        function checkMemorySequence() {
-            const feedback = document.getElementById('memory-feedback');
-            let correct = true;
-            
-            for (let i = 0; i < gameState.memoryGame.sequence.length; i++) {
-                if (gameState.memoryGame.sequence[i] !== gameState.memoryGame.playerSequence[i]) {
-                    correct = false;
-                    break;
-                }
-            }
-            
-            if (correct) {
-                // Check if they've completed all levels
-                if (gameState.memoryGame.level >= gameState.memoryGame.maxLevel) {
-                    feedback.innerHTML = `
-                        <p class="success">Perfect! You've completed the challenge.</p>
-                        <p>The third digit of the door code is: ${gameState.memoryGame.currentDigit}♞</p>
-                        <p class="story-reveal">The horse symbol matches one from the desk note.</p>
-                    `;
-                    addClue('memory-game-solved');
-                    
-                    // Update the door code with this digit (third position)
-                    const codeArr = gameState.doorCode.split('');
-                    codeArr[2] = gameState.memoryGame.currentDigit.toString();
-                    gameState.doorCode = codeArr.join('');
-                    
-                    // Reset current puzzle
-                    gameState.currentPuzzle = null;
-                } else {
-                    // Advance to next level
-                    gameState.memoryGame.level++;
-                    document.getElementById('memory-level').textContent = gameState.memoryGame.level;
-                    
-                    // Extend the sequence
-                    gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
-                    gameState.memoryGame.playerSequence = [];
-                    
-                    feedback.innerHTML = '<p class="success">Correct! Next level...</p>';
-                    setTimeout(startMemorySequence, 1500);
-                }
-            } else {
-                // Wrong sequence - reset level
-                feedback.innerHTML = '<p class="error">Incorrect sequence! Try again.</p>';
-                gameState.memoryGame.playerSequence = [];
-                setTimeout(startMemorySequence, 1500);
-            }
+function handleVialClick(index) {
+    if (gameState.currentPuzzle !== 'memory') return;
+    
+    const vial = vials[index];
+    
+    // Add to player sequence
+    gameState.memoryGame.playerSequence.push(index);
+    
+    // Highlight the vial
+    gsap.to(vial.scale, {
+        x: 1.1,
+        y: 1.1,
+        z: 1.1,
+        duration: 0.2,
+        yoyo: true
+    });
+    
+    // Check if sequence is complete
+    if (gameState.memoryGame.playerSequence.length === gameState.memoryGame.sequence.length) {
+        checkMemorySequence();
+    }
+}
+
+function checkMemorySequence() {
+    let correct = true;
+    for (let i = 0; i < gameState.memoryGame.sequence.length; i++) {
+        if (gameState.memoryGame.sequence[i] !== gameState.memoryGame.playerSequence[i]) {
+            correct = false;
+            break;
         }
+    }
+    
+    if (correct) {
+        if (gameState.memoryGame.level >= gameState.memoryGame.maxLevel) {
+            // Puzzle solved
+            showModal("Memory Game Solved!", `
+                <p>You've successfully completed the memory challenge!</p>
+                <p>The third digit of the door code is: ${gameState.memoryGame.currentDigit}♞</p>
+            `, `<button class="interaction-button" onclick="modal.style.display='none'">Continue</button>`);
+            
+            // Update door code
+            const codeArr = gameState.doorCode.split('');
+            codeArr[2] = gameState.memoryGame.currentDigit.toString();
+            gameState.doorCode = codeArr.join('');
+            
+            addClue('memory-game-solved');
+            gameState.currentPuzzle = null;
+        } else {
+            // Advance level
+            gameState.memoryGame.level++;
+            gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
+            gameState.memoryGame.playerSequence = [];
+            
+            document.getElementById('memory-level').textContent = gameState.memoryGame.level;
+            showModal("Correct!", `Sequence matched! Next level...`, `
+                <button class="interaction-button" onclick="startMemorySequence()">Continue</button>
+            `);
+        }
+    } else {
+        // Wrong sequence
+        showModal("Incorrect", "Wrong sequence! Try again.", `
+            <button class="interaction-button" onclick="startMemorySequence()">Try Again</button>
+        `);
+    }
+}
 
 
         function showBookshelfInteraction() {
