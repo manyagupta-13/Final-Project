@@ -402,7 +402,7 @@
                 <p>Now you must piece together what happened while finding a way out before the facility's self-destruct sequence completes.</p>
             </div>
             <button class="interaction-button" onclick="skipIntro()">Skip Intro</button>
-            <button class="interaction-button" onclick="startGameWithIntro()">Play Story</button>
+            <button class="interaction-button" onclick="startGameWithIntro(); readIntro()">Play Story</button>
         </div>
     </div>
 </div>
@@ -437,6 +437,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 
     <script>
+        // Add this JavaScript to your code
+let speechSynthesis = window.speechSynthesis;
+
+function readIntro() {
+    // Get all paragraphs from intro text
+    const introParagraphs = document.querySelectorAll('#intro-text p');
+    let fullText = '';
+    
+    // Combine all paragraphs into one text
+    introParagraphs.forEach(p => {
+        fullText += p.textContent + ' ';
+    });
+    
+    // Create speech synthesis utterance
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    
+    // Configure voice options
+    utterance.rate = 1.5; // Speed (0.1 to 10)
+    utterance.pitch = 1; // Pitch (0 to 2)
+    utterance.volume = 1; // Volume (0 to 1)
+    
+    // Find a suitable voice (you can customize this)
+    const voices = speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => voice.name.includes('English'));
+    if (preferredVoice) {
+        utterance.voice = preferredVoice;
+    }
+    
+    // Speak the text
+    speechSynthesis.speak(utterance);
+}
+
+function stopReading() {
+    speechSynthesis.cancel();
+}
+
+// Update your buttons to include TTS controls
+function startGameWithIntro() {
+    readIntro();
+    // Your existing game start logic here
+}
+
         function skipIntro() {
     document.getElementById('intro-modal').style.display = 'none';
     // Start any background music or ambient sounds here
@@ -457,7 +499,7 @@ function startGameWithIntro() {
             duration: 1,
             delay: delay
         });
-        delay += 2.5; // 2.5 seconds between paragraphs
+        delay += 7; // 2.5 seconds between paragraphs
         
         // Last paragraph - show continue button
         if (i === paragraphs.length - 1) {
