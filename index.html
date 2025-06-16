@@ -1079,6 +1079,45 @@
         };
         addHangingWires();
 
+        function addBloodStains(scene, roomSize) {
+    // Blood material
+    const bloodMaterial = new THREE.MeshStandardMaterial({
+        color: 0x880000,
+        roughness: 0.9,
+        metalness: 0.1,
+        transparent: true,
+        opacity: 0.7
+    });
+
+    // Create several blood stains
+    for (let i = 0; i < 5; i++) {
+        const stainSize = 0.3 + Math.random() * 0.4;
+        const stain = new THREE.Mesh(
+            new THREE.CircleGeometry(stainSize, 32),
+            bloodMaterial
+        );
+        
+        // Fixed positions for blood stains (you can adjust these)
+        const positions = [
+            { x: -3, z: -2 },
+            { x: 1, z: 0.5 },
+            { x: 2, z: -1.5 },
+            { x: -1, z: 2 },
+            { x: 4, z: 1 }
+        ];
+        
+        stain.position.set(
+            positions[i].x,
+            0.01, // Slightly above floor
+            positions[i].z
+        );
+        stain.rotation.x = -Math.PI / 2;
+        stain.receiveShadow = true;
+        scene.add(stain);
+    }
+}
+addBloodStains(scene, roomSize);
+
         // ===== HANGING WIRES FOR ABANDONED LAB AESTHETIC =====
         function createHangingWires() {
             const wireGroup = new THREE.Group();
@@ -2198,63 +2237,75 @@
         interactiveObjects.push(whiteboard);
 
         // ===== IMPROVED CHAIR =====
-        function createChair() {
-            const chair = new THREE.Group();
+        // Add only one tilted chair near the exit
+const exitChair = new THREE.Group();
+exitChair.position.set(1, 0.2, 5); // Position near exit
+exitChair.rotation.y = Math.PI;
+exitChair.rotation.z = Math.PI/2; // Tipped over on its side
 
-            // Seat
-            const seat = new THREE.Mesh(
-                new THREE.BoxGeometry(0.5, 0.05, 0.5),
-                new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.8 })
-            );
-            seat.position.set(0, 0.025, 0);
-            chair.add(seat);
+// Chair components
+const seat = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.1, 0.5),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x5a3a2a,
+        roughness: 0.8
+    })
+);
+seat.position.set(0, 0.1, 0);
+exitChair.add(seat);
 
-            // Backrest
-            const back = new THREE.Mesh(
-                new THREE.BoxGeometry(0.5, 0.8, 0.05),
-                new THREE.MeshStandardMaterial({ color: 0x4a2a1a, roughness: 0.85 })
-            );
-            back.position.set(0, 0.45, -0.225);
-            chair.add(back);
+const back = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 1.0, 0.1),
+    new THREE.MeshStandardMaterial({ 
+        color: 0x4a2a1a,
+        roughness: 0.85
+    })
+);
+back.position.set(0, 0.6, -0.2);
+exitChair.add(back);
 
-            // Legs
-            const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
-            const legPositions = [
-                { x: -0.2, z: -0.2 },
-                { x: 0.2, z: -0.2 },
-                { x: -0.2, z: 0.2 },
-                { x: 0.2, z: 0.2 }
-            ];
+// Legs
+const legMaterial = new THREE.MeshStandardMaterial({
+    color: 0x333333,
+    metalness: 0.7,
+    roughness: 0.4
+});
 
-            legPositions.forEach(pos => {
-                const leg = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
-                    legMaterial
-                );
-                leg.position.set(pos.x, -0.2, pos.z);
-                chair.add(leg);
-            });
+const frontLeg1 = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.04, 0.04, 0.7, 8),
+    legMaterial
+);
+frontLeg1.position.set(-0.2, -0.25, 0.2);
+frontLeg1.rotation.x = Math.PI/8;
+exitChair.add(frontLeg1);
 
-            // Position the chair
-            chair.position.set(
-                (Math.random() - 0.5) * roomSize * 0.7,
-                0.2,
-                (Math.random() - 0.5) * roomSize * 0.7
-            );
-            chair.rotation.y = Math.random() * Math.PI;
+const frontLeg2 = frontLeg1.clone();
+frontLeg2.position.set(0.2, -0.25, 0.2);
+exitChair.add(frontLeg2);
 
-            chair.userData = {
-                name: "Lab Chair",
-                description: "A standard laboratory chair.",
-                onClick: () => showModal("Chair", "Just an ordinary lab chair.", `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`)
-            };
+const backLeg1 = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.04, 0.04, 0.6, 8),
+    legMaterial
+);
+backLeg1.position.set(-0.2, -0.3, -0.2);
+backLeg1.rotation.x = -Math.PI/12;
+exitChair.add(backLeg1);
 
-            return chair;
-        }
+const backLeg2 = backLeg1.clone();
+backLeg2.position.set(0.2, -0.3, -0.2);
+exitChair.add(backLeg2);
 
-        // Add two chairs to the scene
-        scene.add(createChair());
-        scene.add(createChair());
+exitChair.castShadow = true;
+exitChair.userData = {
+    name: "Tipped Chair",
+    description: "A chair knocked over near the exit.",
+    onClick: () => showModal("Tipped Chair", "This chair was knocked over in a hurry.", `
+        <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
+    `)
+};
+
+scene.add(exitChair);
+interactiveObjects.push(exitChair);
 
         // Safe (hidden behind books)
         const safe = new THREE.Mesh(
