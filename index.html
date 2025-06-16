@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
             background-color: #000;
             color: #e0e0e0;
         }
-        
+
         #threejs-container {
             position: absolute;
             top: 0;
@@ -22,7 +23,7 @@
             height: 100%;
             z-index: 1;
         }
-        
+
         #ui-container {
             position: absolute;
             bottom: 20px;
@@ -36,7 +37,7 @@
             border: 1px solid #444;
             z-index: 2;
         }
-        
+
         #inventory {
             position: absolute;
             top: 20px;
@@ -48,27 +49,27 @@
             border: 1px solid #444;
             z-index: 2;
         }
-        
+
         #inventory h3 {
             margin-top: 0;
             color: #8bc34a;
             border-bottom: 1px solid #444;
             padding-bottom: 5px;
         }
-        
+
         #inventory-items {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         .inventory-item {
             background-color: rgba(68, 68, 68, 0.8);
             padding: 5px 10px;
             border-radius: 3px;
             font-size: 0.9rem;
         }
-        
+
         .modal {
             display: none;
             position: fixed;
@@ -81,7 +82,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .modal-content {
             background-color: #222;
             padding: 30px;
@@ -93,7 +94,7 @@
             border: 2px solid #444;
             position: relative;
         }
-        
+
         .modal-close {
             position: absolute;
             top: 10px;
@@ -102,18 +103,18 @@
             font-size: 24px;
             cursor: pointer;
         }
-        
+
         .modal-close:hover {
             color: #fff;
         }
-        
+
         .interaction-buttons {
             margin-top: 20px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .interaction-button {
             background-color: #4a4a4a;
             color: #e0e0e0;
@@ -123,17 +124,17 @@
             cursor: pointer;
             font-family: 'Courier New', monospace;
         }
-        
+
         .interaction-button:hover {
             background-color: #5a5a5a;
         }
-        
+
         .interaction-button:disabled {
             background-color: #333;
             color: #777;
             cursor: not-allowed;
         }
-        
+
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 60px);
@@ -141,13 +142,13 @@
             margin: 20px auto;
             width: fit-content;
         }
-        
+
         .keypad button {
             width: 60px;
             height: 60px;
             font-size: 1.5rem;
         }
-        
+
         .keypad-display {
             grid-column: span 3;
             background-color: #111;
@@ -159,27 +160,35 @@
             border: 1px solid #333;
             margin-bottom: 10px;
         }
-        
+
         .success {
             color: #8bc34a;
         }
-        
+
         .error {
             color: #f44336;
         }
-        
+
         .hint {
             color: #aaa;
             font-style: italic;
             font-size: 0.9rem;
         }
-        
+
         @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
-        
+
         .pulsing {
             animation: pulse 2s infinite;
         }
@@ -191,7 +200,7 @@
             border-radius: 5px;
             margin: 20px 0;
         }
-        
+
         .crossword-grid {
             display: grid;
             grid-template-columns: repeat(5, 40px);
@@ -200,7 +209,7 @@
             margin: 20px auto;
             justify-content: center;
         }
-        
+
         .crossword-cell {
             width: 40px;
             height: 40px;
@@ -210,7 +219,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .crossword-cell input {
             width: 100%;
             height: 100%;
@@ -221,21 +230,21 @@
             text-align: center;
             text-transform: uppercase;
         }
-        
+
         .crossword-cell input:focus {
             outline: 1px solid #8bc34a;
         }
-        
+
         .crossword-clues {
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
         }
-        
+
         .clue-list {
             width: 45%;
         }
-        
+
         .clue-number {
             position: absolute;
             top: 2px;
@@ -243,7 +252,7 @@
             font-size: 10px;
             color: #8bc34a;
         }
-        
+
         .crossword-success {
             color: #8bc34a;
             font-weight: bold;
@@ -266,7 +275,7 @@
             margin-top: 15px;
             min-height: 30px;
         }
-        
+
         .connections-game {
             margin: 20px 0;
         }
@@ -339,7 +348,7 @@
             flex-direction: column;
             align-items: center;
             padding: 10px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 5px;
         }
 
@@ -353,7 +362,7 @@
             width: 100%;
             padding: 5px;
             text-align: center;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid #555;
             color: white;
         }
@@ -365,7 +374,7 @@
 
         .chemical-success {
             display: none;
-            background: rgba(0,100,0,0.3);
+            background: rgba(0, 100, 0, 0.3);
             padding: 10px;
             border-radius: 5px;
             margin: 15px 0;
@@ -376,14 +385,14 @@
             max-width: 800px;
             text-align: center;
         }
-        
+
         #intro-text p {
             opacity: 0;
             margin: 20px 0;
             font-size: 1.1rem;
             line-height: 1.6;
         }
-        
+
         #intro-modal .interaction-button {
             margin: 10px;
             padding: 10px 20px;
@@ -410,11 +419,30 @@
             cursor: not-allowed;
         }
 
-        .memory-vial:nth-child(1) { background: rgba(255, 0, 0, 0.3); color: #ff0000; }
-        .memory-vial:nth-child(2) { background: rgba(0, 255, 0, 0.3); color: #00ff00; }
-        .memory-vial:nth-child(3) { background: rgba(0, 0, 255, 0.3); color: #0000ff; }
-        .memory-vial:nth-child(4) { background: rgba(255, 255, 0, 0.3); color: #ffff00; }
-        .memory-vial:nth-child(5) { background: rgba(255, 0, 255, 0.3); color: #ff00ff; }
+        .memory-vial:nth-child(1) {
+            background: rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+        }
+
+        .memory-vial:nth-child(2) {
+            background: rgba(0, 255, 0, 0.3);
+            color: #00ff00;
+        }
+
+        .memory-vial:nth-child(3) {
+            background: rgba(0, 0, 255, 0.3);
+            color: #0000ff;
+        }
+
+        .memory-vial:nth-child(4) {
+            background: rgba(255, 255, 0, 0.3);
+            color: #ffff00;
+        }
+
+        .memory-vial:nth-child(5) {
+            background: rgba(255, 0, 255, 0.3);
+            color: #ff00ff;
+        }
 
         .memory-game-container {
             display: flex;
@@ -431,7 +459,7 @@
             margin: 20px 0;
             gap: 10px;
         }
-        
+
         .memory-vial {
             width: 60px;
             height: 60px;
@@ -447,18 +475,18 @@
             color: white;
             font-size: 1.2rem;
         }
-        
+
         .memory-vial.active {
             transform: scale(1.1);
             box-shadow: 0 0 20px currentColor;
             border-width: 4px;
         }
-        
+
         .memory-vial:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         #memory-feedback {
             min-height: 30px;
             margin: 15px 0;
@@ -466,50 +494,59 @@
             font-weight: bold;
             font-size: 1.1rem;
         }
-        
+
         #memory-level-display {
             font-size: 1.3rem;
             margin-bottom: 15px;
             text-align: center;
             color: #8bc34a;
         }
-        
+
         .memory-instructions {
             margin-bottom: 15px;
             line-height: 1.5;
         }
     </style>
 </head>
+
 <body>
     <div id="intro-modal" class="modal" style="display: flex;">
-    <div class="modal-content">
-        <span class="modal-close" onclick="skipIntro()">&times;</span>
-        <div id="intro-content">
-            <h2>The Abandoned Laboratory</h2>
-            <div id="intro-text">
-                <p>You were part of a top-secret research team working on "Project Phoenix" - a revolutionary cellular regeneration experiment.</p>
-                <p>After months of failed trials, Subject 314 showed unprecedented results. The subject's cells demonstrated perfect regeneration with no signs of deterioration.</p>
-                <p>But something went wrong during the final phase...</p>
-                <p>You wake up alone in the abandoned lab, your memories fragmented. The last thing you recall is the emergency alarm blaring and a strange lavender scent in the air.</p>
-                <p>Now you must piece together what happened while finding a way out before the facility's self-destruct sequence completes.</p>
+        <div class="modal-content">
+            <span class="modal-close" onclick="skipIntro()">&times;</span>
+            <div id="intro-content">
+                <h2>The Abandoned Laboratory</h2>
+                <div id="intro-text">
+                    <p>You were part of a top-secret research team working on "Project Phoenix" - a revolutionary
+                        cellular regeneration experiment.</p>
+                    <p>After months of failed trials, Subject 314 showed unprecedented results. The subject's cells
+                        demonstrated perfect regeneration with no signs of deterioration.</p>
+                    <p>But something went wrong during the final phase...</p>
+                    <p>You wake up alone in the abandoned lab, your memories fragmented. The last thing you recall is
+                        the emergency alarm blaring and a strange lavender scent in the air.</p>
+                    <p>Now you must piece together what happened while finding a way out before the facility's
+                        self-destruct sequence completes.</p>
+                </div>
+                <button class="interaction-button" onclick="skipIntro()">Skip Intro</button>
+                <button class="interaction-button" onclick="startGameWithIntro(); readIntro()">Play Story</button>
             </div>
-            <button class="interaction-button" onclick="skipIntro()">Skip Intro</button>
-            <button class="interaction-button" onclick="startGameWithIntro(); readIntro()">Play Story</button>
         </div>
     </div>
-</div>
     <div id="threejs-container"></div>
-    
+
     <div id="inventory">
         <h3>Inventory</h3>
         <div id="inventory-items"></div>
     </div>
-    
+
     <div id="ui-container">
         <div id="room-description">
-            <p>Your head throbs as consciousness returns. The sterile scent of ethanol mixes with something more acrid - ozone? Burning? Your vision clears to reveal a dim laboratory, illuminated only by the flickering glow of dying fluorescent lights.</p>
-            <p>The cold metal table beneath you explains the stiffness in your limbs. How long were you out? The last thing you remember is... nothing. Just darkness.</p>
-            <p>A digital keypad by the reinforced door mocks you with its glowing red display: "LOCKED - ENTER 4-DIGIT CODE". The air feels thick with secrets and the weight of forgotten experiments.</p>
+            <p>Your head throbs as consciousness returns. The sterile scent of ethanol mixes with something more acrid -
+                ozone? Burning? Your vision clears to reveal a dim laboratory, illuminated only by the flickering glow
+                of dying fluorescent lights.</p>
+            <p>The cold metal table beneath you explains the stiffness in your limbs. How long were you out? The last
+                thing you remember is... nothing. Just darkness.</p>
+            <p>A digital keypad by the reinforced door mocks you with its glowing red display: "LOCKED - ENTER 4-DIGIT
+                CODE". The air feels thick with secrets and the weight of forgotten experiments.</p>
         </div>
     </div>
 
@@ -530,106 +567,106 @@
 
     <script>
         // Add this JavaScript to your code
-let speechSynthesis = window.speechSynthesis;
+        let speechSynthesis = window.speechSynthesis;
 
-function readIntro() {
-    // Get all paragraphs from intro text
-    const introParagraphs = document.querySelectorAll('#intro-text p');
-    let fullText = '';
-    
-    // Combine all paragraphs into one text
-    introParagraphs.forEach(p => {
-        fullText += p.textContent + ' ';
-    });
-    
-    // Create speech synthesis utterance
-    const utterance = new SpeechSynthesisUtterance(fullText);
-    
-    // Configure voice options
-    utterance.rate = 1.5; // Speed (0.1 to 10)
-    utterance.pitch = 1; // Pitch (0 to 2)
-    utterance.volume = 1; // Volume (0 to 1)
-    
-    // Find a suitable voice (you can customize this)
-    const voices = speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => voice.name.includes('English'));
-    if (preferredVoice) {
-        utterance.voice = preferredVoice;
-    }
-    
-    // Speak the text
-    speechSynthesis.speak(utterance);
-}
+        function readIntro() {
+            // Get all paragraphs from intro text
+            const introParagraphs = document.querySelectorAll('#intro-text p');
+            let fullText = '';
 
-function stopReading() {
-    speechSynthesis.cancel();
-}
+            // Combine all paragraphs into one text
+            introParagraphs.forEach(p => {
+                fullText += p.textContent + ' ';
+            });
 
-// Update your buttons to include TTS controls
-function startGameWithIntro() {
-    readIntro();
-    // Your existing game start logic here
-}
+            // Create speech synthesis utterance
+            const utterance = new SpeechSynthesisUtterance(fullText);
+
+            // Configure voice options
+            utterance.rate = 1.5; // Speed (0.1 to 10)
+            utterance.pitch = 1; // Pitch (0 to 2)
+            utterance.volume = 1; // Volume (0 to 1)
+
+            // Find a suitable voice (you can customize this)
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => voice.name.includes('English'));
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            // Speak the text
+            speechSynthesis.speak(utterance);
+        }
+
+        function stopReading() {
+            speechSynthesis.cancel();
+        }
+
+        // Update your buttons to include TTS controls
+        function startGameWithIntro() {
+            readIntro();
+            // Your existing game start logic here
+        }
 
         function skipIntro() {
-    document.getElementById('intro-modal').style.display = 'none';
-    // Start any background music or ambient sounds here
-}
-
-function startGameWithIntro() {
-    const introText = document.getElementById('intro-text');
-    const paragraphs = introText.querySelectorAll('p');
-    let delay = 0;
-    
-    // Hide all paragraphs initially
-    paragraphs.forEach(p => p.style.opacity = 0);
-    
-    // Animate them in one by one
-    paragraphs.forEach((p, i) => {
-        gsap.to(p, {
-            opacity: 1,
-            duration: 1,
-            delay: delay
-        });
-        delay += 7; // 2.5 seconds between paragraphs
-        
-        // Last paragraph - show continue button
-        if (i === paragraphs.length - 1) {
-            setTimeout(() => {
-                const continueBtn = document.createElement('button');
-                continueBtn.className = 'interaction-button';
-                continueBtn.textContent = 'Continue';
-                continueBtn.onclick = skipIntro;
-                introText.appendChild(continueBtn);
-            }, delay * 1000);
+            document.getElementById('intro-modal').style.display = 'none';
+            // Start any background music or ambient sounds here
         }
-    });
-}
+
+        function startGameWithIntro() {
+            const introText = document.getElementById('intro-text');
+            const paragraphs = introText.querySelectorAll('p');
+            let delay = 0;
+
+            // Hide all paragraphs initially
+            paragraphs.forEach(p => p.style.opacity = 0);
+
+            // Animate them in one by one
+            paragraphs.forEach((p, i) => {
+                gsap.to(p, {
+                    opacity: 1,
+                    duration: 1,
+                    delay: delay
+                });
+                delay += 7; // 2.5 seconds between paragraphs
+
+                // Last paragraph - show continue button
+                if (i === paragraphs.length - 1) {
+                    setTimeout(() => {
+                        const continueBtn = document.createElement('button');
+                        continueBtn.className = 'interaction-button';
+                        continueBtn.textContent = 'Continue';
+                        continueBtn.onclick = skipIntro;
+                        introText.appendChild(continueBtn);
+                    }, delay * 1000);
+                }
+            });
+        }
         // Initialize Three.js scene
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x111111);
-        
+
         // Enhanced lighting
         const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
         scene.add(ambientLight);
-        
+
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
         directionalLight.position.set(5, 10, 5);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 1024;
         directionalLight.shadow.mapSize.height = 1024;
         scene.add(directionalLight);
-        
+
         // Camera setup
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(0, 1.6, 5);
-        
+
         // Renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         document.getElementById('threejs-container').appendChild(renderer.domElement);
-        
+
         // Controls with better navigation
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.target.set(0, 1, 0);
@@ -645,619 +682,619 @@ function startGameWithIntro() {
         const wallThickness = 0.5;
 
         // Floor with puddles and dirt
-const floorTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_roughness.jpg'); // Replace with concrete texture
-const floorNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_normal.jpg'); // Replace with concrete normal map
+        const floorTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_roughness.jpg'); // Replace with concrete texture
+        const floorNormalMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grass_normal.jpg'); // Replace with concrete normal map
 
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize, roomSize, 100, 100),
-    new THREE.MeshStandardMaterial({ 
-        color: 0x3a3a3a,
-        roughness: 0.9,
-        metalness: 0.1,
-        map: floorTexture,
-        normalMap: floorNormalMap,
-        normalScale: new THREE.Vector2(0.5, 0.5)
-    })
-);
-floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
-scene.add(floor);
-
-// Create puddles
-const createPuddles = () => {
-    const puddleGeometry = new THREE.CircleGeometry(0.5, 32);
-    const puddleMaterial = new THREE.MeshStandardMaterial({
-        color: 0x333355,
-        transparent: true,
-        opacity: 0.7,
-        roughness: 0.1,
-        metalness: 0.8
-    });
-    
-    for (let i = 0; i < 8; i++) {
-        const puddle = new THREE.Mesh(puddleGeometry, puddleMaterial);
-        puddle.rotation.x = -Math.PI / 2;
-        puddle.position.set(
-            (Math.random() - 0.5) * roomSize * 0.8,
-            0.01, // Slightly above floor
-            (Math.random() - 0.5) * roomSize * 0.8
-        );
-        puddle.scale.set(1 + Math.random(), 1 + Math.random(), 1);
-        scene.add(puddle);
-    }
-};
-createPuddles();
-
-// Wall material with dirt and decay
-const wallTexture = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with concrete/dirty wall texture
-wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
-wallTexture.repeat.set(4, 2);
-
-const wallNormalMap = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with appropriate normal map
-wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
-wallNormalMap.repeat.set(4, 2);
-
-const wallMaterial = new THREE.MeshStandardMaterial({ 
-    color: 0x3a3a4a,
-    roughness: 0.8,
-    metalness: 0.1,
-    map: wallTexture,
-    normalMap: wallNormalMap,
-    side: THREE.DoubleSide
-});
-
-// Add grime and stains to walls
-const addWallDecay = (wall) => {
-    // You could add decals or additional geometry here for more detail
-    wall.material = wallMaterial.clone();
-    wall.material.color.setHSL(0.66, 0.2, 0.3 + Math.random() * 0.1);
-    
-    // Random discoloration
-    if (Math.random() > 0.7) {
-        wall.material.color.offsetHSL(0, 0, -0.1 - Math.random() * 0.1);
-    }
-};
-
-// Left wall
-const leftWall = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize, wallHeight),
-    wallMaterial
-);
-leftWall.position.set(-roomSize/2, wallHeight/2, 0);
-leftWall.rotation.y = Math.PI / 2;
-addWallDecay(leftWall);
-scene.add(leftWall);
-
-// Right wall
-const rightWall = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize, wallHeight),
-    wallMaterial
-);
-rightWall.position.set(roomSize/2, wallHeight/2, 0);
-rightWall.rotation.y = -Math.PI / 2;
-addWallDecay(rightWall);
-scene.add(rightWall);
-
-// Back wall
-const backWall = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize, wallHeight),
-    wallMaterial
-);
-backWall.position.set(0, wallHeight/2, -roomSize/2);
-addWallDecay(backWall);
-scene.add(backWall);
-
-// Front wall with door opening
-const frontWallLeft = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
-    wallMaterial
-);
-frontWallLeft.position.set(-roomSize/4 - 0.5, wallHeight/2, roomSize/2);
-addWallDecay(frontWallLeft);
-scene.add(frontWallLeft);
-
-const frontWallRight = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize/2 - 1, wallHeight),
-    wallMaterial
-);
-frontWallRight.position.set(roomSize/4 + 0.5, wallHeight/2, roomSize/2);
-addWallDecay(frontWallRight);
-scene.add(frontWallRight);
-
-// Ceiling with stains
-const ceilingTexture = new THREE.TextureLoader().load('https://static.vecteezy.com/system/resources/previews/002/243/394/large_2x/old-rusty-wall-photo.jpg'); 
-ceilingTexture.wrapS = ceilingTexture.wrapT = THREE.RepeatWrapping;
-ceilingTexture.repeat.set(4, 4);
-
-const ceiling = new THREE.Mesh(
-    new THREE.PlaneGeometry(roomSize, roomSize),
-    new THREE.MeshStandardMaterial({ 
-        color: 0x2a2a3a,
-        roughness: 0.9,
-        metalness: 0.05,
-        map: ceilingTexture
-    })
-);
-ceiling.position.set(0, wallHeight, 0);
-ceiling.rotation.x = Math.PI / 2;
-scene.add(ceiling);
-
-// ===== EVIL SCIENTIST LAB ENHANCEMENTS =====
-
-// 1. Flickering and broken lights (ceiling)
-function createFlickeringLights(roomSize, wallHeight, scene) {
-    const lightPositions = [
-        [-roomSize/3, wallHeight-0.1, -roomSize/3],
-        [ roomSize/3, wallHeight-0.1, -roomSize/3],
-        [ 0, wallHeight-0.1, roomSize/3]
-    ];
-    const lightObjs = [];
-
-    lightPositions.forEach(pos => {
-        const tube = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.05, 0.05, 2, 12),
+        const floor = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize, roomSize, 100, 100),
             new THREE.MeshStandardMaterial({
-                color: 0xcccccc,
-                emissive: 0xffffcc,
-                emissiveIntensity: 1.2
+                color: 0x3a3a3a,
+                roughness: 0.9,
+                metalness: 0.1,
+                map: floorTexture,
+                normalMap: floorNormalMap,
+                normalScale: new THREE.Vector2(0.5, 0.5)
             })
         );
-        tube.position.set(...pos);
-        tube.rotation.z = Math.PI/2;
-        scene.add(tube);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
 
-        const light = new THREE.PointLight(0xfffbe0, 1, 10, 2);
-        light.position.set(pos[0], pos[1] - 0.1, pos[2]);
-        scene.add(light);
-        lightObjs.push({ light, tube });
-    });
+        // Create puddles
+        const createPuddles = () => {
+            const puddleGeometry = new THREE.CircleGeometry(0.5, 32);
+            const puddleMaterial = new THREE.MeshStandardMaterial({
+                color: 0x333355,
+                transparent: true,
+                opacity: 0.7,
+                roughness: 0.1,
+                metalness: 0.8
+            });
 
-    // Animate flickering
-    function flicker() {
-        lightObjs.forEach((obj, i) => {
-            const base = 0.9 + Math.sin(Date.now()/170 + i*200)*0.1 + Math.random()*0.1;
-            obj.light.intensity = Math.max(0, base + (Math.random()>0.8 ? -0.7 : 0));
-            obj.tube.material.emissiveIntensity = obj.light.intensity;
+            for (let i = 0; i < 8; i++) {
+                const puddle = new THREE.Mesh(puddleGeometry, puddleMaterial);
+                puddle.rotation.x = -Math.PI / 2;
+                puddle.position.set(
+                    (Math.random() - 0.5) * roomSize * 0.8,
+                    0.01, // Slightly above floor
+                    (Math.random() - 0.5) * roomSize * 0.8
+                );
+                puddle.scale.set(1 + Math.random(), 1 + Math.random(), 1);
+                scene.add(puddle);
+            }
+        };
+        createPuddles();
+
+        // Wall material with dirt and decay
+        const wallTexture = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with concrete/dirty wall texture
+        wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+        wallTexture.repeat.set(4, 2);
+
+        const wallNormalMap = new THREE.TextureLoader().load('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-662x6miZQUJy4ep94mw13Qv9T9gOw8162A&s'); // Replace with appropriate normal map
+        wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
+        wallNormalMap.repeat.set(4, 2);
+
+        const wallMaterial = new THREE.MeshStandardMaterial({
+            color: 0x3a3a4a,
+            roughness: 0.8,
+            metalness: 0.1,
+            map: wallTexture,
+            normalMap: wallNormalMap,
+            side: THREE.DoubleSide
         });
-        requestAnimationFrame(flicker);
-    }
-    flicker();
-}
-createFlickeringLights(roomSize, wallHeight, scene);
 
-// 2. Add dark stains, blood, and "handprint" decals on walls/floor
-function addWallStains(roomSize, wallHeight, scene) {
-    const stainMaterial = new THREE.MeshBasicMaterial({
-        map: new THREE.TextureLoader().load('https://i.etsystatic.com/7477300/r/il/a0a0cb/1373080092/il_570xN.1373080092_czkm.jpg'), // transparent blood splatter PNG
-        transparent: true,
-        depthWrite: false,
-        depthTest: true
-    });
-    for (let i = 0; i < 5; i++) {
-        const stain = new THREE.Mesh(
-            new THREE.PlaneGeometry(0.6 + Math.random(), 0.4 + Math.random()*0.5),
-            stainMaterial
+        // Add grime and stains to walls
+        const addWallDecay = (wall) => {
+            // You could add decals or additional geometry here for more detail
+            wall.material = wallMaterial.clone();
+            wall.material.color.setHSL(0.66, 0.2, 0.3 + Math.random() * 0.1);
+
+            // Random discoloration
+            if (Math.random() > 0.7) {
+                wall.material.color.offsetHSL(0, 0, -0.1 - Math.random() * 0.1);
+            }
+        };
+
+        // Left wall
+        const leftWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize, wallHeight),
+            wallMaterial
         );
-        stain.position.set(
-            (Math.random()-0.5)*roomSize*0.90,
-            wallHeight*0.2 + Math.random()*wallHeight*0.6,
-            -roomSize/2 + 0.02 + Math.random()*0.1 // slightly off the back wall
+        leftWall.position.set(-roomSize / 2, wallHeight / 2, 0);
+        leftWall.rotation.y = Math.PI / 2;
+        addWallDecay(leftWall);
+        scene.add(leftWall);
+
+        // Right wall
+        const rightWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize, wallHeight),
+            wallMaterial
         );
-        stain.rotation.y = (Math.random()-0.5)*0.3;
-        stain.rotation.z = (Math.random()-0.5)*Math.PI*2;
-        stain.renderOrder = 10;
-        scene.add(stain);
-    }
-    // Bloody handprint
-    const handprintMat = stainMaterial.clone();
-    handprintMat.map = new THREE.TextureLoader().load('https://www.pngarts.com/files/9/Blood-Splatter-PNG-Download-Image.png');
-    const handprint = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.4, 0.4),
-        handprintMat
-    );
-    handprint.position.set(roomSize/2-0.06, wallHeight*0.8, (Math.random()-0.5)*roomSize*0.5);
-    handprint.rotation.y = -Math.PI/2;
-    handprint.renderOrder = 10;
-    scene.add(handprint);
-}
-addWallStains(roomSize, wallHeight, scene);
+        rightWall.position.set(roomSize / 2, wallHeight / 2, 0);
+        rightWall.rotation.y = -Math.PI / 2;
+        addWallDecay(rightWall);
+        scene.add(rightWall);
 
-// 3. Cracked glass on floor or equipment
-function addCrackedGlass(scene) {
-    const texture = new THREE.TextureLoader().load('https://www.textures.com/system/gallery/photos/Decals/Damage/Floor/116572/DecalsDamageFloor0022_1_350.jpg'); // PNG crack decal
-    const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
-    const crack = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), mat);
-    crack.position.set((Math.random()-0.5)*2, 0.011, (Math.random()-0.5)*2);
-    crack.rotation.x = -Math.PI/2;
-    crack.renderOrder = 20;
-    scene.add(crack);
-}
-addCrackedGlass(scene);
-
-// 4. Broken glass shards on the floor
-function scatterGlassShards(scene, roomSize) {
-    const shardMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xbbfaff,
-        transmission: 0.7,
-        roughness: 0.05,
-        metalness: 0.1,
-        opacity: 0.5,
-        transparent: true
-    });
-    for (let i = 0; i < 8; i++) {
-        const geom = new THREE.BoxGeometry(0.1 + Math.random()*0.2, 0.01, 0.05 + Math.random()*0.08);
-        const mesh = new THREE.Mesh(geom, shardMaterial);
-        mesh.position.set(
-            (Math.random()-0.5)*roomSize*0.9,
-            0.015,
-            (Math.random()-0.5)*roomSize*0.9
+        // Back wall
+        const backWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize, wallHeight),
+            wallMaterial
         );
-        mesh.rotation.y = Math.random()*Math.PI;
-        mesh.rotation.x = (Math.random()-0.5)*0.2;
-        scene.add(mesh);
-    }
-}
-scatterGlassShards(scene, roomSize);
+        backWall.position.set(0, wallHeight / 2, -roomSize / 2);
+        addWallDecay(backWall);
+        scene.add(backWall);
 
-// 5. Add a toppled chair, broken and left to rot
-function addToppledChair(scene, roomSize) {
-    const chair = new THREE.Group();
-    
-    // Seat
-    const seat = new THREE.Mesh(
-        new THREE.BoxGeometry(0.5, 0.05, 0.5),
-        new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.8 })
-    );
-    seat.position.set(0, 0.025, 0);
-    chair.add(seat);
-    
-    // Backrest
-    const back = new THREE.Mesh(
-        new THREE.BoxGeometry(0.5, 0.5, 0.05),
-        new THREE.MeshStandardMaterial({ color: 0x4a2a1a, roughness: 0.85 })
-    );
-    back.position.set(0, 0.45, -0.225);
-    chair.add(back);
-    
-    // Legs
-    const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
-    const legPositions = [
-        { x: -0.2, z: -0.2 },
-        { x: 0.2, z: -0.2 },
-        { x: -0.2, z: 0.2 },
-        { x: 0.2, z: 0.2 }
-    ];
-    
-    legPositions.forEach(pos => {
-        const leg = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
-            legMaterial
+        // Front wall with door opening
+        const frontWallLeft = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize / 2 - 1, wallHeight),
+            wallMaterial
         );
-        leg.position.set(pos.x, -0.2, pos.z);
-        chair.add(leg);
-    });
-    
-    // Position and rotate the chair randomly
-    chair.position.set(
-        (Math.random()-0.5)*roomSize*0.7,
-        0.2,
-        (Math.random()-0.5)*roomSize*0.7
-    );
-    chair.rotation.y = Math.random()*Math.PI;
-    chair.rotation.x = Math.PI/6 + Math.random()*0.2;
-    chair.rotation.z = Math.random()*0.3;
-    
-    scene.add(chair);
-}
-addToppledChair(scene, roomSize);
+        frontWallLeft.position.set(-roomSize / 4 - 0.5, wallHeight / 2, roomSize / 2);
+        addWallDecay(frontWallLeft);
+        scene.add(frontWallLeft);
 
-// 6. Add a shadowy, subtle mist/fog near the floor
-scene.fog = new THREE.FogExp2(0x1a1a2a, 0.06); // Or customize color and density
-
-// 7. Add a leaking pipe dripping onto the floor (puddle area)
-function addLeakingPipe(scene, wallHeight, roomSize) {
-    const pipe = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.1, 0.1, 2, 16),
-        new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8, metalness: 0.4 })
-    );
-    pipe.rotation.z = Math.PI/2;
-    pipe.position.set(-roomSize/2+0.8, wallHeight*0.7, -1.5);
-    scene.add(pipe);
-
-    // Dripping water (sphere drops)
-    const drop = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05, 10, 10),
-        new THREE.MeshStandardMaterial({ color: 0x99ccff, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.7 })
-    );
-    scene.add(drop);
-    function animateDrop() {
-        drop.position.set(-roomSize/2+0.8, wallHeight*0.7-1.0 + Math.abs(Math.sin(Date.now()/500))*0.8, -1.5);
-        requestAnimationFrame(animateDrop);
-    }
-    animateDrop();
-}
-addLeakingPipe(scene, wallHeight, roomSize);
-
-// 8. Add cobwebs in upper corners
-function addCobwebs(scene, roomSize, wallHeight) {
-    const cobwebTex = new THREE.TextureLoader().load('https://i.imgur.com/KVQbtuE.png');
-    for (let i=0; i<3; i++) {
-        const cobweb = new THREE.Mesh(
-            new THREE.PlaneGeometry(0.7+Math.random()*0.6, 0.7+Math.random()*0.4),
-            new THREE.MeshBasicMaterial({ map: cobwebTex, transparent: true, opacity: 0.7 })
+        const frontWallRight = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize / 2 - 1, wallHeight),
+            wallMaterial
         );
-        // Place in a random upper corner
-        const x = i%2 ? -roomSize/2+0.01 : roomSize/2-0.01;
-        const z = i<2 ? roomSize/2-0.01 : -roomSize/2+0.01;
-        cobweb.position.set(x, wallHeight-0.2, z);
-        cobweb.rotation.y = i%2 ? Math.PI/2 : -Math.PI/2;
-        cobweb.rotation.z = (Math.random()-0.5)*0.2;
-        scene.add(cobweb);
-    }
-}
-addCobwebs(scene, roomSize, wallHeight);
+        frontWallRight.position.set(roomSize / 4 + 0.5, wallHeight / 2, roomSize / 2);
+        addWallDecay(frontWallRight);
+        scene.add(frontWallRight);
 
-// 9. Add writing on the wall ("HELP", "NO ESCAPE", etc.)
-function addWallWriting(scene, roomSize, wallHeight) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 128;
-    const ctx = canvas.getContext('2d');
-    ctx.font = "bold 48px 'Creepster', Arial, sans-serif";
-    ctx.fillStyle = "#AA0000";
-    ctx.fillText("NO ESCAPE", 10, 60);
-    ctx.strokeStyle = "#440000";
-    ctx.lineWidth = 3;
-    ctx.strokeText("NO ESCAPE", 10, 60);
-    ctx.globalAlpha = 0.7;
-    ctx.font = "italic 28px Arial";
-    ctx.fillText("it watches", 45, 110);
+        // Ceiling with stains
+        const ceilingTexture = new THREE.TextureLoader().load('https://static.vecteezy.com/system/resources/previews/002/243/394/large_2x/old-rusty-wall-photo.jpg');
+        ceilingTexture.wrapS = ceilingTexture.wrapT = THREE.RepeatWrapping;
+        ceilingTexture.repeat.set(4, 4);
 
-    const tex = new THREE.CanvasTexture(canvas);
-    const graffiti = new THREE.Mesh(
-        new THREE.PlaneGeometry(1.8, 0.9),
-        new THREE.MeshBasicMaterial({ map: tex, transparent: true })
-    );
-    graffiti.position.set(0, wallHeight*0.65, -roomSize/2+0.03);
-    scene.add(graffiti);
-}
-addWallWriting(scene, roomSize, wallHeight);
+        const ceiling = new THREE.Mesh(
+            new THREE.PlaneGeometry(roomSize, roomSize),
+            new THREE.MeshStandardMaterial({
+                color: 0x2a2a3a,
+                roughness: 0.9,
+                metalness: 0.05,
+                map: ceilingTexture
+            })
+        );
+        ceiling.position.set(0, wallHeight, 0);
+        ceiling.rotation.x = Math.PI / 2;
+        scene.add(ceiling);
 
-// Add some hanging wires or pipes for detail
-const addHangingWires = () => {
-    const wireGeometry = new THREE.BufferGeometry();
-    const points = [];
-    for (let i = 0; i < 5; i++) {
-        points.push(new THREE.Vector3(
-            (Math.random() - 0.5) * roomSize * 0.8,
-            wallHeight * 0.9 - Math.random() * wallHeight * 0.5,
-            (Math.random() - 0.5) * roomSize * 0.8
-        ));
-    }
-    wireGeometry.setFromPoints(points);
-    
-    const wireMaterial = new THREE.LineBasicMaterial({ color: 0x666666 });
-    const wire = new THREE.Line(wireGeometry, wireMaterial);
-    scene.add(wire);
-};
-addHangingWires();
+        // ===== EVIL SCIENTIST LAB ENHANCEMENTS =====
 
-        // ===== HANGING WIRES FOR ABANDONED LAB AESTHETIC =====
-function createHangingWires() {
-    const wireGroup = new THREE.Group();
-    const wireMaterial = new THREE.MeshStandardMaterial({
-        color: 0x333333,
-        roughness: 0.8,
-        metalness: 0.2
-    });
+        // 1. Flickering and broken lights (ceiling)
+        function createFlickeringLights(roomSize, wallHeight, scene) {
+            const lightPositions = [
+                [-roomSize / 3, wallHeight - 0.1, -roomSize / 3],
+                [roomSize / 3, wallHeight - 0.1, -roomSize / 3],
+                [0, wallHeight - 0.1, roomSize / 3]
+            ];
+            const lightObjs = [];
 
-    // Create a grid of hanging wires across the ceiling
-    const wireCount = 10; // Increased number of wires
-    const gridSize = Math.ceil(Math.sqrt(wireCount));
-    const spacing = roomSize / (gridSize + 1);
-    
-    for (let i = 0; i < wireCount; i++) {
-        // Calculate grid position with some randomness
-        const gridX = i % gridSize;
-        const gridZ = Math.floor(i / gridSize);
-        
-        // Position with slight randomness to avoid perfect grid
-        const x = -roomSize/2 + (gridX + 0.5 + (Math.random()-0.5)*0.3) * spacing;
-        const z = -roomSize/2 + (gridZ + 0.5 + (Math.random()-0.5)*0.3) * spacing;
-        
-        // Random wire length (longer wires, between 2-4 meters)
-        const length = 2 + Math.random() * 2;
-        
-        // Create wire using a cylinder
-        const wireGeometry = new THREE.CylinderGeometry(0.02, 0.02, length, 8);
-        const wire = new THREE.Mesh(wireGeometry, wireMaterial);
-        
-        // Position at ceiling and let hang straight down
-        wire.position.set(x, wallHeight - length/2, z);
-        
-        // Remove all rotation randomness - wires hang perfectly straight down
-        wire.rotation.set(0, 0, 0);
-        
-        wire.castShadow = true;
-        wireGroup.add(wire);
-        
-        // Add electrical box/connector at top (more detailed)
-        if (Math.random() > 0.3) {
-            const connector = new THREE.Mesh(
-                new THREE.BoxGeometry(0.1, 0.05, 0.1),
-                new THREE.MeshStandardMaterial({ color: 0x666666 })
+            lightPositions.forEach(pos => {
+                const tube = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.05, 0.05, 2, 12),
+                    new THREE.MeshStandardMaterial({
+                        color: 0xcccccc,
+                        emissive: 0xffffcc,
+                        emissiveIntensity: 1.2
+                    })
+                );
+                tube.position.set(...pos);
+                tube.rotation.z = Math.PI / 2;
+                scene.add(tube);
+
+                const light = new THREE.PointLight(0xfffbe0, 1, 10, 2);
+                light.position.set(pos[0], pos[1] - 0.1, pos[2]);
+                scene.add(light);
+                lightObjs.push({ light, tube });
+            });
+
+            // Animate flickering
+            function flicker() {
+                lightObjs.forEach((obj, i) => {
+                    const base = 0.9 + Math.sin(Date.now() / 170 + i * 200) * 0.1 + Math.random() * 0.1;
+                    obj.light.intensity = Math.max(0, base + (Math.random() > 0.8 ? -0.7 : 0));
+                    obj.tube.material.emissiveIntensity = obj.light.intensity;
+                });
+                requestAnimationFrame(flicker);
+            }
+            flicker();
+        }
+        createFlickeringLights(roomSize, wallHeight, scene);
+
+        // 2. Add dark stains, blood, and "handprint" decals on walls/floor
+        function addWallStains(roomSize, wallHeight, scene) {
+            const stainMaterial = new THREE.MeshBasicMaterial({
+                map: new THREE.TextureLoader().load('https://i.etsystatic.com/7477300/r/il/a0a0cb/1373080092/il_570xN.1373080092_czkm.jpg'), // transparent blood splatter PNG
+                transparent: true,
+                depthWrite: false,
+                depthTest: true
+            });
+            for (let i = 0; i < 5; i++) {
+                const stain = new THREE.Mesh(
+                    new THREE.PlaneGeometry(0.6 + Math.random(), 0.4 + Math.random() * 0.5),
+                    stainMaterial
+                );
+                stain.position.set(
+                    (Math.random() - 0.5) * roomSize * 0.90,
+                    wallHeight * 0.2 + Math.random() * wallHeight * 0.6,
+                    -roomSize / 2 + 0.02 + Math.random() * 0.1 // slightly off the back wall
+                );
+                stain.rotation.y = (Math.random() - 0.5) * 0.3;
+                stain.rotation.z = (Math.random() - 0.5) * Math.PI * 2;
+                stain.renderOrder = 10;
+                scene.add(stain);
+            }
+            // Bloody handprint
+            const handprintMat = stainMaterial.clone();
+            handprintMat.map = new THREE.TextureLoader().load('https://www.pngarts.com/files/9/Blood-Splatter-PNG-Download-Image.png');
+            const handprint = new THREE.Mesh(
+                new THREE.PlaneGeometry(0.4, 0.4),
+                handprintMat
             );
-            connector.position.set(x, wallHeight, z);
-            wireGroup.add(connector);
-            
-            // Add small wires coming out of connector
-            for (let j = 0; j < 3; j++) {
-                const smallWire = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.01, 0.01, 0.2, 6),
-                    wireMaterial
+            handprint.position.set(roomSize / 2 - 0.06, wallHeight * 0.8, (Math.random() - 0.5) * roomSize * 0.5);
+            handprint.rotation.y = -Math.PI / 2;
+            handprint.renderOrder = 10;
+            scene.add(handprint);
+        }
+        addWallStains(roomSize, wallHeight, scene);
+
+        // 3. Cracked glass on floor or equipment
+        function addCrackedGlass(scene) {
+            const texture = new THREE.TextureLoader().load('https://www.textures.com/system/gallery/photos/Decals/Damage/Floor/116572/DecalsDamageFloor0022_1_350.jpg'); // PNG crack decal
+            const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+            const crack = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), mat);
+            crack.position.set((Math.random() - 0.5) * 2, 0.011, (Math.random() - 0.5) * 2);
+            crack.rotation.x = -Math.PI / 2;
+            crack.renderOrder = 20;
+            scene.add(crack);
+        }
+        addCrackedGlass(scene);
+
+        // 4. Broken glass shards on the floor
+        function scatterGlassShards(scene, roomSize) {
+            const shardMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xbbfaff,
+                transmission: 0.7,
+                roughness: 0.05,
+                metalness: 0.1,
+                opacity: 0.5,
+                transparent: true
+            });
+            for (let i = 0; i < 8; i++) {
+                const geom = new THREE.BoxGeometry(0.1 + Math.random() * 0.2, 0.01, 0.05 + Math.random() * 0.08);
+                const mesh = new THREE.Mesh(geom, shardMaterial);
+                mesh.position.set(
+                    (Math.random() - 0.5) * roomSize * 0.9,
+                    0.015,
+                    (Math.random() - 0.5) * roomSize * 0.9
                 );
-                smallWire.position.set(
-                    x + (Math.random() - 0.5) * 0.05,
-                    wallHeight - 0.1,
-                    z + (Math.random() - 0.5) * 0.05
-                );
-                smallWire.rotation.x = Math.random() * Math.PI;
-                smallWire.rotation.z = Math.random() * Math.PI;
-                wireGroup.add(smallWire);
+                mesh.rotation.y = Math.random() * Math.PI;
+                mesh.rotation.x = (Math.random() - 0.5) * 0.2;
+                scene.add(mesh);
             }
         }
-        
-        // Add sparking effect to some wires (20% chance)
-        if (Math.random() > 0.8) {
-            createSparkEffect(x, wallHeight - length, z, wireGroup);
-        }
-    }
-    
-    // Remove the curved wires section completely to ensure all wires are straight
-    
-    return wireGroup;
-}
+        scatterGlassShards(scene, roomSize);
 
-function createSparkEffect(x, y, z, parentGroup) {
-    const sparkGroup = new THREE.Group();
-    sparkGroup.position.set(x, y, z);
-    
-    // Create small sparks
-    const sparkCount = 3 + Math.floor(Math.random() * 3);
-    const sparks = [];
-    
-    for (let i = 0; i < sparkCount; i++) {
-        const spark = new THREE.Mesh(
-            new THREE.SphereGeometry(0.02, 8, 8),
-            new THREE.MeshBasicMaterial({ 
-                color: 0xffff00,
-                transparent: true,
-                opacity: 0.8
-            })
-        );
-        spark.position.set(
-            (Math.random() - 0.5) * 0.1,
-            (Math.random() - 0.5) * 0.1,
-            (Math.random() - 0.5) * 0.1
-        );
-        sparks.push(spark);
-        sparkGroup.add(spark);
-    }
-    
-    // Animation for sparks
-    let time = 0;
-    function animateSparks() {
-        time += 0.1;
-        sparks.forEach((spark, i) => {
-            spark.position.y = Math.sin(time * 2 + i) * 0.05;
-            spark.material.opacity = 0.5 + Math.sin(time * 3 + i) * 0.3;
-            spark.scale.setScalar(0.8 + Math.sin(time * 5 + i) * 0.3);
-        });
-        requestAnimationFrame(animateSparks);
-    }
-    animateSparks();
-    
-    parentGroup.add(sparkGroup);
-}
+        // 5. Add a toppled chair, broken and left to rot
+        function addToppledChair(scene, roomSize) {
+            const chair = new THREE.Group();
 
-// Add hanging wires to scene
-const hangingWires = createHangingWires();
-scene.add(hangingWires);
-
-// ===== DANGEROUS EXPOSED WIRING =====
-function createExposedWiring() {
-    const wiringGroup = new THREE.Group();
-    const wireMaterial = new THREE.MeshStandardMaterial({
-        color: 0xcccccc,
-        roughness: 0.7,
-        metalness: 0.5,
-        emissive: 0xffaa00,
-        emissiveIntensity: 0.3
-    });
-
-    // Create several wiring runs along walls and ceiling
-    const wiringPaths = [
-        // Wall wiring
-        { 
-            points: [
-                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 1, -roomSize/2 + 1),
-                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 1.5, -roomSize/2 + 3),
-                new THREE.Vector3(-roomSize/2 + 1, wallHeight - 2, -roomSize/2 + 5)
-            ],
-            broken: true
-        },
-        // Ceiling wiring
-        {
-            points: [
-                new THREE.Vector3(-2, wallHeight - 0.1, 0),
-                new THREE.Vector3(0, wallHeight - 0.2, 1),
-                new THREE.Vector3(2, wallHeight - 0.3, 0),
-                new THREE.Vector3(3, wallHeight - 0.4, -2)
-            ],
-            broken: false
-        }
-    ];
-
-    wiringPaths.forEach(path => {
-        // Create the curve path
-        const curve = new THREE.CatmullRomCurve3(path.points);
-        const geometry = new THREE.TubeGeometry(curve, 20, 0.03, 8, false);
-        const wire = new THREE.Mesh(geometry, wireMaterial);
-        wiringGroup.add(wire);
-
-        // Add broken ends if needed
-        if (path.broken) {
-            const lastPoint = path.points[path.points.length - 1];
-            const brokenEnd = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.04, 0.01, 0.2, 8),
-                new THREE.MeshStandardMaterial({ color: 0x888888 })
+            // Seat
+            const seat = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.05, 0.5),
+                new THREE.MeshStandardMaterial({ color: 0x5a3a2a, roughness: 0.8 })
             );
-            brokenEnd.position.copy(lastPoint);
-            brokenEnd.rotation.x = Math.PI/2;
-            wiringGroup.add(brokenEnd);
+            seat.position.set(0, 0.025, 0);
+            chair.add(seat);
+
+            // Backrest
+            const back = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.5, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0x4a2a1a, roughness: 0.85 })
+            );
+            back.position.set(0, 0.45, -0.225);
+            chair.add(back);
+
+            // Legs
+            const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
+            const legPositions = [
+                { x: -0.2, z: -0.2 },
+                { x: 0.2, z: -0.2 },
+                { x: -0.2, z: 0.2 },
+                { x: 0.2, z: 0.2 }
+            ];
+
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
+                    legMaterial
+                );
+                leg.position.set(pos.x, -0.2, pos.z);
+                chair.add(leg);
+            });
+
+            // Position and rotate the chair randomly
+            chair.position.set(
+                (Math.random() - 0.5) * roomSize * 0.7,
+                0.2,
+                (Math.random() - 0.5) * roomSize * 0.7
+            );
+            chair.rotation.y = Math.random() * Math.PI;
+            chair.rotation.x = Math.PI / 6 + Math.random() * 0.2;
+            chair.rotation.z = Math.random() * 0.3;
+
+            scene.add(chair);
         }
-    });
+        addToppledChair(scene, roomSize);
 
-    return wiringGroup;
-}
+        // 6. Add a shadowy, subtle mist/fog near the floor
+        scene.fog = new THREE.FogExp2(0x1a1a2a, 0.06); // Or customize color and density
 
-const exposedWiring = createExposedWiring();
-scene.add(exposedWiring);
+        // 7. Add a leaking pipe dripping onto the floor (puddle area)
+        function addLeakingPipe(scene, wallHeight, roomSize) {
+            const pipe = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1, 0.1, 2, 16),
+                new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8, metalness: 0.4 })
+            );
+            pipe.rotation.z = Math.PI / 2;
+            pipe.position.set(-roomSize / 2 + 0.8, wallHeight * 0.7, -1.5);
+            scene.add(pipe);
+
+            // Dripping water (sphere drops)
+            const drop = new THREE.Mesh(
+                new THREE.SphereGeometry(0.05, 10, 10),
+                new THREE.MeshStandardMaterial({ color: 0x99ccff, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.7 })
+            );
+            scene.add(drop);
+            function animateDrop() {
+                drop.position.set(-roomSize / 2 + 0.8, wallHeight * 0.7 - 1.0 + Math.abs(Math.sin(Date.now() / 500)) * 0.8, -1.5);
+                requestAnimationFrame(animateDrop);
+            }
+            animateDrop();
+        }
+        addLeakingPipe(scene, wallHeight, roomSize);
+
+        // 8. Add cobwebs in upper corners
+        function addCobwebs(scene, roomSize, wallHeight) {
+            const cobwebTex = new THREE.TextureLoader().load('https://i.imgur.com/KVQbtuE.png');
+            for (let i = 0; i < 3; i++) {
+                const cobweb = new THREE.Mesh(
+                    new THREE.PlaneGeometry(0.7 + Math.random() * 0.6, 0.7 + Math.random() * 0.4),
+                    new THREE.MeshBasicMaterial({ map: cobwebTex, transparent: true, opacity: 0.7 })
+                );
+                // Place in a random upper corner
+                const x = i % 2 ? -roomSize / 2 + 0.01 : roomSize / 2 - 0.01;
+                const z = i < 2 ? roomSize / 2 - 0.01 : -roomSize / 2 + 0.01;
+                cobweb.position.set(x, wallHeight - 0.2, z);
+                cobweb.rotation.y = i % 2 ? Math.PI / 2 : -Math.PI / 2;
+                cobweb.rotation.z = (Math.random() - 0.5) * 0.2;
+                scene.add(cobweb);
+            }
+        }
+        addCobwebs(scene, roomSize, wallHeight);
+
+        // 9. Add writing on the wall ("HELP", "NO ESCAPE", etc.)
+        function addWallWriting(scene, roomSize, wallHeight) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.font = "bold 48px 'Creepster', Arial, sans-serif";
+            ctx.fillStyle = "#AA0000";
+            ctx.fillText("NO ESCAPE", 10, 60);
+            ctx.strokeStyle = "#440000";
+            ctx.lineWidth = 3;
+            ctx.strokeText("NO ESCAPE", 10, 60);
+            ctx.globalAlpha = 0.7;
+            ctx.font = "italic 28px Arial";
+            ctx.fillText("it watches", 45, 110);
+
+            const tex = new THREE.CanvasTexture(canvas);
+            const graffiti = new THREE.Mesh(
+                new THREE.PlaneGeometry(1.8, 0.9),
+                new THREE.MeshBasicMaterial({ map: tex, transparent: true })
+            );
+            graffiti.position.set(0, wallHeight * 0.65, -roomSize / 2 + 0.03);
+            scene.add(graffiti);
+        }
+        addWallWriting(scene, roomSize, wallHeight);
+
+        // Add some hanging wires or pipes for detail
+        const addHangingWires = () => {
+            const wireGeometry = new THREE.BufferGeometry();
+            const points = [];
+            for (let i = 0; i < 5; i++) {
+                points.push(new THREE.Vector3(
+                    (Math.random() - 0.5) * roomSize * 0.8,
+                    wallHeight * 0.9 - Math.random() * wallHeight * 0.5,
+                    (Math.random() - 0.5) * roomSize * 0.8
+                ));
+            }
+            wireGeometry.setFromPoints(points);
+
+            const wireMaterial = new THREE.LineBasicMaterial({ color: 0x666666 });
+            const wire = new THREE.Line(wireGeometry, wireMaterial);
+            scene.add(wire);
+        };
+        addHangingWires();
+
+        // ===== HANGING WIRES FOR ABANDONED LAB AESTHETIC =====
+        function createHangingWires() {
+            const wireGroup = new THREE.Group();
+            const wireMaterial = new THREE.MeshStandardMaterial({
+                color: 0x333333,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+
+            // Create a grid of hanging wires across the ceiling
+            const wireCount = 10; // Increased number of wires
+            const gridSize = Math.ceil(Math.sqrt(wireCount));
+            const spacing = roomSize / (gridSize + 1);
+
+            for (let i = 0; i < wireCount; i++) {
+                // Calculate grid position with some randomness
+                const gridX = i % gridSize;
+                const gridZ = Math.floor(i / gridSize);
+
+                // Position with slight randomness to avoid perfect grid
+                const x = -roomSize / 2 + (gridX + 0.5 + (Math.random() - 0.5) * 0.3) * spacing;
+                const z = -roomSize / 2 + (gridZ + 0.5 + (Math.random() - 0.5) * 0.3) * spacing;
+
+                // Random wire length (longer wires, between 2-4 meters)
+                const length = 2 + Math.random() * 2;
+
+                // Create wire using a cylinder
+                const wireGeometry = new THREE.CylinderGeometry(0.02, 0.02, length, 8);
+                const wire = new THREE.Mesh(wireGeometry, wireMaterial);
+
+                // Position at ceiling and let hang straight down
+                wire.position.set(x, wallHeight - length / 2, z);
+
+                // Remove all rotation randomness - wires hang perfectly straight down
+                wire.rotation.set(0, 0, 0);
+
+                wire.castShadow = true;
+                wireGroup.add(wire);
+
+                // Add electrical box/connector at top (more detailed)
+                if (Math.random() > 0.3) {
+                    const connector = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.1, 0.05, 0.1),
+                        new THREE.MeshStandardMaterial({ color: 0x666666 })
+                    );
+                    connector.position.set(x, wallHeight, z);
+                    wireGroup.add(connector);
+
+                    // Add small wires coming out of connector
+                    for (let j = 0; j < 3; j++) {
+                        const smallWire = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.01, 0.01, 0.2, 6),
+                            wireMaterial
+                        );
+                        smallWire.position.set(
+                            x + (Math.random() - 0.5) * 0.05,
+                            wallHeight - 0.1,
+                            z + (Math.random() - 0.5) * 0.05
+                        );
+                        smallWire.rotation.x = Math.random() * Math.PI;
+                        smallWire.rotation.z = Math.random() * Math.PI;
+                        wireGroup.add(smallWire);
+                    }
+                }
+
+                // Add sparking effect to some wires (20% chance)
+                if (Math.random() > 0.8) {
+                    createSparkEffect(x, wallHeight - length, z, wireGroup);
+                }
+            }
+
+            // Remove the curved wires section completely to ensure all wires are straight
+
+            return wireGroup;
+        }
+
+        function createSparkEffect(x, y, z, parentGroup) {
+            const sparkGroup = new THREE.Group();
+            sparkGroup.position.set(x, y, z);
+
+            // Create small sparks
+            const sparkCount = 3 + Math.floor(Math.random() * 3);
+            const sparks = [];
+
+            for (let i = 0; i < sparkCount; i++) {
+                const spark = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.02, 8, 8),
+                    new THREE.MeshBasicMaterial({
+                        color: 0xffff00,
+                        transparent: true,
+                        opacity: 0.8
+                    })
+                );
+                spark.position.set(
+                    (Math.random() - 0.5) * 0.1,
+                    (Math.random() - 0.5) * 0.1,
+                    (Math.random() - 0.5) * 0.1
+                );
+                sparks.push(spark);
+                sparkGroup.add(spark);
+            }
+
+            // Animation for sparks
+            let time = 0;
+            function animateSparks() {
+                time += 0.1;
+                sparks.forEach((spark, i) => {
+                    spark.position.y = Math.sin(time * 2 + i) * 0.05;
+                    spark.material.opacity = 0.5 + Math.sin(time * 3 + i) * 0.3;
+                    spark.scale.setScalar(0.8 + Math.sin(time * 5 + i) * 0.3);
+                });
+                requestAnimationFrame(animateSparks);
+            }
+            animateSparks();
+
+            parentGroup.add(sparkGroup);
+        }
+
+        // Add hanging wires to scene
+        const hangingWires = createHangingWires();
+        scene.add(hangingWires);
+
+        // ===== DANGEROUS EXPOSED WIRING =====
+        function createExposedWiring() {
+            const wiringGroup = new THREE.Group();
+            const wireMaterial = new THREE.MeshStandardMaterial({
+                color: 0xcccccc,
+                roughness: 0.7,
+                metalness: 0.5,
+                emissive: 0xffaa00,
+                emissiveIntensity: 0.3
+            });
+
+            // Create several wiring runs along walls and ceiling
+            const wiringPaths = [
+                // Wall wiring
+                {
+                    points: [
+                        new THREE.Vector3(-roomSize / 2 + 1, wallHeight - 1, -roomSize / 2 + 1),
+                        new THREE.Vector3(-roomSize / 2 + 1, wallHeight - 1.5, -roomSize / 2 + 3),
+                        new THREE.Vector3(-roomSize / 2 + 1, wallHeight - 2, -roomSize / 2 + 5)
+                    ],
+                    broken: true
+                },
+                // Ceiling wiring
+                {
+                    points: [
+                        new THREE.Vector3(-2, wallHeight - 0.1, 0),
+                        new THREE.Vector3(0, wallHeight - 0.2, 1),
+                        new THREE.Vector3(2, wallHeight - 0.3, 0),
+                        new THREE.Vector3(3, wallHeight - 0.4, -2)
+                    ],
+                    broken: false
+                }
+            ];
+
+            wiringPaths.forEach(path => {
+                // Create the curve path
+                const curve = new THREE.CatmullRomCurve3(path.points);
+                const geometry = new THREE.TubeGeometry(curve, 20, 0.03, 8, false);
+                const wire = new THREE.Mesh(geometry, wireMaterial);
+                wiringGroup.add(wire);
+
+                // Add broken ends if needed
+                if (path.broken) {
+                    const lastPoint = path.points[path.points.length - 1];
+                    const brokenEnd = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.04, 0.01, 0.2, 8),
+                        new THREE.MeshStandardMaterial({ color: 0x888888 })
+                    );
+                    brokenEnd.position.copy(lastPoint);
+                    brokenEnd.rotation.x = Math.PI / 2;
+                    wiringGroup.add(brokenEnd);
+                }
+            });
+
+            return wiringGroup;
+        }
+
+        const exposedWiring = createExposedWiring();
+        scene.add(exposedWiring);
 
         // Interactive objects
         const interactiveObjects = [];
 
         // ===== LABORATORY EQUIPMENT ADDITIONS =====
 
-// Glass material to reuse
-const glassMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x88ccff,
-    transmission: 0.9,
-    roughness: 0.1,
-    metalness: 0.0,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
-    ior: 1.5,
-    thickness: 0.5,
-    transparent: true,
-    opacity: 0.7
-});
+        // Glass material to reuse
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x88ccff,
+            transmission: 0.9,
+            roughness: 0.1,
+            metalness: 0.0,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1,
+            ior: 1.5,
+            thickness: 0.5,
+            transparent: true,
+            opacity: 0.7
+        });
 
-// Metal material for equipment
-const metalMaterial = new THREE.MeshStandardMaterial({
-    color: 0xaaaaaa,
-    roughness: 0.3,
-    metalness: 0.8
-});
+        // Metal material for equipment
+        const metalMaterial = new THREE.MeshStandardMaterial({
+            color: 0xaaaaaa,
+            roughness: 0.3,
+            metalness: 0.8
+        });
 
-// 1. CHEMISTRY WORKBENCH
+        // 1. CHEMISTRY WORKBENCH
         const workbench = new THREE.Group();
         workbench.position.set(-4, 0, 2);
 
         // Bench surface
         const benchSurface = new THREE.Mesh(
             new THREE.BoxGeometry(2, 0.1, 1.5),
-            new THREE.MeshStandardMaterial({ 
+            new THREE.MeshStandardMaterial({
                 color: 0x333333,
                 roughness: 0.7
             })
@@ -1266,10 +1303,10 @@ const metalMaterial = new THREE.MeshStandardMaterial({
         benchSurface.receiveShadow = true;
         workbench.add(benchSurface);
 
-// Test tube rack with 5 vials for memory game
-const tubeRack = new THREE.Group();
+        // Test tube rack with 5 vials for memory game
+        const tubeRack = new THREE.Group();
         const vials = []; // Store vial references globally
-        
+
         // Colors for the vials
         const vialColors = [
             { color: 0xff0000, name: "red" },
@@ -1278,7 +1315,7 @@ const tubeRack = new THREE.Group();
             { color: 0xffff00, name: "yellow" },
             { color: 0xff00ff, name: "purple" }
         ];
-        
+
         for (let i = 0; i < 5; i++) {
             const tube = new THREE.Mesh(
                 new THREE.CylinderGeometry(0.08, 0.08, 0.7, 32),
@@ -1286,7 +1323,7 @@ const tubeRack = new THREE.Group();
             );
             tube.position.set(-0.4 + i * 0.2, 0.4, 0);
             tube.castShadow = true;
-            
+
             // Add colored liquid
             const liquid = new THREE.Mesh(
                 new THREE.CylinderGeometry(0.07, 0.07, 0.3, 32),
@@ -1300,7 +1337,7 @@ const tubeRack = new THREE.Group();
             );
             liquid.position.set(-0.4 + i * 0.2, 0.25, 0);
             tube.add(liquid);
-            
+
             // Create vial group
             const vial = new THREE.Group();
             vial.add(tube);
@@ -1312,7 +1349,7 @@ const tubeRack = new THREE.Group();
                 onClick: () => handleVialClick(i)
             };
             vials.push(vial);
-            
+
             tubeRack.add(vial);
             interactiveObjects.push(vial);
         }
@@ -1332,7 +1369,7 @@ const tubeRack = new THREE.Group();
             metalMaterial
         );
         burnerTube.position.set(0.5, 0.3, 0.4);
-        burnerTube.rotation.x = Math.PI/4;
+        burnerTube.rotation.x = Math.PI / 4;
         workbench.add(burnerTube);
 
         // Flame effect
@@ -1356,230 +1393,230 @@ const tubeRack = new THREE.Group();
         animateFlame();
 
         workbench.userData = {
-    name: "Chemistry Workbench",
-    description: "A workstation with test tubes, burners, and various glassware.",
-    onClick: () => showModal("Workbench", `
+            name: "Chemistry Workbench",
+            description: "A workstation with test tubes, burners, and various glassware.",
+            onClick: () => showModal("Workbench", `
         <p>The workbench contains various chemistry equipment. The colored vials seem to be part of an experiment.</p>
         <p>A note says: "Memory test - repeat the sequence to proceed."</p>
     `, `
         <button class="interaction-button" onclick="createMemoryGame()">Start Memory Challenge</button>
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
+        };
         scene.add(workbench);
         interactiveObjects.push(workbench);
 
-// 2. MICROSCOPE
-const microscope = new THREE.Group();
-microscope.position.set(1, 0.8, -1);
+        // 2. MICROSCOPE
+        const microscope = new THREE.Group();
+        microscope.position.set(1, 0.8, -1);
 
-// Base
-const microBase = new THREE.Mesh(
-    new THREE.BoxGeometry(0.4, 0.2, 0.4),
-    metalMaterial
-);
-microBase.castShadow = true;
-microscope.add(microBase);
+        // Base
+        const microBase = new THREE.Mesh(
+            new THREE.BoxGeometry(0.4, 0.2, 0.4),
+            metalMaterial
+        );
+        microBase.castShadow = true;
+        microscope.add(microBase);
 
-// Arm
-const arm = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16),
-    metalMaterial
-);
-arm.position.set(0, 0.5, 0.2);
-arm.rotation.x = Math.PI * 0.3;
-microscope.add(arm);
+        // Arm
+        const arm = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 0.8, 16),
+            metalMaterial
+        );
+        arm.position.set(0, 0.5, 0.2);
+        arm.rotation.x = Math.PI * 0.3;
+        microscope.add(arm);
 
-// Eyepiece
-const eyepiece = new THREE.Mesh(
-    new THREE.SphereGeometry(0.15, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5),
-    metalMaterial
-);
-eyepiece.position.set(0, 0.9, 0.35);
-microscope.add(eyepiece);
+        // Eyepiece
+        const eyepiece = new THREE.Mesh(
+            new THREE.SphereGeometry(0.15, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5),
+            metalMaterial
+        );
+        eyepiece.position.set(0, 0.9, 0.35);
+        microscope.add(eyepiece);
 
-// Objective lens
-const lens = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1, 0.1, 0.05, 32),
-    new THREE.MeshPhysicalMaterial({
-        color: 0x000000,
-        transmission: 0.9,
-        roughness: 0.0,
-        metalness: 0.1,
-        ior: 1.5
-    })
-);
-lens.position.set(0, 0.5, -0.1);
-microscope.add(lens);
+        // Objective lens
+        const lens = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1, 0.1, 0.05, 32),
+            new THREE.MeshPhysicalMaterial({
+                color: 0x000000,
+                transmission: 0.9,
+                roughness: 0.0,
+                metalness: 0.1,
+                ior: 1.5
+            })
+        );
+        lens.position.set(0, 0.5, -0.1);
+        microscope.add(lens);
 
-// Slide
-const slide = new THREE.Mesh(
-    new THREE.BoxGeometry(0.3, 0.01, 0.1),
-    new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        roughness: 0.1
-    })
-);
-slide.position.set(0, 0.2, -0.2);
-microscope.add(slide);
+        // Slide
+        const slide = new THREE.Mesh(
+            new THREE.BoxGeometry(0.3, 0.01, 0.1),
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                roughness: 0.1
+            })
+        );
+        slide.position.set(0, 0.2, -0.2);
+        microscope.add(slide);
 
-microscope.userData = {
-    name: "Microscope",
-    description: "A high-powered microscope focused on a specimen slide.",
-    onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures unlike anything natural.", `
+        microscope.userData = {
+            name: "Microscope",
+            description: "A high-powered microscope focused on a specimen slide.",
+            onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures unlike anything natural.", `
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
-scene.add(microscope);
-interactiveObjects.push(microscope);
+        };
+        scene.add(microscope);
+        interactiveObjects.push(microscope);
 
-// 3. ERRLENMEYER FLASK WITH GLOWING LIQUID
-const flask = new THREE.Group();
-flask.position.set(3, 0.5, 1);
+        // 3. ERRLENMEYER FLASK WITH GLOWING LIQUID
+        const flask = new THREE.Group();
+        flask.position.set(3, 0.5, 1);
 
-// Flask body
-const flaskBody = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.5, 0.3, 1.2, 32),
-    glassMaterial
-);
-flaskBody.position.y = 0.6;
-flask.add(flaskBody);
+        // Flask body
+        const flaskBody = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.5, 0.3, 1.2, 32),
+            glassMaterial
+        );
+        flaskBody.position.y = 0.6;
+        flask.add(flaskBody);
 
-// Glowing liquid
-const glowingLiquid = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.48, 0.28, 0.8, 32),
-    new THREE.MeshPhysicalMaterial({
-        color: 0x00ff88,
-        transmission: 0.7,
-        roughness: 0.2,
-        emissive: 0x00ff88,
-        emissiveIntensity: 0.5
-    })
-);
-glowingLiquid.position.y = 0.4;
-flask.add(glowingLiquid);
+        // Glowing liquid
+        const glowingLiquid = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.48, 0.28, 0.8, 32),
+            new THREE.MeshPhysicalMaterial({
+                color: 0x00ff88,
+                transmission: 0.7,
+                roughness: 0.2,
+                emissive: 0x00ff88,
+                emissiveIntensity: 0.5
+            })
+        );
+        glowingLiquid.position.y = 0.4;
+        flask.add(glowingLiquid);
 
-// Bubbles
-for (let i = 0; i < 10; i++) {
-    const bubble = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05 + Math.random() * 0.03, 16, 16),
-        new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
-            transmission: 1.0,
-            roughness: 0.0,
-            metalness: 0.0,
-            ior: 1.33
-        })
-    );
-    bubble.position.set(
-        (Math.random() - 0.5) * 0.4,
-        Math.random() * 0.7,
-        (Math.random() - 0.5) * 0.4
-    );
-    flask.add(bubble);
-}
+        // Bubbles
+        for (let i = 0; i < 10; i++) {
+            const bubble = new THREE.Mesh(
+                new THREE.SphereGeometry(0.05 + Math.random() * 0.03, 16, 16),
+                new THREE.MeshPhysicalMaterial({
+                    color: 0xffffff,
+                    transmission: 1.0,
+                    roughness: 0.0,
+                    metalness: 0.0,
+                    ior: 1.33
+                })
+            );
+            bubble.position.set(
+                (Math.random() - 0.5) * 0.4,
+                Math.random() * 0.7,
+                (Math.random() - 0.5) * 0.4
+            );
+            flask.add(bubble);
+        }
 
-// 4. CENTRIFUGE MACHINE
-const centrifuge = new THREE.Group();
-centrifuge.position.set(-2, 0.5, 3);
+        // 4. CENTRIFUGE MACHINE
+        const centrifuge = new THREE.Group();
+        centrifuge.position.set(-2, 0.5, 3);
 
-// Machine body
-const centrifugeBody = new THREE.Mesh(
-    new THREE.BoxGeometry(0.8, 0.6, 0.6),
-    new THREE.MeshStandardMaterial({
-        color: 0xcccccc,
-        roughness: 0.5,
-        metalness: 0.7
-    })
-);
-centrifuge.add(centrifugeBody);
+        // Machine body
+        const centrifugeBody = new THREE.Mesh(
+            new THREE.BoxGeometry(0.8, 0.6, 0.6),
+            new THREE.MeshStandardMaterial({
+                color: 0xcccccc,
+                roughness: 0.5,
+                metalness: 0.7
+            })
+        );
+        centrifuge.add(centrifugeBody);
 
-// Lid
-const centrifugeLid = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.35, 0.35, 0.05, 32),
-    new THREE.MeshStandardMaterial({
-        color: 0x999999,
-        roughness: 0.4,
-        metalness: 0.8
-    })
-);
-centrifugeLid.position.set(0, 0.325, 0);
-centrifuge.add(centrifugeLid);
+        // Lid
+        const centrifugeLid = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.35, 0.35, 0.05, 32),
+            new THREE.MeshStandardMaterial({
+                color: 0x999999,
+                roughness: 0.4,
+                metalness: 0.8
+            })
+        );
+        centrifugeLid.position.set(0, 0.325, 0);
+        centrifuge.add(centrifugeLid);
 
-// Control panel
-const panel = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.4, 0.2),
-    new THREE.MeshStandardMaterial({
-        color: 0x111111,
-        emissive: 0x111111,
-        emissiveIntensity: 0.2
-    })
-);
-panel.position.set(0, 0.2, 0.31);
-panel.rotation.x = -Math.PI/2;
-centrifuge.add(panel);
+        // Control panel
+        const panel = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.4, 0.2),
+            new THREE.MeshStandardMaterial({
+                color: 0x111111,
+                emissive: 0x111111,
+                emissiveIntensity: 0.2
+            })
+        );
+        panel.position.set(0, 0.2, 0.31);
+        panel.rotation.x = -Math.PI / 2;
+        centrifuge.add(panel);
 
-// Add buttons
-for (let i = 0; i < 3; i++) {
-    const button = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16),
-        new THREE.MeshStandardMaterial({
-            color: [0xff0000, 0xffff00, 0x00ff00][i],
-            emissive: [0xff0000, 0xffff00, 0x00ff00][i],
-            emissiveIntensity: 0.3
-        })
-    );
-    button.position.set(-0.1 + i * 0.1, 0.21, 0.31);
-    centrifuge.add(button);
-}
+        // Add buttons
+        for (let i = 0; i < 3; i++) {
+            const button = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16),
+                new THREE.MeshStandardMaterial({
+                    color: [0xff0000, 0xffff00, 0x00ff00][i],
+                    emissive: [0xff0000, 0xffff00, 0x00ff00][i],
+                    emissiveIntensity: 0.3
+                })
+            );
+            button.position.set(-0.1 + i * 0.1, 0.21, 0.31);
+            centrifuge.add(button);
+        }
 
-// Add all equipment to scene
-scene.add(workbench);
-scene.add(microscope);
-scene.add(flask);
-scene.add(centrifuge);
+        // Add all equipment to scene
+        scene.add(workbench);
+        scene.add(microscope);
+        scene.add(flask);
+        scene.add(centrifuge);
 
-// Add interaction data for new objects
-workbench.userData = {
-    name: "Chemistry Workbench",
-    description: "A workstation with test tubes, burners, and various glassware.",
-    onClick: () => showModal("Workbench", "The workbench contains various chemistry equipment. Some test tubes contain colorful liquids.", `
+        // Add interaction data for new objects
+        workbench.userData = {
+            name: "Chemistry Workbench",
+            description: "A workstation with test tubes, burners, and various glassware.",
+            onClick: () => showModal("Workbench", "The workbench contains various chemistry equipment. Some test tubes contain colorful liquids.", `
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
+        };
 
-microscope.userData = {
-    name: "Microscope",
-    description: "A high-powered microscope focused on a specimen slide.",
-    onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures unlike anything natural.", `
+        microscope.userData = {
+            name: "Microscope",
+            description: "A high-powered microscope focused on a specimen slide.",
+            onClick: () => showModal("Microscope", "Looking through the microscope reveals strange cellular structures unlike anything natural.", `
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
+        };
 
-flask.userData = {
-    name: "Glowing Flask",
-    description: "An Erlenmeyer flask containing a luminescent green liquid.",
-    onClick: () => showModal("Mysterious Flask", "The liquid pulses gently with an inner light. It feels warm to the touch.", `
+        flask.userData = {
+            name: "Glowing Flask",
+            description: "An Erlenmeyer flask containing a luminescent green liquid.",
+            onClick: () => showModal("Mysterious Flask", "The liquid pulses gently with an inner light. It feels warm to the touch.", `
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
+        };
 
-centrifuge.userData = {
-    name: "Centrifuge",
-    description: "A laboratory centrifuge for separating substances.",
-    onClick: () => showModal("Centrifuge", "The machine hums quietly. A label reads: 'Subject 314 samples only'.", `
+        centrifuge.userData = {
+            name: "Centrifuge",
+            description: "A laboratory centrifuge for separating substances.",
+            onClick: () => showModal("Centrifuge", "The machine hums quietly. A label reads: 'Subject 314 samples only'.", `
         <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
     `)
-};
+        };
 
-// Add to interactive objects array
-interactiveObjects.push(workbench, microscope, flask, centrifuge);
+        // Add to interactive objects array
+        interactiveObjects.push(workbench, microscope, flask, centrifuge);
         // Door (purple as you liked)
         const door = new THREE.Mesh(
             new THREE.BoxGeometry(2, 4, 0.1),
             new THREE.MeshStandardMaterial({ color: 0x8844ff })
         );
-        door.position.set(0, 2, roomSize/2 - 0.05);
+        door.position.set(0, 2, roomSize / 2 - 0.05);
         door.castShadow = true;
         door.userData = {
             name: "Exit Door",
@@ -1594,138 +1631,138 @@ interactiveObjects.push(workbench, microscope, flask, centrifuge);
             new THREE.BoxGeometry(0.5, 0.3, 0.05),
             new THREE.MeshStandardMaterial({ color: 0x111111 })
         );
-        keypad.position.set(0.8, 1.2, roomSize/2);
+        keypad.position.set(0.8, 1.2, roomSize / 2);
         scene.add(keypad);
 
         // Update the desk creation code to add more items
-const desk = new THREE.Group();
-desk.position.set(-3, 0.4, -3);
+        const desk = new THREE.Group();
+        desk.position.set(-3, 0.4, -3);
 
-// Desk surface
-const deskSurface = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 0.8, 1.5),
-    new THREE.MeshStandardMaterial({ 
-        color: 0x555555,
-        roughness: 0.7
-    })
-);
-deskSurface.castShadow = true;
-deskSurface.receiveShadow = true;
-desk.add(deskSurface);
+        // Desk surface
+        const deskSurface = new THREE.Mesh(
+            new THREE.BoxGeometry(3, 0.8, 1.5),
+            new THREE.MeshStandardMaterial({
+                color: 0x555555,
+                roughness: 0.7
+            })
+        );
+        deskSurface.castShadow = true;
+        deskSurface.receiveShadow = true;
+        desk.add(deskSurface);
 
-// Add desk drawers
-const drawerMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
-for (let i = 0; i < 3; i++) {
-    const drawer = new THREE.Mesh(
-        new THREE.BoxGeometry(2.8, 0.2, 0.4),
-        drawerMaterial
-    );
-    drawer.position.set(0, -0.3 + i * 0.25, 0.55);
-    drawer.castShadow = true;
-    desk.add(drawer);
-    
-    // Add drawer handle
-    const handle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16),
-        new THREE.MeshStandardMaterial({ color: 0x888888 })
-    );
-    handle.rotation.z = Math.PI/2;
-    handle.position.set(0.8, -0.3 + i * 0.25, 0.75);
-    desk.add(handle);
-}
+        // Add desk drawers
+        const drawerMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
+        for (let i = 0; i < 3; i++) {
+            const drawer = new THREE.Mesh(
+                new THREE.BoxGeometry(2.8, 0.2, 0.4),
+                drawerMaterial
+            );
+            drawer.position.set(0, -0.3 + i * 0.25, 0.55);
+            drawer.castShadow = true;
+            desk.add(drawer);
 
-// Add papers
-const paperGeometry = new THREE.PlaneGeometry(0.3, 0.4);
-const paperMaterial = new THREE.MeshStandardMaterial({ 
-    color: 0xffffdd,
-    side: THREE.DoubleSide
-});
-for (let i = 0; i < 5; i++) {
-    const paper = new THREE.Mesh(paperGeometry, paperMaterial);
-    paper.position.set(
-        -1 + Math.random() * 1.5,
-        0.41,
-        -0.5 + Math.random() * 0.8
-    );
-    paper.rotation.x = Math.PI/2;
-    paper.rotation.z = (Math.random() - 0.5) * 0.5;
-    paper.receiveShadow = true;
-    desk.add(paper);
-}
+            // Add drawer handle
+            const handle = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16),
+                new THREE.MeshStandardMaterial({ color: 0x888888 })
+            );
+            handle.rotation.z = Math.PI / 2;
+            handle.position.set(0.8, -0.3 + i * 0.25, 0.75);
+            desk.add(handle);
+        }
 
-// Add a desk lamp
-const lampBase = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1, 0.1, 0.2, 16),
-    new THREE.MeshStandardMaterial({ color: 0x333333 })
-);
-lampBase.position.set(1, 0.5, -0.5);
-desk.add(lampBase);
+        // Add papers
+        const paperGeometry = new THREE.PlaneGeometry(0.3, 0.4);
+        const paperMaterial = new THREE.MeshStandardMaterial({
+            color: 0xffffdd,
+            side: THREE.DoubleSide
+        });
+        for (let i = 0; i < 5; i++) {
+            const paper = new THREE.Mesh(paperGeometry, paperMaterial);
+            paper.position.set(
+                -1 + Math.random() * 1.5,
+                0.41,
+                -0.5 + Math.random() * 0.8
+            );
+            paper.rotation.x = Math.PI / 2;
+            paper.rotation.z = (Math.random() - 0.5) * 0.5;
+            paper.receiveShadow = true;
+            desk.add(paper);
+        }
 
-const lampArm = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.03, 0.03, 0.8, 16),
-    new THREE.MeshStandardMaterial({ color: 0x222222 })
-);
-lampArm.position.set(1, 0.9, -0.5);
-lampArm.rotation.z = Math.PI/4;
-desk.add(lampArm);
+        // Add a desk lamp
+        const lampBase = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1, 0.1, 0.2, 16),
+            new THREE.MeshStandardMaterial({ color: 0x333333 })
+        );
+        lampBase.position.set(1, 0.5, -0.5);
+        desk.add(lampBase);
 
-const lampShade = new THREE.Mesh(
-    new THREE.ConeGeometry(0.2, 0.3, 16),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-);
-lampShade.position.set(1.25, 1.1, -0.75);
-lampShade.rotation.x = Math.PI/2;
-desk.add(lampShade);
+        const lampArm = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.03, 0.03, 0.8, 16),
+            new THREE.MeshStandardMaterial({ color: 0x222222 })
+        );
+        lampArm.position.set(1, 0.9, -0.5);
+        lampArm.rotation.z = Math.PI / 4;
+        desk.add(lampArm);
 
-// Add a light to the lamp
-const lampLight = new THREE.PointLight(0xffeedd, 1, 2);
-lampLight.position.set(1.25, 1.05, -0.75);
-desk.add(lampLight);
+        const lampShade = new THREE.Mesh(
+            new THREE.ConeGeometry(0.2, 0.3, 16),
+            new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+        );
+        lampShade.position.set(1.25, 1.1, -0.75);
+        lampShade.rotation.x = Math.PI / 2;
+        desk.add(lampShade);
 
-// Add a stapler
-const staplerBase = new THREE.Mesh(
-    new THREE.BoxGeometry(0.15, 0.05, 0.08),
-    new THREE.MeshStandardMaterial({ color: 0x888888 })
-);
-staplerBase.position.set(-0.5, 0.41, -0.3);
-desk.add(staplerBase);
+        // Add a light to the lamp
+        const lampLight = new THREE.PointLight(0xffeedd, 1, 2);
+        lampLight.position.set(1.25, 1.05, -0.75);
+        desk.add(lampLight);
 
-const staplerTop = new THREE.Mesh(
-    new THREE.BoxGeometry(0.15, 0.03, 0.08),
-    new THREE.MeshStandardMaterial({ color: 0x666666 })
-);
-staplerTop.position.set(-0.5, 0.45, -0.3);
-staplerTop.rotation.x = Math.PI/8;
-desk.add(staplerTop);
+        // Add a stapler
+        const staplerBase = new THREE.Mesh(
+            new THREE.BoxGeometry(0.15, 0.05, 0.08),
+            new THREE.MeshStandardMaterial({ color: 0x888888 })
+        );
+        staplerBase.position.set(-0.5, 0.41, -0.3);
+        desk.add(staplerBase);
 
-// Add a coffee mug
-const mug = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.08, 0.1, 0.12, 16),
-    new THREE.MeshStandardMaterial({ color: 0x442211 })
-);
-mug.position.set(0.8, 0.46, 0.2);
-desk.add(mug);
+        const staplerTop = new THREE.Mesh(
+            new THREE.BoxGeometry(0.15, 0.03, 0.08),
+            new THREE.MeshStandardMaterial({ color: 0x666666 })
+        );
+        staplerTop.position.set(-0.5, 0.45, -0.3);
+        staplerTop.rotation.x = Math.PI / 8;
+        desk.add(staplerTop);
 
-// Add interactive data
-desk.userData = {
-    name: "Lab Desk",
-    description: "Cluttered with research notes and equipment.",
-    onClick: () => showDeskInteraction()
-};
-scene.add(desk);
-interactiveObjects.push(desk);
+        // Add a coffee mug
+        const mug = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.08, 0.1, 0.12, 16),
+            new THREE.MeshStandardMaterial({ color: 0x442211 })
+        );
+        mug.position.set(0.8, 0.46, 0.2);
+        desk.add(mug);
+
+        // Add interactive data
+        desk.userData = {
+            name: "Lab Desk",
+            description: "Cluttered with research notes and equipment.",
+            onClick: () => showDeskInteraction()
+        };
+        scene.add(desk);
+        interactiveObjects.push(desk);
 
         // ===== ENHANCED CABINET =====
         const cabinet = new THREE.Group();
         cabinet.position.set(3, 1.5, -3);
-        
+
         // Cabinet frame (wooden texture)
         const cabinetTexture = new THREE.MeshStandardMaterial({
             color: 0x5a3a2a,
             roughness: 0.7,
             metalness: 0.1
         });
-        
+
         const cabinetFrame = new THREE.Mesh(
             new THREE.BoxGeometry(2, 3, 1),
             cabinetTexture
@@ -1733,7 +1770,7 @@ interactiveObjects.push(desk);
         cabinetFrame.castShadow = true;
         cabinetFrame.receiveShadow = true;
         cabinet.add(cabinetFrame);
-        
+
         // Drawers with handles
         const drawerPositions = [0.7, 0, -0.7];
         const drawerMaterials = [
@@ -1751,21 +1788,21 @@ interactiveObjects.push(desk);
             drawer.position.set(0, yPos, 0.05);
             drawer.castShadow = true;
             drawer.receiveShadow = true;
-            
+
             // Add drawer handle
             const handleGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.2, 16);
             const handleMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
             const handle = new THREE.Mesh(handleGeometry, handleMaterial);
-            handle.rotation.z = Math.PI/2;
+            handle.rotation.z = Math.PI / 2;
             handle.position.set(0.8, yPos, 0.4);
             handle.castShadow = true;
-            
+
             drawer.userData = {
                 isDrawer: true,
-                drawerNumber: i+1,
+                drawerNumber: i + 1,
                 locked: i !== 0 // First drawer unlocked
             };
-            
+
             cabinet.add(drawer);
             cabinet.add(handle);
             drawers.push(drawer);
@@ -1779,7 +1816,7 @@ interactiveObjects.push(desk);
             { x: 0.9, z: -0.45 },
             { x: -0.9, z: -0.45 }
         ];
-        
+
         legPositions.forEach(pos => {
             const leg = new THREE.Mesh(legGeometry, new THREE.MeshStandardMaterial({ color: 0x333333 }));
             leg.position.set(pos.x, -1.55, pos.z);
@@ -1799,159 +1836,159 @@ interactiveObjects.push(desk);
         drawers.forEach(drawer => interactiveObjects.push(drawer));
 
         // ===== ENHANCED BOOKSHELF WITH MORE BOOKS =====
-const bookshelf = new THREE.Group();
-bookshelf.position.set(0, 2.5, -4);
+        const bookshelf = new THREE.Group();
+        bookshelf.position.set(0, 2.5, -4);
 
-// Bookshelf frame (semi-transparent)
-const frameMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3a2a1f,
-    roughness: 0.6,
-    transparent: true,
-    opacity: 0.7
-});
+        // Bookshelf frame (semi-transparent)
+        const frameMaterial = new THREE.MeshStandardMaterial({
+            color: 0x3a2a1f,
+            roughness: 0.6,
+            transparent: true,
+            opacity: 0.7
+        });
 
-const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 5, 0.5),
-    frameMaterial
-);
-frame.castShadow = true;
-frame.receiveShadow = true;
-bookshelf.add(frame);
-
-// Shelves (more transparent)
-const shelfMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3a2a1f,
-    roughness: 0.6,
-    transparent: true,
-    opacity: 0.2
-});
-
-const shelfPositions = [1.8, 1.0, 0.2, -0.6, -1.4]; // 5 shelves now
-shelfPositions.forEach(yPos => {
-    const shelf = new THREE.Mesh(
-        new THREE.BoxGeometry(3.8, 0.1, 0.4),
-        shelfMaterial
-    );
-    shelf.position.set(0, yPos, 0);
-    shelf.castShadow = true;
-    shelf.receiveShadow = true;
-    bookshelf.add(shelf);
-});
-
-// Expanded book colors (24 distinct colors)
-const bookColors = [
-    0x8b0000, 0xa52a2a, 0xb22222, // Reds
-    0x006400, 0x2e8b57, 0x3cb371, // Greens
-    0x00008b, 0x1e90ff, 0x4169e1, // Blues
-    0x8b008b, 0x9932cc, 0x9400d3, // Purples
-    0x8b4513, 0xd2691e, 0xcd853f, // Browns
-    0x2f4f4f, 0x708090, 0x778899, // Grays
-    0x4682b4, 0x5f9ea0, 0x48d1cc, // Teals
-    0x556b2f, 0x6b8e23, 0x9acd32  // Olive greens
-];
-
-// Create books for all shelves
-for (let i = 0; i < shelfPositions.length; i++) {
-    const booksPerShelf = 6 + Math.floor(Math.random() * 3); // 6-8 books per shelf
-    
-    for (let j = 0; j < booksPerShelf; j++) {
-        // Random book dimensions
-        const bookHeight = 0.4 + Math.random() * 0.4;
-        const bookWidth = 0.15 + Math.random() * 0.15;
-        const bookDepth = 0.1 + Math.random() * 0.1;
-        
-        // Random color from our expanded palette
-        const colorIndex = Math.floor(Math.random() * bookColors.length);
-        
-        const book = new THREE.Mesh(
-            new THREE.BoxGeometry(bookWidth, bookHeight, bookDepth),
-            new THREE.MeshStandardMaterial({ 
-                color: bookColors[colorIndex],
-                roughness: 0.3,
-                metalness: 0.1
-            })
+        const frame = new THREE.Mesh(
+            new THREE.BoxGeometry(4, 5, 0.5),
+            frameMaterial
         );
-        
-        // Position books with some randomness
-        book.position.set(
-            -1.7 + j * 0.35 + Math.random() * 0.1,
-            shelfPositions[i] + bookHeight/2 + 0.05,
-            0.1 + (Math.random() - 0.5) * 0.05
-        );
-        
-        // Random rotation for natural look
-        book.rotation.z = (Math.random() - 0.5) * 0.2;
-        
-        // Add some books leaning against others
-        if (Math.random() > 0.7) {
-            book.rotation.y = (Math.random() - 0.5) * 0.5;
+        frame.castShadow = true;
+        frame.receiveShadow = true;
+        bookshelf.add(frame);
+
+        // Shelves (more transparent)
+        const shelfMaterial = new THREE.MeshStandardMaterial({
+            color: 0x3a2a1f,
+            roughness: 0.6,
+            transparent: true,
+            opacity: 0.2
+        });
+
+        const shelfPositions = [1.8, 1.0, 0.2, -0.6, -1.4]; // 5 shelves now
+        shelfPositions.forEach(yPos => {
+            const shelf = new THREE.Mesh(
+                new THREE.BoxGeometry(3.8, 0.1, 0.4),
+                shelfMaterial
+            );
+            shelf.position.set(0, yPos, 0);
+            shelf.castShadow = true;
+            shelf.receiveShadow = true;
+            bookshelf.add(shelf);
+        });
+
+        // Expanded book colors (24 distinct colors)
+        const bookColors = [
+            0x8b0000, 0xa52a2a, 0xb22222, // Reds
+            0x006400, 0x2e8b57, 0x3cb371, // Greens
+            0x00008b, 0x1e90ff, 0x4169e1, // Blues
+            0x8b008b, 0x9932cc, 0x9400d3, // Purples
+            0x8b4513, 0xd2691e, 0xcd853f, // Browns
+            0x2f4f4f, 0x708090, 0x778899, // Grays
+            0x4682b4, 0x5f9ea0, 0x48d1cc, // Teals
+            0x556b2f, 0x6b8e23, 0x9acd32  // Olive greens
+        ];
+
+        // Create books for all shelves
+        for (let i = 0; i < shelfPositions.length; i++) {
+            const booksPerShelf = 6 + Math.floor(Math.random() * 3); // 6-8 books per shelf
+
+            for (let j = 0; j < booksPerShelf; j++) {
+                // Random book dimensions
+                const bookHeight = 0.4 + Math.random() * 0.4;
+                const bookWidth = 0.15 + Math.random() * 0.15;
+                const bookDepth = 0.1 + Math.random() * 0.1;
+
+                // Random color from our expanded palette
+                const colorIndex = Math.floor(Math.random() * bookColors.length);
+
+                const book = new THREE.Mesh(
+                    new THREE.BoxGeometry(bookWidth, bookHeight, bookDepth),
+                    new THREE.MeshStandardMaterial({
+                        color: bookColors[colorIndex],
+                        roughness: 0.3,
+                        metalness: 0.1
+                    })
+                );
+
+                // Position books with some randomness
+                book.position.set(
+                    -1.7 + j * 0.35 + Math.random() * 0.1,
+                    shelfPositions[i] + bookHeight / 2 + 0.05,
+                    0.1 + (Math.random() - 0.5) * 0.05
+                );
+
+                // Random rotation for natural look
+                book.rotation.z = (Math.random() - 0.5) * 0.2;
+
+                // Add some books leaning against others
+                if (Math.random() > 0.7) {
+                    book.rotation.y = (Math.random() - 0.5) * 0.5;
+                }
+
+                book.castShadow = true;
+                book.receiveShadow = true;
+                bookshelf.add(book);
+
+                // Add some books with different orientations (10% chance)
+                if (Math.random() > 0.9) {
+                    const horizontalBook = new THREE.Mesh(
+                        new THREE.BoxGeometry(bookDepth, bookWidth, bookHeight),
+                        new THREE.MeshStandardMaterial({
+                            color: bookColors[(colorIndex + 5) % bookColors.length],
+                            roughness: 0.3
+                        })
+                    );
+                    horizontalBook.position.set(
+                        book.position.x + 0.1,
+                        book.position.y,
+                        book.position.z + 0.1
+                    );
+                    horizontalBook.rotation.y = Math.PI / 2;
+                    bookshelf.add(horizontalBook);
+                }
+            }
         }
-        
-        book.castShadow = true;
-        book.receiveShadow = true;
-        bookshelf.add(book);
-        
-        // Add some books with different orientations (10% chance)
-        if (Math.random() > 0.9) {
-            const horizontalBook = new THREE.Mesh(
-                new THREE.BoxGeometry(bookDepth, bookWidth, bookHeight),
-                new THREE.MeshStandardMaterial({ 
-                    color: bookColors[(colorIndex + 5) % bookColors.length],
-                    roughness: 0.3
+
+        // Add some book spines with titles (for detail)
+        for (let i = 0; i < 8; i++) {
+            const spineCanvas = document.createElement('canvas');
+            spineCanvas.width = 128;
+            spineCanvas.height = 32;
+            const ctx = spineCanvas.getContext('2d');
+
+            // Random spine color
+            ctx.fillStyle = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            ctx.fillRect(0, 0, 128, 32);
+
+            // Add text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px Arial';
+            const titles = ["CELL BIO", "GENETICS", "CHEM VOL2", "PHYSICS", "ORGANIC", "QUANTUM", "ANATOMY", "NEURO"];
+            ctx.fillText(titles[i], 10, 20);
+
+            const spineTexture = new THREE.CanvasTexture(spineCanvas);
+            const spine = new THREE.Mesh(
+                new THREE.PlaneGeometry(0.15, 0.4),
+                new THREE.MeshStandardMaterial({
+                    map: spineTexture,
+                    side: THREE.DoubleSide
                 })
             );
-            horizontalBook.position.set(
-                book.position.x + 0.1,
-                book.position.y,
-                book.position.z + 0.1
+            spine.position.set(
+                -1.5 + i * 0.4,
+                shelfPositions[2] + 0.25,
+                0.25
             );
-            horizontalBook.rotation.y = Math.PI/2;
-            bookshelf.add(horizontalBook);
+            spine.rotation.y = Math.PI;
+            bookshelf.add(spine);
         }
-    }
-}
 
-// Add some book spines with titles (for detail)
-for (let i = 0; i < 8; i++) {
-    const spineCanvas = document.createElement('canvas');
-    spineCanvas.width = 128;
-    spineCanvas.height = 32;
-    const ctx = spineCanvas.getContext('2d');
-    
-    // Random spine color
-    ctx.fillStyle = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-    ctx.fillRect(0, 0, 128, 32);
-    
-    // Add text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px Arial';
-    const titles = ["CELL BIO", "GENETICS", "CHEM VOL2", "PHYSICS", "ORGANIC", "QUANTUM", "ANATOMY", "NEURO"];
-    ctx.fillText(titles[i], 10, 20);
-    
-    const spineTexture = new THREE.CanvasTexture(spineCanvas);
-    const spine = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.15, 0.4),
-        new THREE.MeshStandardMaterial({ 
-            map: spineTexture,
-            side: THREE.DoubleSide
-        })
-    );
-    spine.position.set(
-        -1.5 + i * 0.4,
-        shelfPositions[2] + 0.25,
-        0.25
-    );
-    spine.rotation.y = Math.PI;
-    bookshelf.add(spine);
-}
-
-bookshelf.userData = {
-    name: "Bookshelf",
-    description: "A fully stocked bookshelf with scientific literature.",
-    onClick: () => showBookshelfInteraction()
-};
-scene.add(bookshelf);
-interactiveObjects.push(bookshelf);
+        bookshelf.userData = {
+            name: "Bookshelf",
+            description: "A fully stocked bookshelf with scientific literature.",
+            onClick: () => showBookshelfInteraction()
+        };
+        scene.add(bookshelf);
+        interactiveObjects.push(bookshelf);
 
         // ===== ENHANCED COMPUTER TERMINAL =====
         const terminal = new THREE.Group();
@@ -1978,7 +2015,7 @@ interactiveObjects.push(bookshelf);
         // Monitor screen
         const screen = new THREE.Mesh(
             new THREE.PlaneGeometry(0.65, 0.45),
-            new THREE.MeshStandardMaterial({ 
+            new THREE.MeshStandardMaterial({
                 color: 0x00aa00,
                 emissive: 0x00aa00,
                 emissiveIntensity: 0.5
@@ -2024,7 +2061,7 @@ interactiveObjects.push(bookshelf);
         // ===== ENHANCED PERIODIC TABLE =====
         const chart = new THREE.Group();
         chart.position.set(4, 1.5, 0);
-        chart.rotation.y = -Math.PI/2;
+        chart.rotation.y = -Math.PI / 2;
 
         // Chart background
         const background = new THREE.Mesh(
@@ -2037,20 +2074,20 @@ interactiveObjects.push(bookshelf);
         // Create periodic table grid
         const gridMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
         const gridGeometry = new THREE.BufferGeometry();
-        
+
         // Vertical lines
         const positions = [];
         for (let x = -0.9; x <= 0.9; x += 0.2) {
             positions.push(x, -0.75, 0.01, x, 0.75, 0.01);
         }
-        
+
         // Horizontal lines
         for (let y = -0.75; y <= 0.75; y += 0.25) {
             positions.push(-0.9, y, 0.01, 0.9, y, 0.01);
         }
-        
+
         gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        
+
         const grid = new THREE.LineSegments(gridGeometry, gridMaterial);
         chart.add(grid);
 
@@ -2102,7 +2139,7 @@ interactiveObjects.push(bookshelf);
             context.textAlign = 'center';
             context.textBaseline = 'middle';
             context.fillText(el.symbol, 32, 32);
-            
+
             const texture = new THREE.CanvasTexture(canvas);
             const element = new THREE.Mesh(
                 new THREE.PlaneGeometry(0.15, 0.15),
@@ -2123,14 +2160,14 @@ interactiveObjects.push(bookshelf);
         // ===== IMPROVED WHITEBOARD =====
         const whiteboard = new THREE.Mesh(
             new THREE.PlaneGeometry(2.5, 1.8),
-            new THREE.MeshStandardMaterial({ 
+            new THREE.MeshStandardMaterial({
                 color: 0xffffff,
                 roughness: 0.4,
                 metalness: 0.1
             })
         );
         whiteboard.position.set(-4.9, 1.8, 0);
-        whiteboard.rotation.y = Math.PI/2;
+        whiteboard.rotation.y = Math.PI / 2;
         whiteboard.receiveShadow = true;
 
         // Add writing to the whiteboard
@@ -2163,7 +2200,7 @@ interactiveObjects.push(bookshelf);
         // ===== IMPROVED CHAIR =====
         function createChair() {
             const chair = new THREE.Group();
-            
+
             // Seat
             const seat = new THREE.Mesh(
                 new THREE.BoxGeometry(0.5, 0.05, 0.5),
@@ -2171,7 +2208,7 @@ interactiveObjects.push(bookshelf);
             );
             seat.position.set(0, 0.025, 0);
             chair.add(seat);
-            
+
             // Backrest
             const back = new THREE.Mesh(
                 new THREE.BoxGeometry(0.5, 0.8, 0.05),
@@ -2179,7 +2216,7 @@ interactiveObjects.push(bookshelf);
             );
             back.position.set(0, 0.45, -0.225);
             chair.add(back);
-            
+
             // Legs
             const legMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 });
             const legPositions = [
@@ -2188,7 +2225,7 @@ interactiveObjects.push(bookshelf);
                 { x: -0.2, z: 0.2 },
                 { x: 0.2, z: 0.2 }
             ];
-            
+
             legPositions.forEach(pos => {
                 const leg = new THREE.Mesh(
                     new THREE.CylinderGeometry(0.03, 0.03, 0.4, 8),
@@ -2197,21 +2234,21 @@ interactiveObjects.push(bookshelf);
                 leg.position.set(pos.x, -0.2, pos.z);
                 chair.add(leg);
             });
-            
+
             // Position the chair
             chair.position.set(
-                (Math.random()-0.5)*roomSize*0.7,
+                (Math.random() - 0.5) * roomSize * 0.7,
                 0.2,
-                (Math.random()-0.5)*roomSize*0.7
+                (Math.random() - 0.5) * roomSize * 0.7
             );
-            chair.rotation.y = Math.random()*Math.PI;
-            
+            chair.rotation.y = Math.random() * Math.PI;
+
             chair.userData = {
                 name: "Lab Chair",
                 description: "A standard laboratory chair.",
                 onClick: () => showModal("Chair", "Just an ordinary lab chair.", `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`)
             };
-            
+
             return chair;
         }
 
@@ -2302,7 +2339,7 @@ interactiveObjects.push(bookshelf);
         const modalDescription = document.getElementById('modal-description');
         const modalInteractions = document.getElementById('modal-interactions');
         const modalClose = document.querySelector('.modal-close');
-        
+
 
         function showModal(title, description, interactions) {
             modalTitle.innerHTML = `<h2>${title}</h2>`;
@@ -2311,79 +2348,79 @@ interactiveObjects.push(bookshelf);
             modal.style.display = 'flex';
         }
 
-        modalClose.onclick = function(e) {
+        modalClose.onclick = function (e) {
             e.stopPropagation();
             modal.style.display = 'none';
         }
 
         // Prevent clicks on modal from reaching the scene
-        modalContent.addEventListener('click', function(e) {
+        modalContent.addEventListener('click', function (e) {
             e.stopPropagation();
         });
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
         }
 
         function checkAllCompoundsSolved() {
-    const allSolved = Array.from(document.querySelectorAll('.compound-item input'))
-        .every(input => input.disabled);
-    
-    if (allSolved) {
-        const successDiv = document.getElementById('chemical-success');
-        successDiv.style.display = 'block';
-        addClue('chemical-puzzle-solved');
-    }
-}
+            const allSolved = Array.from(document.querySelectorAll('.compound-item input'))
+                .every(input => input.disabled);
 
-window.checkCompoundAnswer = function(inputElement) {
-    const index = inputElement.id.split('-')[1];
-    const feedbackIcon = document.getElementById(`feedback-${index}`);
-    const userAnswer = inputElement.value.toLowerCase().trim();
-    const correctAnswer = inputElement.dataset.answer.toLowerCase();
-    
-    if (userAnswer === correctAnswer) {
-        inputElement.disabled = true;
-        feedbackIcon.innerHTML = '✓';
-        feedbackIcon.style.color = '#4CAF50';
-        checkAllCompoundsSolved();
-    } else if (userAnswer) {
-        feedbackIcon.innerHTML = '✗';
-        feedbackIcon.style.color = '#F44336';
-    } else {
-        feedbackIcon.innerHTML = '';
-    }
-};
+            if (allSolved) {
+                const successDiv = document.getElementById('chemical-success');
+                successDiv.style.display = 'block';
+                addClue('chemical-puzzle-solved');
+            }
+        }
 
-function showChemicalPuzzle() {
-    // Chemical compounds and their names
-    const compounds = [
-        { formula: "H₂O", name: "water" },
-        { formula: "CO₂", name: "carbon dioxide" },
-        { formula: "NaCl", name: "sodium chloride" },
-        { formula: "C₆H₁₂O₆", name: "glucose" },
-        { formula: "CH₄", name: "methane" },
-        { formula: "NH₃", name: "ammonia" },
-        { formula: "H₂SO₄", name: "sulfuric acid" },
-        { formula: "NaOH", name: "sodium hydroxide" }
-    ];
+        window.checkCompoundAnswer = function (inputElement) {
+            const index = inputElement.id.split('-')[1];
+            const feedbackIcon = document.getElementById(`feedback-${index}`);
+            const userAnswer = inputElement.value.toLowerCase().trim();
+            const correctAnswer = inputElement.dataset.answer.toLowerCase();
 
-    // Shuffle the compounds
-    const shuffledCompounds = [...compounds].sort(() => Math.random() - 0.5);
+            if (userAnswer === correctAnswer) {
+                inputElement.disabled = true;
+                feedbackIcon.innerHTML = '✓';
+                feedbackIcon.style.color = '#4CAF50';
+                checkAllCompoundsSolved();
+            } else if (userAnswer) {
+                feedbackIcon.innerHTML = '✗';
+                feedbackIcon.style.color = '#F44336';
+            } else {
+                feedbackIcon.innerHTML = '';
+            }
+        };
 
-    // Create the puzzle HTML
-    let puzzleHTML = `
+        function showChemicalPuzzle() {
+            // Chemical compounds and their names
+            const compounds = [
+                { formula: "H₂O", name: "water" },
+                { formula: "CO₂", name: "carbon dioxide" },
+                { formula: "NaCl", name: "sodium chloride" },
+                { formula: "C₆H₁₂O₆", name: "glucose" },
+                { formula: "CH₄", name: "methane" },
+                { formula: "NH₃", name: "ammonia" },
+                { formula: "H₂SO₄", name: "sulfuric acid" },
+                { formula: "NaOH", name: "sodium hydroxide" }
+            ];
+
+            // Shuffle the compounds
+            const shuffledCompounds = [...compounds].sort(() => Math.random() - 0.5);
+
+            // Create the puzzle HTML
+            let puzzleHTML = `
         <div class="chemical-puzzle">
             <h3>Name These Chemical Compounds</h3>
             <p>Identify all 8 common chemical compounds to reveal the second digit of the door code.</p>
             <div class="compounds-grid">
     `;
 
-    // Add the compound inputs
-    shuffledCompounds.forEach((compound, index) => {
-        puzzleHTML += `
+            // Add the compound inputs
+            shuffledCompounds.forEach((compound, index) => {
+                puzzleHTML += `
             <div class="compound-item">
                 <div class="compound-formula">${compound.formula}</div>
                 <input type="text" id="compound-${index}" data-answer="${compound.name}" 
@@ -2391,9 +2428,9 @@ function showChemicalPuzzle() {
                 <span class="feedback-icon" id="feedback-${index}"></span>
             </div>
         `;
-    });
+            });
 
-    puzzleHTML += `
+            puzzleHTML += `
             </div>
             <div id="chemical-success" class="chemical-success">
                 Puzzle solved! The second digit of the door code is: ${gameState.doorCode[1]}★
@@ -2402,14 +2439,14 @@ function showChemicalPuzzle() {
         </div>
     `;
 
-    showModal("Chemical Compounds Puzzle", puzzleHTML, '');
-}
+            showModal("Chemical Compounds Puzzle", puzzleHTML, '');
+        }
 
         // Update inventory display
         function updateInventory() {
             const inventoryContainer = document.getElementById('inventory-items');
             inventoryContainer.innerHTML = '';
-            
+
             gameState.inventory.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.className = 'inventory-item';
@@ -2438,15 +2475,15 @@ function showChemicalPuzzle() {
         // Update story based on progress
         function updateStory() {
             const roomDesc = document.getElementById('room-description');
-            
+
             let baseDescription = `
                 <p>Your head throbs as consciousness returns. The sterile scent of ethanol mixes with something more acrid - ozone? Burning? Your vision clears to reveal a dim laboratory, illuminated only by the flickering glow of dying fluorescent lights.</p>
                 <p>The cold metal table beneath you explains the stiffness in your limbs. How long were you out? The last thing you remember is... nothing. Just darkness.</p>
                 <p>A digital keypad by the reinforced door mocks you with its glowing red display: "LOCKED - ENTER 4-DIGIT CODE". The air feels thick with secrets and the weight of forgotten experiments.</p>
             `;
-            
+
             let additionalText = '';
-            
+
             if (gameState.puzzlesSolved >= 3) {
                 additionalText = `
                     <div class="story-reveal">
@@ -2454,7 +2491,7 @@ function showChemicalPuzzle() {
                     </div>
                 `;
             }
-            
+
             roomDesc.innerHTML = baseDescription + additionalText;
         }
 
@@ -2478,38 +2515,38 @@ function showChemicalPuzzle() {
                 </div>
                 <p class="hint">Enter the 4-digit code to escape</p>
             `;
-            
+
             showModal("Door Keypad", "The reinforced door requires a 4-digit code to open.", keypadHTML);
         }
 
         let currentCode = '';
-        window.addCodeDigit = function(digit, e) {
+        window.addCodeDigit = function (digit, e) {
             if (e) e.stopPropagation();
             if (currentCode.length < 4) {
                 currentCode += digit;
-                document.getElementById('code-display').textContent = 
+                document.getElementById('code-display').textContent =
                     currentCode.padEnd(4, '_').split('').join(' ');
             }
         }
 
-        window.clearCode = function(e) {
+        window.clearCode = function (e) {
             if (e) e.stopPropagation();
             currentCode = '';
             document.getElementById('code-display').textContent = '____';
         }
 
-        window.submitCode = function(e) {
+        window.submitCode = function (e) {
             if (e) e.stopPropagation();
             if (currentCode === gameState.doorCode) {
                 document.getElementById('code-display').className = 'keypad-display success';
                 document.getElementById('code-display').textContent = 'OPEN';
-                
+
                 setTimeout(() => {
                     showModal("Escaped!", `
                         <p>The door unlocks with a satisfying clunk. You've escaped!</p>
                         <p>As you leave, you glance back at the lab, its mysteries still unsolved...</p>
                     `, `<button class="interaction-button" onclick="location.reload()">Play Again</button>`);
-                    
+
                     // Animate door opening
                     let angle = 0;
                     const maxAngle = Math.PI / 2;
@@ -2533,32 +2570,32 @@ function showChemicalPuzzle() {
         }
 
         function showConnectionsGame() {
-    // Shuffle the items if not already done
-    if (gameState.connectionsGameData.shuffledItems.length === 0) {
-        const allItems = [];
-        gameState.connectionsGameData.categories.forEach(category => {
-            category.items.forEach(item => allItems.push(item));
-        });
-        gameState.connectionsGameData.shuffledItems = shuffleArray([...allItems]);
-    }
+            // Shuffle the items if not already done
+            if (gameState.connectionsGameData.shuffledItems.length === 0) {
+                const allItems = [];
+                gameState.connectionsGameData.categories.forEach(category => {
+                    category.items.forEach(item => allItems.push(item));
+                });
+                gameState.connectionsGameData.shuffledItems = shuffleArray([...allItems]);
+            }
 
-    // Create the game HTML
-    let gameHTML = `
+            // Create the game HTML
+            let gameHTML = `
         <div class="connections-game">
             <h3>Make 4 groups of 4 connected items</h3>
             <div class="connections-grid">
     `;
 
-    // Add the cards
-    gameState.connectionsGameData.shuffledItems.forEach((item, index) => {
-        gameHTML += `
+            // Add the cards
+            gameState.connectionsGameData.shuffledItems.forEach((item, index) => {
+                gameHTML += `
             <div class="connections-card" data-item="${item}" onclick="selectConnectionCard(this, '${item}')">
                 ${item}
             </div>
         `;
-    });
+            });
 
-    gameHTML += `
+            gameHTML += `
             </div>
             <div class="connections-selected">
                 <h4>Selected: <span id="connections-selected-count">0</span>/4</h4>
@@ -2569,109 +2606,109 @@ function showChemicalPuzzle() {
         </div>
     `;
 
-    showModal("Connections Puzzle", `
+            showModal("Connections Puzzle", `
         <p>You found a set of cards with various words. Group them into 4 categories of 4 related items.</p>
         ${gameHTML}
     `, `<button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>`);
-}
+        }
 
-// Add these helper functions for the connections game
-window.selectConnectionCard = function(cardElement, item) {
-    const selectedCount = document.getElementById('connections-selected-count');
-    const selectedItemsDiv = document.getElementById('connections-selected-items');
-    const submitButton = document.getElementById('connections-submit');
-    
-    // Toggle selection
-    if (cardElement.classList.contains('selected')) {
-        cardElement.classList.remove('selected');
-        // Remove from selected items
-        const itemElements = selectedItemsDiv.querySelectorAll('.selected-item');
-        itemElements.forEach(el => {
-            if (el.textContent === item) {
-                el.remove();
+        // Add these helper functions for the connections game
+        window.selectConnectionCard = function (cardElement, item) {
+            const selectedCount = document.getElementById('connections-selected-count');
+            const selectedItemsDiv = document.getElementById('connections-selected-items');
+            const submitButton = document.getElementById('connections-submit');
+
+            // Toggle selection
+            if (cardElement.classList.contains('selected')) {
+                cardElement.classList.remove('selected');
+                // Remove from selected items
+                const itemElements = selectedItemsDiv.querySelectorAll('.selected-item');
+                itemElements.forEach(el => {
+                    if (el.textContent === item) {
+                        el.remove();
+                    }
+                });
+            } else {
+                // Check if we can select more (max 4)
+                if (selectedItemsDiv.querySelectorAll('.selected-item').length >= 4) {
+                    return;
+                }
+                cardElement.classList.add('selected');
+                // Add to selected items
+                const itemEl = document.createElement('span');
+                itemEl.className = 'selected-item';
+                itemEl.textContent = item;
+                selectedItemsDiv.appendChild(itemEl);
             }
-        });
-    } else {
-        // Check if we can select more (max 4)
-        if (selectedItemsDiv.querySelectorAll('.selected-item').length >= 4) {
-            return;
-        }
-        cardElement.classList.add('selected');
-        // Add to selected items
-        const itemEl = document.createElement('span');
-        itemEl.className = 'selected-item';
-        itemEl.textContent = item;
-        selectedItemsDiv.appendChild(itemEl);
-    }
-    
-    // Update count and enable/disable submit button
-    const selectedCountNum = selectedItemsDiv.querySelectorAll('.selected-item').length;
-    selectedCount.textContent = selectedCountNum;
-    submitButton.disabled = selectedCountNum !== 4;
-};
 
-window.submitConnectionSelection = function() {
-    const selectedItemsDiv = document.getElementById('connections-selected-items');
-    const selectedItems = Array.from(selectedItemsDiv.querySelectorAll('.selected-item')).map(el => el.textContent);
-    const feedbackDiv = document.getElementById('connections-feedback');
-    
-    // Find which category these items belong to
-    let foundCategory = null;
-    for (const category of gameState.connectionsGameData.categories) {
-        const allPresent = category.items.every(item => selectedItems.includes(item));
-        if (allPresent) {
-            foundCategory = category;
-            break;
-        }
-    }
-    
-    if (foundCategory) {
-        // Correct category
-        feedbackDiv.innerHTML = `<p class="success">Correct! Category: ${foundCategory.name}</p>`;
-        
-        // Remove these items from the game
-        gameState.connectionsGameData.shuffledItems = gameState.connectionsGameData.shuffledItems.filter(
-            item => !selectedItems.includes(item)
-        );
-        
-        // Mark category as solved
-        foundCategory.solved = true;
-        
-        // Clear selection
-        document.querySelectorAll('.connections-card.selected').forEach(card => {
-            card.classList.remove('selected');
-            card.style.display = 'none'; // Hide solved cards
-        });
-        selectedItemsDiv.innerHTML = '';
-        document.getElementById('connections-selected-count').textContent = '0';
-        document.getElementById('connections-submit').disabled = true;
-        
-        // Check if game is complete
-        const unsolvedCategories = gameState.connectionsGameData.categories.filter(cat => !cat.solved);
-        if (unsolvedCategories.length === 0) {
-            // Game solved!
-            setTimeout(() => {
-                gameState.connectionsSolved = true;
-                showModal("Connections Solved!", `
+            // Update count and enable/disable submit button
+            const selectedCountNum = selectedItemsDiv.querySelectorAll('.selected-item').length;
+            selectedCount.textContent = selectedCountNum;
+            submitButton.disabled = selectedCountNum !== 4;
+        };
+
+        window.submitConnectionSelection = function () {
+            const selectedItemsDiv = document.getElementById('connections-selected-items');
+            const selectedItems = Array.from(selectedItemsDiv.querySelectorAll('.selected-item')).map(el => el.textContent);
+            const feedbackDiv = document.getElementById('connections-feedback');
+
+            // Find which category these items belong to
+            let foundCategory = null;
+            for (const category of gameState.connectionsGameData.categories) {
+                const allPresent = category.items.every(item => selectedItems.includes(item));
+                if (allPresent) {
+                    foundCategory = category;
+                    break;
+                }
+            }
+
+            if (foundCategory) {
+                // Correct category
+                feedbackDiv.innerHTML = `<p class="success">Correct! Category: ${foundCategory.name}</p>`;
+
+                // Remove these items from the game
+                gameState.connectionsGameData.shuffledItems = gameState.connectionsGameData.shuffledItems.filter(
+                    item => !selectedItems.includes(item)
+                );
+
+                // Mark category as solved
+                foundCategory.solved = true;
+
+                // Clear selection
+                document.querySelectorAll('.connections-card.selected').forEach(card => {
+                    card.classList.remove('selected');
+                    card.style.display = 'none'; // Hide solved cards
+                });
+                selectedItemsDiv.innerHTML = '';
+                document.getElementById('connections-selected-count').textContent = '0';
+                document.getElementById('connections-submit').disabled = true;
+
+                // Check if game is complete
+                const unsolvedCategories = gameState.connectionsGameData.categories.filter(cat => !cat.solved);
+                if (unsolvedCategories.length === 0) {
+                    // Game solved!
+                    setTimeout(() => {
+                        gameState.connectionsSolved = true;
+                        showModal("Connections Solved!", `
                     <p>You've successfully grouped all the cards!</p>
                     <p>The first digit of the door code is revealed: ${gameState.doorCode[0]}☽</p>
                     <p class="story-reveal">The moon symbol reminds you of the lunar phases mentioned in the desk note.</p>
                 `, `<button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>`);
-            }, 1000);
-        }
-    } else {
-        // Incorrect grouping
-        feedbackDiv.innerHTML = '<p class="error">These items do not belong to the same category. Try again.</p>';
-        
-        // Clear selection but keep cards visible
-        document.querySelectorAll('.connections-card.selected').forEach(card => {
-            card.classList.remove('selected');
-        });
-        selectedItemsDiv.innerHTML = '';
-        document.getElementById('connections-selected-count').textContent = '0';
-        document.getElementById('connections-submit').disabled = true;
-    }
-};
+                    }, 1000);
+                }
+            } else {
+                // Incorrect grouping
+                feedbackDiv.innerHTML = '<p class="error">These items do not belong to the same category. Try again.</p>';
+
+                // Clear selection but keep cards visible
+                document.querySelectorAll('.connections-card.selected').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                selectedItemsDiv.innerHTML = '';
+                document.getElementById('connections-selected-count').textContent = '0';
+                document.getElementById('connections-submit').disabled = true;
+            }
+        };
 
         /* ========== ENHANCED MEMORY GAME FUNCTIONS ========== */
         function createMemoryGame() {
@@ -2684,10 +2721,10 @@ window.submitConnectionSelection = function() {
                 currentDigit: Math.floor(Math.random() * 10),
                 acceptingInput: false
             };
-            
+
             // Generate initial sequence
             gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
-            
+
             showModal("Memory Challenge", `
                 <div id="memory-level-display">Level: 1/${gameState.memoryGame.maxLevel}</div>
                 <div class="memory-instructions">
@@ -2697,9 +2734,9 @@ window.submitConnectionSelection = function() {
                 <div class="memory-game-container">
                     ${vialColors.map((vial, index) => `
                         <div class="memory-vial" 
-                             style="background: rgba(${parseInt(vial.color.toString(16).substring(0,2), 16)}, 
-                                                   ${parseInt(vial.color.toString(16).substring(2,4), 16)}, 
-                                                   ${parseInt(vial.color.toString(16).substring(4,6), 16)}, 0.3); 
+                             style="background: rgba(${parseInt(vial.color.toString(16).substring(0, 2), 16)}, 
+                                                   ${parseInt(vial.color.toString(16).substring(2, 4), 16)}, 
+                                                   ${parseInt(vial.color.toString(16).substring(4, 6), 16)}, 0.3); 
                                     border-color: ${vial.border};"
                              data-index="${index}"
                              onclick="handleModalVialClick(${index})">
@@ -2717,33 +2754,33 @@ window.submitConnectionSelection = function() {
         function startMemorySequence() {
             const feedback = document.getElementById('memory-feedback');
             feedback.innerHTML = '<p style="color:#8bc34a;">Watch the sequence carefully...</p>';
-            
+
             // Disable clicking during sequence playback
             gameState.memoryGame.acceptingInput = false;
             document.querySelectorAll('.memory-vial').forEach(vial => {
                 vial.style.pointerEvents = 'none';
             });
-            
+
             let delay = 0;
             gameState.memoryGame.sequence.forEach((vialIndex, i) => {
                 setTimeout(() => {
                     const vialElement = document.querySelector(`.memory-vial[data-index="${vialIndex}"]`);
                     const vial3D = vials[vialIndex];
-                    
+
                     // Highlight the vial in modal
                     vialElement.classList.add('active');
-                    
+
                     // Highlight the 3D vial
                     vial3D.children[1].material.color.setHex(0xffffff);
                     vial3D.children[1].material.emissive.setHex(0xffffff);
                     vial3D.children[1].material.emissiveIntensity = 1.0;
-                    
+
                     // Reset after delay
                     setTimeout(() => {
                         vialElement.classList.remove('active');
                         vial3D.children[1].material.color.setHex(vial3D.userData.originalColor);
                         vial3D.children[1].material.emissiveIntensity = 0.3;
-                        
+
                         if (i === gameState.memoryGame.sequence.length - 1) {
                             // Enable interaction after sequence
                             setTimeout(() => {
@@ -2762,28 +2799,28 @@ window.submitConnectionSelection = function() {
         }
 
         // Handle vial clicks in the modal
-        window.handleModalVialClick = function(index) {
+        window.handleModalVialClick = function (index) {
             if (!gameState.memoryGame.acceptingInput) return;
-            
+
             const feedback = document.getElementById('memory-feedback');
             const vialElement = document.querySelector(`.memory-vial[data-index="${index}"]`);
             const vial3D = vials[index];
-            
+
             // Highlight the clicked vial
             vialElement.classList.add('active');
             vial3D.children[1].material.color.setHex(0xffffff);
             vial3D.children[1].material.emissive.setHex(0xffffff);
             vial3D.children[1].material.emissiveIntensity = 1.0;
-            
+
             setTimeout(() => {
                 vialElement.classList.remove('active');
                 vial3D.children[1].material.color.setHex(vial3D.userData.originalColor);
                 vial3D.children[1].material.emissiveIntensity = 0.3;
             }, 300);
-            
+
             // Add to player sequence
             gameState.memoryGame.playerSequence.push(index);
-            
+
             // Check if sequence is complete
             if (gameState.memoryGame.playerSequence.length === gameState.memoryGame.sequence.length) {
                 checkMemorySequence();
@@ -2793,32 +2830,32 @@ window.submitConnectionSelection = function() {
         // Handle vial clicks in the 3D scene
         function handleVialClick(index) {
             if (gameState.currentPuzzle !== 'memory') {
-                showModal(`Vial ${index+1}`, `This vial contains ${vialColors[index].name} liquid.`, 
+                showModal(`Vial ${index + 1}`, `This vial contains ${vialColors[index].name} liquid.`,
                     `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
                 return;
             }
-            
+
             if (!gameState.memoryGame.acceptingInput) return;
-            
+
             const feedback = document.getElementById('memory-feedback');
             const vialElement = document.querySelector(`.memory-vial[data-index="${index}"]`);
             const vial3D = vials[index];
-            
+
             // Highlight the clicked vial in both views
             vialElement.classList.add('active');
             vial3D.children[1].material.color.setHex(0xffffff);
             vial3D.children[1].material.emissive.setHex(0xffffff);
             vial3D.children[1].material.emissiveIntensity = 1.0;
-            
+
             setTimeout(() => {
                 vialElement.classList.remove('active');
                 vial3D.children[1].material.color.setHex(vial3D.userData.originalColor);
                 vial3D.children[1].material.emissiveIntensity = 0.3;
             }, 300);
-            
+
             // Add to player sequence
             gameState.memoryGame.playerSequence.push(index);
-            
+
             // Check if sequence is complete
             if (gameState.memoryGame.playerSequence.length === gameState.memoryGame.sequence.length) {
                 checkMemorySequence();
@@ -2829,13 +2866,13 @@ window.submitConnectionSelection = function() {
             const feedback = document.getElementById('memory-feedback');
             const levelDisplay = document.getElementById('memory-level-display');
             let correct = true;
-            
+
             // Disable input while checking
             gameState.memoryGame.acceptingInput = false;
             document.querySelectorAll('.memory-vial').forEach(vial => {
                 vial.style.pointerEvents = 'none';
             });
-            
+
             // Check each step of the sequence
             for (let i = 0; i < gameState.memoryGame.sequence.length; i++) {
                 if (gameState.memoryGame.sequence[i] !== gameState.memoryGame.playerSequence[i]) {
@@ -2843,12 +2880,12 @@ window.submitConnectionSelection = function() {
                     break;
                 }
             }
-            
+
             if (correct) {
                 if (gameState.memoryGame.level >= gameState.memoryGame.maxLevel) {
                     // Puzzle solved
                     feedback.innerHTML = '<p style="color:#8bc34a; font-size:1.2rem;">Perfect! You completed all levels!</p>';
-                    
+
                     setTimeout(() => {
                         showModal("Memory Game Solved!", `
                             <p>You've successfully completed the memory challenge!</p>
@@ -2857,12 +2894,12 @@ window.submitConnectionSelection = function() {
                         `, `
                             <button class="interaction-button" onclick="modal.style.display='none'; gameState.currentPuzzle = null;">Continue</button>
                         `);
-                        
+
                         // Update door code
                         const codeArr = gameState.doorCode.split('');
                         codeArr[2] = gameState.memoryGame.currentDigit.toString();
                         gameState.doorCode = codeArr.join('');
-                        
+
                         addClue('memory-game-solved');
                         gameState.currentPuzzle = null;
                     }, 1500);
@@ -2870,11 +2907,11 @@ window.submitConnectionSelection = function() {
                     // Advance level
                     gameState.memoryGame.level++;
                     levelDisplay.textContent = `Level: ${gameState.memoryGame.level}/${gameState.memoryGame.maxLevel}`;
-                    
+
                     // Add new random vial to sequence
                     gameState.memoryGame.sequence.push(Math.floor(Math.random() * 5));
                     gameState.memoryGame.playerSequence = [];
-                    
+
                     feedback.innerHTML = '<p style="color:#8bc34a;">Correct! Next level...</p>';
                     setTimeout(startMemorySequence, 1500);
                 }
@@ -2915,12 +2952,12 @@ window.submitConnectionSelection = function() {
             if (!gameState.inventory.includes('small-key')) {
                 addToInventory('small-key');
                 addClue('desk-searched');
-                
+
                 const result = `
                     <p>Under a stack of papers, you find a small brass key and a note with symbols: ☽, ★, ♞, ☀️</p>
                     <p class="story-reveal">The note reads: 'The transformation sequence must follow lunar phases.'</p>
                 `;
-                
+
                 showModal("Desk Search Results", result, `<button class="interaction-button" onclick="showDeskInteraction(event)">Back to Desk</button>`);
             } else {
                 showModal("Lab Desk", "You've already searched the desk thoroughly.", `<button class="interaction-button" onclick="showDeskInteraction(event)">Back to Desk</button>`);
@@ -2941,93 +2978,93 @@ window.submitConnectionSelection = function() {
         }
 
         function openCabinetDrawer(drawerNumber, e) {
-    if (e) e.stopPropagation();
-    
-    const cabinetObj = interactiveObjects.find(obj => obj.userData.isCabinet);
-    if (!cabinetObj) return;
-    
-    const drawer = cabinetObj.userData.drawers[drawerNumber - 1];
-    if (!drawer) return;
-    
-    if (drawer.userData.locked) {
-        if (drawerNumber === 1 || gameState.inventory.includes('small-key')) {
-            // Unlock the drawer
-            drawer.userData.locked = false;
-            
-            if (drawerNumber === 1) {
-                // Top drawer - contains the connections game cards
-                const result = `
+            if (e) e.stopPropagation();
+
+            const cabinetObj = interactiveObjects.find(obj => obj.userData.isCabinet);
+            if (!cabinetObj) return;
+
+            const drawer = cabinetObj.userData.drawers[drawerNumber - 1];
+            if (!drawer) return;
+
+            if (drawer.userData.locked) {
+                if (drawerNumber === 1 || gameState.inventory.includes('small-key')) {
+                    // Unlock the drawer
+                    drawer.userData.locked = false;
+
+                    if (drawerNumber === 1) {
+                        // Top drawer - contains the connections game cards
+                        const result = `
                     <p>You open the top drawer and find 16 cards with various words printed on them.</p>
                     <p class="story-reveal">A note says: "Group these into 4 categories to reveal the first digit of the code."</p>
                 `;
-                
-                // Animate drawer opening
-                gsap.to(drawer.position, {
-                    z: 0.5,
-                    duration: 0.5,
-                    onComplete: () => {
-                        showModal("Cabinet Contents", result, `
+
+                        // Animate drawer opening
+                        gsap.to(drawer.position, {
+                            z: 0.5,
+                            duration: 0.5,
+                            onComplete: () => {
+                                showModal("Cabinet Contents", result, `
                             <button class="interaction-button" onclick="showConnectionsGame(event)">Examine Cards</button>
                             <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
                         `);
-                    }
-                });
-            } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
-                // Middle drawer - USB drive (existing code)
-                addToInventory('usb-drive');
-                gameState.usedItems.push('small-key');
-                addClue('cabinet-opened');
-                
-                const result = `
+                            }
+                        });
+                    } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
+                        // Middle drawer - USB drive (existing code)
+                        addToInventory('usb-drive');
+                        gameState.usedItems.push('small-key');
+                        addClue('cabinet-opened');
+
+                        const result = `
                     <p>You unlock and open drawer ${drawerNumber}. Inside is a USB drive labeled "Project Phoenix".</p>
                     <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
                 `;
-                
-                // Animate drawer opening
-                gsap.to(drawer.position, {
-                    z: 0.5,
-                    duration: 0.5,
-                    onComplete: () => {
-                        showModal("Cabinet Contents", result, `
+
+                        // Animate drawer opening
+                        gsap.to(drawer.position, {
+                            z: 0.5,
+                            duration: 0.5,
+                            onComplete: () => {
+                                showModal("Cabinet Contents", result, `
                             <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
                         `);
-                    }
-                });
-            } else {
-                showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
+                            }
+                        });
+                    } else {
+                        showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
                     <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
                 `);
-            }
-        } else {
-            showModal("Locked Drawer", `Drawer ${drawerNumber} is locked. You need a key to open it.`, `
+                    }
+                } else {
+                    showModal("Locked Drawer", `Drawer ${drawerNumber} is locked. You need a key to open it.`, `
                 <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
             `);
-        }
-    } else {
-        // Drawer is already unlocked
-        if (drawerNumber === 1) {
-            // Top drawer - connections game
-            showModal("Cabinet Drawer", "The top drawer contains the set of word cards.", `
+                }
+            } else {
+                // Drawer is already unlocked
+                if (drawerNumber === 1) {
+                    // Top drawer - connections game
+                    showModal("Cabinet Drawer", "The top drawer contains the set of word cards.", `
                 <button class="interaction-button" onclick="showConnectionsGame(event)">Examine Cards</button>
                 <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
             `);
-        } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
-            // Middle drawer - USB drive (existing code)
-            addToInventory('usb-drive');
-            const result = `
+                } else if (drawerNumber === 2 && !gameState.inventory.includes('usb-drive')) {
+                    // Middle drawer - USB drive (existing code)
+                    addToInventory('usb-drive');
+                    const result = `
                 <p>The drawer contains a USB drive labeled "Project Phoenix".</p>
                 <p class="story-reveal">A note with the USB reads: 'Emergency override code: ${gameState.doorCode}'</p>
             `;
-            showModal("Cabinet Contents", result, `
+                    showModal("Cabinet Contents", result, `
                 <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
             `);
-        } else {
-            showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
+                } else {
+                    showModal("Cabinet Drawer", `Drawer ${drawerNumber} is empty.`, `
                 <button class="interaction-button" onclick="showCabinetInteraction(event)">Back to Cabinet</button>
             `);
+                }
+            }
         }
-    }
-}
 
         function showBookshelfInteraction() {
             const interactions = `
@@ -3042,27 +3079,27 @@ window.submitConnectionSelection = function() {
         function browseBooks(e) {
             if (e) e.stopPropagation();
             addClue('books-browsed');
-            
+
             const result = `
                 <p>You find a cryptography book with a marked passage about celestial symbols and sequences.</p>
                 <p class="story-reveal">The margin notes mention 'the sequence must be followed precisely'.</p>
             `;
-            
+
             showModal("Cryptography Book", result, `<button class="interaction-button" onclick="showBookshelfInteraction(event)">Back to Bookshelf</button>`);
         }
 
         function checkBehindBooks(e) {
             if (e) e.stopPropagation();
             addClue('safe-discovered');
-            
+
             // Make the safe visible
             safe.visible = true;
-            
+
             const result = `
                 <p>Shifting volumes reveals a wall safe with an unusual keypad - it displays scrambled letters instead of numbers.</p>
                 <p>A small label reads: "Subject 314 holds the key".</p>
             `;
-            
+
             showModal("Hidden Safe", result, `
                 <button class="interaction-button" onclick="showSafeInteraction(event)">Examine Safe</button>
                 <button class="interaction-button" onclick="showBookshelfInteraction(event)">Back to Bookshelf</button>
@@ -3071,7 +3108,7 @@ window.submitConnectionSelection = function() {
 
         function showSafeInteraction(e) {
             if (e) e.stopPropagation();
-            
+
             if (gameState.inventory.includes('subject-note')) {
                 showAnagramPuzzle();
             } else {
@@ -3088,7 +3125,7 @@ window.submitConnectionSelection = function() {
         function showAnagramPuzzle() {
             const letters = "THEPOISONVESSELS".split('');
             const scrambledLetters = shuffleArray([...letters]).join(' ');
-            
+
             showModal("Letter Combination Safe", `
                 <p>Rearrange these letters to form the correct phrase:</p>
                 <div class="anagram-letters">${scrambledLetters}</div>
@@ -3105,7 +3142,7 @@ window.submitConnectionSelection = function() {
             if (e) e.stopPropagation();
             const input = document.getElementById('anagram-input').value.toUpperCase().replace(/\s/g, '');
             const feedback = document.getElementById('anagram-feedback');
-            
+
             if (input === "THEPOISONVESSELS") {
                 feedback.innerHTML = '<p class="success">Correct! The safe opens with a hiss. Inside rests a USB drive labeled "Project Phoenix - Final Notes".</p>';
                 addToInventory('usb-drive');
@@ -3127,34 +3164,34 @@ window.submitConnectionSelection = function() {
         }
 
         function showComputerInteraction() {
-    const interactions = `
+            const interactions = `
         <div class="interaction-buttons">
             <button class="interaction-button" onclick="turnOnComputer(event)">Turn On Computer</button>
-            ${gameState.inventory.includes('usb-drive') ? 
-                `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
+            ${gameState.inventory.includes('usb-drive') ?
+                    `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
         </div>
     `;
-    showModal("Computer Terminal", "An old computer terminal with a glowing screen.", interactions);
-}
+            showModal("Computer Terminal", "An old computer terminal with a glowing screen.", interactions);
+        }
 
         function turnOnComputer(e) {
-    if (e) e.stopPropagation();
-    addClue('computer-on');
-    
-    const result = `
+            if (e) e.stopPropagation();
+            addClue('computer-on');
+
+            const result = `
         <p>The computer displays a login screen with username "DR.ALCHEM" already entered.</p>
         <p class="hint">The sticky note on the keyboard says: "Remember - password changes every full moon!"</p>
-        ${gameState.inventory.includes('usb-drive') ? 
-            '<p>A USB port is available on the side of the computer.</p>' : 
-            '<p class="hint">You notice a USB port on the side of the computer - maybe you need something to insert?</p>'}
+        ${gameState.inventory.includes('usb-drive') ?
+                    '<p>A USB port is available on the side of the computer.</p>' :
+                    '<p class="hint">You notice a USB port on the side of the computer - maybe you need something to insert?</p>'}
     `;
-    
-    showModal("Computer Login", result, `
-        ${gameState.inventory.includes('usb-drive') ? 
-            `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
+
+            showModal("Computer Login", result, `
+        ${gameState.inventory.includes('usb-drive') ?
+                    `<button class="interaction-button" onclick="insertUSB(event)">Insert USB Drive</button>` : ''}
         <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
     `);
-}
+        }
 
         // Crossword puzzle data
         const crosswordData = {
@@ -3180,12 +3217,12 @@ window.submitConnectionSelection = function() {
 
         function showCrosswordPuzzle(e, withHints = false) {
             if (e) e.stopPropagation();
-            
+
             // Build the crossword grid
             let gridHTML = '<div class="crossword-container">';
             gridHTML += '<h3>Laboratory Crossword</h3>';
             gridHTML += '<p>Solve the puzzle to reveal the password</p>';
-            
+
             // Create the grid
             gridHTML += '<div class="crossword-grid">';
             for (let row = 0; row < 5; row++) {
@@ -3193,22 +3230,22 @@ window.submitConnectionSelection = function() {
                     const cellId = `cell-${row}-${col}`;
                     const cellValue = withHints && (row === 0 || col === 0) ? crosswordData.solution[row][col] : '';
                     const isLocked = withHints && (row === 0 || col === 0);
-                    
+
                     // Add clue numbers
                     let clueNumber = '';
-                    if ((row === 0 && col === 0) || (row === 0 && col === 1) || 
+                    if ((row === 0 && col === 0) || (row === 0 && col === 1) ||
                         (row === 0 && col === 2) || (row === 0 && col === 4) ||
                         (row === 2 && col === 0) || (row === 3 && col === 0) ||
                         (row === 4 && col === 0)) {
-                        const acrossClue = Object.entries(crosswordData.across).find(([num, data]) => 
+                        const acrossClue = Object.entries(crosswordData.across).find(([num, data]) =>
                             data.row === row && data.col === col);
-                        const downClue = Object.entries(crosswordData.down).find(([num, data]) => 
+                        const downClue = Object.entries(crosswordData.down).find(([num, data]) =>
                             data.row === row && data.col === col);
-                        
+
                         if (acrossClue) clueNumber = acrossClue[0];
                         else if (downClue) clueNumber = downClue[0];
                     }
-                    
+
                     gridHTML += `
                         <div class="crossword-cell">
                             ${clueNumber ? `<span class="clue-number">${clueNumber}</span>` : ''}
@@ -3221,7 +3258,7 @@ window.submitConnectionSelection = function() {
                 }
             }
             gridHTML += '</div>';
-            
+
             // Add clues
             gridHTML += '<div class="crossword-clues">';
             gridHTML += '<div class="clue-list"><h4>Across</h4><ol>';
@@ -3229,14 +3266,14 @@ window.submitConnectionSelection = function() {
                 gridHTML += `<li>${num}. ${clue.clue}</li>`;
             }
             gridHTML += '</ol></div>';
-            
+
             gridHTML += '<div class="clue-list"><h4>Down</h4><ol>';
             for (const [num, clue] of Object.entries(crosswordData.down)) {
                 gridHTML += `<li>${num}. ${clue.clue}</li>`;
             }
             gridHTML += '</ol></div>';
             gridHTML += '</div>';
-            
+
             // Add success message area
             gridHTML += `
                 <div id="crossword-success" class="crossword-success">
@@ -3244,11 +3281,11 @@ window.submitConnectionSelection = function() {
                 </div>
                 <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
             `;
-            
+
             gridHTML += '</div>';
-            
+
             showModal("Computer Login - Crossword Puzzle", gridHTML, '');
-            
+
             // If using hints, lock the first row and column
             if (withHints) {
                 for (let i = 0; i < 5; i++) {
@@ -3260,34 +3297,34 @@ window.submitConnectionSelection = function() {
 
         // Check if crossword is completed correctly
         function checkCrosswordCompletion() {
-    let allCorrect = true;
-    
-    for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 5; col++) {
-            const cell = document.getElementById(`cell-${row}-${col}`);
-            if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
-                allCorrect = false;
+            let allCorrect = true;
+
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (!cell.readOnly && cell.value.toUpperCase() !== crosswordData.solution[row][col]) {
+                        allCorrect = false;
+                    }
+                }
             }
-        }
-    }
-    
-    if (allCorrect) {
-        const successDiv = document.getElementById('crossword-success');
-        successDiv.innerHTML = `
+
+            if (allCorrect) {
+                const successDiv = document.getElementById('crossword-success');
+                successDiv.innerHTML = `
             <p>Puzzle solved! The last digit of the door code is revealed: ${gameState.doorCode.slice(-1)}☀️</p>
             <p class="story-reveal">The sun symbol matches one of the symbols from the desk note.</p>
         `;
-        successDiv.style.display = 'block';
-        addClue('computer-password');
-        
-        // Automatically log in after a short delay
-        setTimeout(loginToComputer, 1500);
-    }
-}
+                successDiv.style.display = 'block';
+                addClue('computer-password');
+
+                // Automatically log in after a short delay
+                setTimeout(loginToComputer, 1500);
+            }
+        }
 
         function loginToComputer() {
             addClue('computer-login');
-            
+
             const result = `
                 <p>Login successful! The screen displays:</p>
                 <div style="font-family: monospace; background: #000; color: #0f0; padding: 10px;">
@@ -3296,92 +3333,92 @@ window.submitConnectionSelection = function() {
                     Use only if primary systems fail.
                 </div>
             `;
-            
+
             showModal("Computer System", result, `<button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>`);
         }
 
         function insertUSB(e) {
-    if (e) e.stopPropagation();
-    if (gameState.inventory.includes('usb-drive')) {
-        addClue('usb-inserted');
-        
-        const result = `
+            if (e) e.stopPropagation();
+            if (gameState.inventory.includes('usb-drive')) {
+                addClue('usb-inserted');
+
+                const result = `
             <p>The USB drive contains Project Phoenix files, including the emergency door code: ${gameState.doorCode}</p>
             <p class="story-reveal">The files mention "Subject 314" and "cellular regeneration".</p>
             <p>The computer now allows login attempts.</p>
         `;
-        
-        showModal("USB Drive Contents", result, `
+
+                showModal("USB Drive Contents", result, `
             <button class="interaction-button" onclick="showCrosswordPuzzle(event, true)">Attempt Login</button>
             <button class="interaction-button" onclick="showComputerInteraction(event)">Back to Computer</button>
         `);
-    }
-}
+            }
+        }
 
 
         function attemptCrosswordAccess(e) {
-    if (e) e.stopPropagation();
+            if (e) e.stopPropagation();
 
-    if (gameState.clues.includes('usb-inserted')) {
-        showCrosswordPuzzle(e, false); // No hints even with USB
-    } else {
-        showModal("Access Denied", `
+            if (gameState.clues.includes('usb-inserted')) {
+                showCrosswordPuzzle(e, false); // No hints even with USB
+            } else {
+                showModal("Access Denied", `
             <p>You try to access the crossword puzzle, but it's locked.</p>
             <p class="hint">You need to insert a USB drive first to attempt login.</p>
         `, `
             <button class="interaction-button" onclick="modal.style.display='none'">Close</button>
         `);
-    }
-}
+            }
+        }
 
 
         function showWhiteboardInteraction() {
             addClue('whiteboard-examined');
-            
+
             const result = `
                 <p>The whiteboard is covered in equations and the number "314" appears repeatedly.</p>
                 <p class="story-reveal">A small note reads: 'Subject 314 showed promise for 314 minutes before deterioration.'</p>
             `;
-            
+
             showModal("Whiteboard", result, `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
         }
 
         function showChartInteraction() {
             addClue('chart-examined');
-            
+
             const result = `
                 <p>The periodic table has certain elements circled with notes about "stabilization sequence".</p>
                 <p class="story-reveal">The word "POSSESS" is written vertically beside the elements.</p>
             `;
-            
+
             showModal("Chemical Chart", result, `<button class="interaction-button" onclick="modal.style.display='none'">Close</button>`);
         }
 
         // Raycaster for object interaction
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-        
+
         function onMouseClick(event) {
             // Don't process clicks if modal is open
             if (modal.style.display === 'flex') return;
-            
+
             // Calculate mouse position in normalized device coordinates
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            
+
             // Update the raycaster
             raycaster.setFromCamera(mouse, camera);
-            
+
             // Calculate objects intersecting the raycaster
             const intersects = raycaster.intersectObjects(interactiveObjects, true); // Note the 'true' for recursive checking
-            
+
             if (intersects.length > 0) {
                 // Find the first object with an onClick handler
                 let clickedObj = intersects[0].object;
                 while (clickedObj && !clickedObj.userData.onClick) {
                     clickedObj = clickedObj.parent;
                 }
-                
+
                 if (clickedObj && clickedObj.userData.onClick) {
                     clickedObj.userData.onClick();
                 }
@@ -3391,81 +3428,81 @@ window.submitConnectionSelection = function() {
         window.addEventListener('click', onMouseClick, false);
 
         // Add to your existing raycaster code
-// Hover functionality
-let lastHovered = null;
+        // Hover functionality
+        let lastHovered = null;
 
-function onMouseMove(event) {
-    // Calculate mouse position
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
-    // Update the raycaster
-    raycaster.setFromCamera(mouse, camera);
-    
-    // Find intersected objects
-    const intersects = raycaster.intersectObjects(interactiveObjects, true);
-    
-    // Remove hover effect from previous object
-    if (lastHovered) {
-        if (lastHovered.material) {
-            lastHovered.material.emissive.setHex(lastHovered.userData.originalEmissive || 0x000000);
-        }
-        document.getElementById('ui-container').style.borderColor = '#444'; // Reset border
-        lastHovered = null;
-    }
-    
-    // Add hover effect to new object
-    if (intersects.length > 0) {
-        let hoveredObj = intersects[0].object;
-        while (hoveredObj && !hoveredObj.userData.name) {
-            hoveredObj = hoveredObj.parent;
-        }
-        
-        if (hoveredObj && hoveredObj.userData.name) {
-            if (hoveredObj.material) {
-                hoveredObj.userData.originalEmissive = hoveredObj.material.emissive?.getHex() || 0x000000;
-                hoveredObj.material.emissive.setHex(0x333333);
+        function onMouseMove(event) {
+            // Calculate mouse position
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the raycaster
+            raycaster.setFromCamera(mouse, camera);
+
+            // Find intersected objects
+            const intersects = raycaster.intersectObjects(interactiveObjects, true);
+
+            // Remove hover effect from previous object
+            if (lastHovered) {
+                if (lastHovered.material) {
+                    lastHovered.material.emissive.setHex(lastHovered.userData.originalEmissive || 0x000000);
+                }
+                document.getElementById('ui-container').style.borderColor = '#444'; // Reset border
+                lastHovered = null;
             }
-            
-            // Update UI to show hovered object name
-            document.getElementById('ui-container').style.borderColor = '#8bc34a';
-            document.getElementById('room-description').innerHTML = 
-                `<p>Looking at: <strong>${hoveredObj.userData.name}</strong></p>
-                 <p>${hoveredObj.userData.description}</p>`;
-            
-            lastHovered = hoveredObj;
-        }
-    } else {
-        // Restore original description if not hovering anything
-        updateStory();
-    }
-}
 
-window.addEventListener('mousemove', onMouseMove, false);
+            // Add hover effect to new object
+            if (intersects.length > 0) {
+                let hoveredObj = intersects[0].object;
+                while (hoveredObj && !hoveredObj.userData.name) {
+                    hoveredObj = hoveredObj.parent;
+                }
+
+                if (hoveredObj && hoveredObj.userData.name) {
+                    if (hoveredObj.material) {
+                        hoveredObj.userData.originalEmissive = hoveredObj.material.emissive?.getHex() || 0x000000;
+                        hoveredObj.material.emissive.setHex(0x333333);
+                    }
+
+                    // Update UI to show hovered object name
+                    document.getElementById('ui-container').style.borderColor = '#8bc34a';
+                    document.getElementById('room-description').innerHTML =
+                        `<p>Looking at: <strong>${hoveredObj.userData.name}</strong></p>
+                 <p>${hoveredObj.userData.description}</p>`;
+
+                    lastHovered = hoveredObj;
+                }
+            } else {
+                // Restore original description if not hovering anything
+                updateStory();
+            }
+        }
+
+        window.addEventListener('mousemove', onMouseMove, false);
 
         // ===== IMPROVED INTERACTION INDICATORS =====
         function addInteractionIndicators() {
             interactiveObjects.forEach(obj => {
                 if (obj.userData.hasIndicator) return;
-                
+
                 // Only add indicators to main objects, not their children
                 if (obj.parent && obj.parent.userData.name) return;
-                
+
                 const indicator = new THREE.Mesh(
                     new THREE.SphereGeometry(0.05, 8, 8),
-                    new THREE.MeshBasicMaterial({ 
+                    new THREE.MeshBasicMaterial({
                         color: 0x00ff00,
                         transparent: true,
                         opacity: 0.7
                     })
                 );
-                
+
                 // Position above the object
                 const box = new THREE.Box3().setFromObject(obj);
                 const size = box.getSize(new THREE.Vector3());
                 indicator.position.copy(obj.position);
                 indicator.position.y += size.y * 0.6;
-                
+
                 // Make it pulse
                 function pulse() {
                     gsap.to(indicator.scale, {
@@ -3483,10 +3520,10 @@ window.addEventListener('mousemove', onMouseMove, false);
                         repeat: -1
                     });
                 }
-                
+
                 scene.add(indicator);
                 pulse();
-                
+
                 // Store reference
                 obj.userData.indicator = indicator;
                 obj.userData.hasIndicator = true;
@@ -3499,4 +3536,5 @@ window.addEventListener('mousemove', onMouseMove, false);
         updateInventory();
     </script>
 </body>
+
 </html>
